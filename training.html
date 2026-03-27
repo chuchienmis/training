@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竹建瓦斯股份有限公司 115年個資保護教育訓練</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#1a3458;--green:#1a6b2f;--green2:#2e9147;--red:#c0292a;--gold:#c8962a;--goldl:#e8b84b;--cream:#f7f3ec;--td:#1a1a2e;--tm:#3a3a5c;--w:#fff;--bdr:rgba(26,107,47,.2);--sh:0 8px 40px rgba(13,31,60,.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);font-family:'Noto Sans TC',sans-serif;color:var(--td);min-height:100vh}
+
+header{background:var(--navy);color:var(--w);position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(200,150,42,.03) 40px,rgba(200,150,42,.03) 41px)}
+.hi{max-width:900px;margin:0 auto;padding:24px 24px 20px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
+.hlogo{flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hlogo img{width:60px;height:auto;object-fit:contain;display:block}
+.ht{text-align:left}
+.ht h1{font-family:'Noto Serif TC',serif;font-size:clamp(18px,3.2vw,28px);font-weight:900;line-height:1.4;letter-spacing:1px;color:var(--w)}
+.hsub{font-size:clamp(14px,2.2vw,18px);color:var(--goldl);margin-top:5px;letter-spacing:1px;font-family:'Noto Serif TC',serif;font-weight:700}
+.gline{width:52px;height:2px;background:linear-gradient(90deg,var(--gold),var(--goldl));margin-top:8px;border-radius:2px}
+/* RWD */
+@media(max-width:600px){
+  .hi{padding:16px 14px 14px;gap:8px}
+  .hlogo img{width:44px}
+  .ht h1{font-size:17px;letter-spacing:.5px}
+  .hsub{font-size:13px}
+  .main{padding:20px 14px 60px}
+  .login-row{flex-direction:column;max-width:100%}
+  .name-wrap,.dept-wrap,.title-badge{width:100%;min-width:0}
+  .title-badge{justify-content:center}
+  .vplayer,.vframe-wrap{padding-bottom:56.25%}
+  .qcta{flex-direction:column;align-items:flex-start;padding:18px}
+  .bq{width:100%;text-align:center}
+  .qm{border-radius:0;margin:0}
+  .qbody{padding:14px 16px}
+  .qmh{padding:14px 16px}
+  .qfoot{padding:0 16px 20px}
+  .qblk{padding:14px 16px}
+  .rm{border-radius:12px}
+  .rb{padding:16px 18px 20px}
+  .rscore{font-size:48px}
+  .sinfo{padding:16px 18px}
+  .sir{flex-direction:column}
+  .bsu{width:100%}
+  .sir input{width:100%}
+}
+@media(max-width:400px){
+  .ht h1{font-size:17px}
+  .qop{padding:8px 10px;gap:8px}
+  .qotxt{font-size:12px}
+}
+
+.main{max-width:900px;margin:0 auto;padding:30px 24px 80px}
+
+/* IDENTITY GATE */
+#ig{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:40px 36px;text-align:center;box-shadow:var(--sh)}
+#ig h2{font-family:'Noto Serif TC',serif;font-size:19px;color:var(--navy);margin-bottom:8px}
+#ig p{font-size:13px;color:var(--tm);margin-bottom:28px;line-height:1.7}
+
+.login-row{display:flex;gap:12px;align-items:flex-start;max-width:480px;margin:0 auto 8px}
+@media(max-width:480px){.login-row{flex-direction:column}}
+
+.name-wrap{flex:1;position:relative}
+.name-wrap input{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none}
+.name-wrap input:focus{border-color:var(--green);background:var(--w)}
+.name-wrap input::placeholder{color:#bbb}
+
+/* autocomplete dropdown */
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--w);border:1.5px solid var(--green);border-radius:10px;box-shadow:0 8px 24px rgba(13,31,60,.12);z-index:100;overflow:hidden;display:none}
+.ac-list.show{display:block}
+.ac-item{padding:11px 16px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:space-between;transition:background .12s}
+.ac-item:hover,.ac-item.active{background:#f0faf2}
+.ac-item-name{color:var(--td);font-weight:500}
+.ac-item-title{color:var(--green);font-size:12px;font-weight:600;background:rgba(26,107,47,.1);padding:2px 8px;border-radius:10px}
+
+/* title preview badge */
+.title-badge{display:none;align-items:center;gap:8px;background:rgba(26,107,47,.08);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 16px;font-size:14px;color:var(--navy);font-weight:600;white-space:nowrap;min-width:90px;justify-content:center}
+.title-badge.show{display:flex}
+.title-badge-icon{font-size:16px}
+
+.dept-wrap{flex:1}
+.dept-wrap input{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none}
+.dept-wrap input:focus{border-color:var(--green);background:var(--w)}
+.dept-wrap input::placeholder{color:#bbb}
+
+.ierr{color:var(--red);font-size:13px;margin:4px 0 14px;min-height:18px;font-weight:500}
+.bcf{background:var(--navy);color:var(--w);border:none;padding:13px 44px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s,transform .1s;margin-top:4px}
+.bcf:hover{background:var(--navy2)}.bcf:active{transform:scale(.98)}
+
+/* TRAINING CONTENT */
+#tc{display:none}#tc.v{display:block}
+.uchip{display:flex;align-items:center;gap:10px;background:var(--w);border:1px solid var(--bdr);border-radius:30px;padding:7px 18px 7px 9px;margin-bottom:24px;width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.uav{width:34px;height:34px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--w);font-weight:700;font-size:13px;flex-shrink:0}
+.un{font-weight:700;font-size:14px;color:var(--navy)}.ud{font-size:12px;color:var(--tm)}
+
+.sl{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.sn{width:30px;height:30px;background:var(--navy);color:var(--w);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.st{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;color:var(--navy)}
+
+/* VIDEO CARD */
+.vcard{background:var(--w);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:26px}
+.vcard-top{background:var(--navy);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.vcard-title{color:var(--w);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+/* video player */
+.vplayer{position:relative;width:100%;padding-bottom:56.25%;background:#000;cursor:pointer}
+.vplayer iframe{position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;pointer-events:none;transition:opacity .3s}
+.vplayer iframe.ready{opacity:1;pointer-events:auto}
+.vthumb-cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+.vthumb-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vthumb-cover:hover .vplay-circle{transform:scale(1.08)}
+.vplay-circle{position:relative;z-index:1;transition:transform .2s}
+.vstatus{padding:10px 22px;background:#f5f2ed;border-top:1px solid #ece9e3;font-size:12px;color:var(--tm);display:flex;align-items:center;gap:8px}
+.vstatus-dot{width:8px;height:8px;border-radius:50%;background:#bbb;flex-shrink:0;transition:background .3s}
+.vstatus-dot.on{background:#22c55e}
+
+/* QUIZ CTA */
+.qcta{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:22px 26px;box-shadow:var(--sh);margin-bottom:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.qcta h3{font-family:'Noto Serif TC',serif;font-size:16px;color:var(--navy);margin-bottom:5px}
+.qcta p{font-size:12px;color:var(--tm)}
+.bq{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--w);border:none;padding:12px 26px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;white-space:nowrap;box-shadow:0 4px 12px rgba(26,107,47,.3);transition:opacity .2s,transform .1s}
+.bq:hover{opacity:.88}.bq:active{transform:scale(.98)}.bq:disabled{background:#aaa;box-shadow:none;opacity:1;cursor:not-allowed}
+
+/* SHEETS SETTING */
+.sinfo{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:20px 24px;box-shadow:var(--sh)}
+.sinfo h3{font-family:'Noto Serif TC',serif;font-size:15px;color:var(--navy);margin-bottom:9px}
+.sinfo p{font-size:12px;color:var(--tm);margin-bottom:6px;line-height:1.7}
+.sir{display:flex;gap:8px;align-items:center;margin-top:9px}
+.sir input{flex:1;padding:9px 12px;border:1.5px solid #d0cec8;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--td);background:var(--cream);outline:none}
+.sir input:focus{border-color:var(--green)}
+.bsu{background:var(--green);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.bsu:hover{background:var(--green2)}
+.ust{font-size:11px;margin-top:5px;color:var(--green);display:none}
+
+/* QUIZ OVERLAY */
+#qo{display:none;position:fixed;inset:0;background:rgba(13,31,60,.72);z-index:1000;overflow-y:auto;backdrop-filter:blur(4px);padding:18px 14px}
+#qo.open{display:flex;align-items:flex-start;justify-content:center}
+.qm{background:var(--cream);border-radius:16px;width:100%;max-width:720px;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;animation:su .3s ease;margin:auto}
+@keyframes su{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.qmh{background:var(--navy);padding:17px 24px;display:flex;align-items:center;justify-content:space-between}
+.qmh h2{font-family:'Noto Serif TC',serif;color:var(--w);font-size:16px}
+.qcl{background:rgba(255,255,255,.15);border:none;color:var(--w);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.qcl:hover{background:rgba(255,255,255,.28)}
+.qpbw{background:#ddd;height:3px}.qpb{height:3px;background:var(--green);width:0%;transition:width .4s}
+.qbody{padding:20px 24px}
+.qst{font-family:'Noto Serif TC',serif;font-size:13px;font-weight:700;color:var(--navy);background:rgba(26,107,47,.08);border-left:4px solid var(--green);padding:9px 13px;border-radius:0 6px 6px 0;margin-bottom:12px}
+.qblk{background:var(--w);border:1px solid #e0ddd6;border-radius:10px;padding:18px 20px;margin-bottom:12px;transition:box-shadow .2s}
+.qblk:hover{box-shadow:0 4px 14px rgba(13,31,60,.08)}.qblk.ua{border-color:var(--red)!important}
+.qmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.qnum{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--green);text-transform:uppercase}
+.qpts{font-size:10px;background:var(--navy);color:var(--w);padding:2px 7px;border-radius:10px}
+.qtxt{font-size:14px;font-weight:500;color:var(--navy);line-height:1.65;margin-bottom:11px}
+.qops{display:flex;flex-direction:column;gap:7px}
+.qop{display:flex;align-items:center;gap:11px;padding:9px 13px;border:1.5px solid #e0ddd8;border-radius:8px;cursor:pointer;transition:all .15s;background:var(--cream);user-select:none}
+.qop:hover{border-color:var(--green);background:#f0faf2}
+.qop input{display:none}
+.rdot{width:17px;height:17px;border:2px solid #ccc;border-radius:50%;flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.qop.sel{border-color:var(--green);background:#e8f5ec}
+.qop.sel .rdot{border-color:var(--green);background:var(--green)}
+.qop.sel .rdot::after{content:'';width:6px;height:6px;background:#fff;border-radius:50%;display:block}
+.qotxt{font-size:13px;color:var(--td)}
+.qfoot{padding:0 24px 24px}
+.qwarn{background:#fff8e6;border:1px solid var(--goldl);border-radius:8px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:11px;display:none}
+.qwarn.show{display:block}
+.bsub{width:100%;background:var(--navy);color:var(--w);border:none;padding:14px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:2px;transition:background .2s}
+.bsub:hover{background:var(--navy2)}
+
+/* RESULT OVERLAY */
+#ro{display:none;position:fixed;inset:0;background:rgba(13,31,60,.78);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);overflow-y:auto}
+#ro.open{display:flex}
+.rm{background:var(--w);border-radius:16px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35);animation:su .3s ease;text-align:center;margin:auto}
+.rh{background:var(--navy);padding:26px 24px 18px}
+.ri{font-size:44px;margin-bottom:8px}
+.rh h2{color:var(--w);font-family:'Noto Serif TC',serif;font-size:18px}
+.rb{padding:20px 24px 24px}
+.rscore{font-size:60px;font-weight:900;color:var(--navy);font-family:'Noto Serif TC',serif;line-height:1}
+.rscore span{font-size:19px;font-weight:400;color:var(--tm)}
+.rmsg{font-size:13px;color:var(--tm);margin:8px 0 14px;line-height:1.6}
+.rinfo{background:var(--cream);border-radius:8px;padding:12px 14px;margin-bottom:14px;text-align:left}
+.rrow{display:flex;gap:8px;font-size:12px;color:var(--tm);margin-bottom:3px}
+.rrow:last-child{margin-bottom:0}.rrow strong{color:var(--navy);min-width:56px}
+.rev-wrap{text-align:left;margin-bottom:16px}
+.rev-wrap h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #eee}
+.rev-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;padding:6px 0;border-bottom:1px solid #f5f2ed;line-height:1.5}
+.rev-item:last-child{border-bottom:none}
+.rev-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.rev-right{flex:1}
+.rev-q{color:var(--td);font-size:12px}
+.rev-ans{font-size:11px;margin-top:2px}
+.rev-ans.ok{color:var(--green);font-weight:600}
+.rev-ans.ng{color:var(--red)}
+.bdn{background:var(--navy);color:var(--w);border:none;padding:11px 32px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px}
+
+#si{display:none;position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--w);padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.25);z-index:3000;animation:su .3s ease}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hi">
+    <div class="hlogo">
+      <img src="data:image/jpeg;base64,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" alt="竹建瓦斯Logo"/>
+    </div>
+    <div class="ht">
+      <h1>竹建瓦斯股份有限公司</h1>
+      <div class="hsub">115年度個人資料保護法教育訓練</div>
+      <div class="gline"></div>
+    </div>
+  </div>
+</header>
+<div class="main">
+
+  <!-- IDENTITY GATE -->
+  <div id="ig">
+    <h2>請確認您的身份以開始訓練</h2>
+
+    <div class="login-row">
+      <!-- 姓名 + autocomplete -->
+      <div class="name-wrap">
+        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"
+          oninput="onNameInput()" onblur="hideAC()" onkeydown="onNameKey(event)"/>
+        <div class="ac-list" id="acList"></div>
+      </div>
+
+      <!-- 職稱 badge（自動帶入） -->
+      <div class="title-badge" id="titleBadge">
+        <span class="title-badge-icon">🏷</span>
+        <span id="titleText"></span>
+      </div>
+
+      <!-- 部門 -->
+      <div class="dept-wrap">
+        <input type="text" id="idept" placeholder="部門 / 單位" maxlength="30"/>
+      </div>
+    </div>
+
+    <div class="ierr" id="ierr"></div>
+    <button class="bcf" onclick="confirmIdentity()">確認身份，進入訓練 →</button>
+  </div>
+
+  <!-- TRAINING CONTENT -->
+  <div id="tc">
+    <div class="uchip">
+      <div class="uav" id="uav"></div>
+      <div>
+        <div class="un" id="un"></div>
+        <div class="ud" id="ud"></div>
+      </div>
+    </div>
+
+    <!-- 1. 影片 -->
+    <div class="sl"><div class="sn">1</div><div class="st">觀看教育訓練影片</div></div>
+    <div class="vcard">
+      <div class="vcard-top">
+        <div class="vcard-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polygon points="5,3 19,12 5,21"/></svg>
+          115年度個人資料保護法教育訓練講座
+        </div>
+        <span style="font-size:11px;color:rgba(255,255,255,.45);">經濟部能源署</span>
+      </div>
+
+      <!-- 播放器：iframe 預先載入但隱藏，縮圖蓋在上方 -->
+      <div class="vplayer" id="vplayer">
+        <!-- iframe 預載，autoplay=0，點擊後切換為 autoplay=1 -->
+        <iframe
+          id="vframe"
+          src="https://www.youtube.com/embed/BtjS95wb-yQ?rel=0&modestbranding=1&playsinline=1"
+          title="115年度個人資料保護法教育訓練"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+        <!-- 縮圖蓋板 -->
+        <div class="vthumb-cover" id="vcover" onclick="playVideo()">
+          <img src="https://img.youtube.com/vi/BtjS95wb-yQ/hqdefault.jpg" alt="影片縮圖"
+               onerror="this.src='https://img.youtube.com/vi/BtjS95wb-yQ/mqdefault.jpg'"/>
+          <div class="vplay-circle">
+            <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg" width="72" height="50">
+              <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#ff0000"/>
+              <path d="M45 24 27 14v20" fill="#fff"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="vstatus">
+        <div class="vstatus-dot" id="vdot"></div>
+        <span id="vtxt">點擊上方縮圖即可在此頁面直接觀看影片</span>
+      </div>
+    </div>
+
+    <!-- 2. 測驗 -->
+    <div class="sl"><div class="sn">2</div><div class="st">完成學習評量測驗</div></div>
+    <div class="qcta">
+      <div>
+        <h3>個人資料保護法 — 學習評量</h3>
+        <p>共 10 題（每題 10 分，滿分 100 分），請依課程內容作答後提交</p>
+      </div>
+      <button class="bq" id="bq" onclick="openQuiz()">開始作答 →</button>
+    </div>
+
+    <!-- Google Sheets 設定 -->
+    <div class="sinfo">
+      <h3>📊 Google Sheets 串接設定</h3>
+      <p>建立 Google Apps Script Web App 後，貼入網址即可自動儲存同仁測驗紀錄（詳見頁底說明）。</p>
+      <div class="sir">
+        <input type="text" id="surl" placeholder="貼上 Google Apps Script Web App 網址"/>
+        <button class="bsu" onclick="saveSheetUrl()">儲存</button>
+      </div>
+      <div class="ust" id="ust">✅ 網址已儲存</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ OVERLAY -->
+<div id="qo">
+  <div class="qm">
+    <div class="qmh"><h2>📝 個資法學習評量（10 題）</h2><button class="qcl" onclick="closeQuiz()">✕</button></div>
+    <div class="qpbw"><div class="qpb" id="qpb"></div></div>
+    <div class="qbody" id="qbody"></div>
+    <div class="qfoot">
+      <div class="qwarn" id="qwarn">⚠ 請確認所有 10 題均已作答後再提交。</div>
+      <button class="bsub" onclick="submitQuiz()">提交測驗答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div id="ro">
+  <div class="rm">
+    <div class="rh"><div class="ri" id="ri">🎉</div><h2 id="rt">測驗完成</h2></div>
+    <div class="rb">
+      <div class="rscore" id="rs">0<span> / 100</span></div>
+      <div class="rmsg" id="rm"></div>
+      <div class="rinfo" id="rinfo"></div>
+      <div class="rev-wrap" id="review"></div>
+      <button class="bdn" onclick="document.getElementById('ro').classList.remove('open')">確認完成</button>
+    </div>
+  </div>
+</div>
+
+<div id="si">⏳ 正在儲存至 Google Sheets…</div>
+
+<script>
+// ══ 員工名單（姓名 → 職稱）══
+const STAFF = {
+  '林昭偉':'經理','李志倉':'經理','陳儒彥':'經理','陳炳宏':'經理','蕭惠萍':'經理',
+  '彭敬文':'課長','陳淑貞':'副理','邱育生':'副理','黃美月':'副理','黃晨晞':'副理',
+  '林曉琪':'課長','陳郁夫':'課長','鍾興翰':'課長','廖珮雯':'課長','廖偉村':'代理課長',
+  '白沛豫':'專員','林孟賢':'專員','陳人豪':'代理專員','洪姝筠':'代理專員',
+  '陳朝鑫':'秘書','張鈞豪':'工務員','劉建彣':'工務員',
+  '黃禹竣':'助理員','劉德泓':'助理員','王璽凱':'助理員','林琮炫':'助理員',
+  '蔡凱程':'雇員','陳東彥':'雇員'
+};
+const NAMES = Object.keys(STAFF);
+
+// ══ 題目 ══
+const KQ=[
+  {id:'q1',pts:10,text:'1. 可以直接或間接識別個人的資料，皆屬於個人資料',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q2',pts:10,text:'2. 以任何方式取得個人資料，都屬於個資法所規範蒐集個人資料的行為',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q3',pts:10,text:'3. 自然人不是個資法所稱的非公務機關範圍，所以不適用個資法',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'X'},
+  {id:'q4',pts:10,text:'4. 在任何情況下都不可以蒐集、處理或利用特種個人資料',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'X'},
+  {id:'q5',pts:10,text:'5. 非公務機關蒐集之個人資料，經當事人同意後，可以做特定目的外之利用',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q6',pts:10,text:'6. 以下何者屬於個資法中定義的個人資料？',
+   ops:[{l:'(A) 公司統編',v:'A'},{l:'(B) 公益基金會的捐款帳號',v:'B'},{l:'(C) ChatGPT（人工智慧聊天機器人）的姓名',v:'C'},{l:'(D) 以上皆非',v:'D'}],ans:'D'},
+  {id:'q7',pts:10,text:'7. 以下何者屬於個資法第6條之特種個人資料？',
+   ops:[{l:'(A) 犯罪前科',v:'A'},{l:'(B) 基因',v:'B'},{l:'(C) 病歷',v:'C'},{l:'(D) 以上皆是',v:'D'}],ans:'D'},
+  {id:'q8',pts:10,text:'8. 下列敘述何者正確？',
+   ops:[{l:'(A) 依個資法之規定，個人資料應永久保存，不得進行銷毀。',v:'A'},
+        {l:'(B) 公務機關或非公務機關委託他人蒐集、處理或利用個人資料時，並不負有監督該他人之義務。',v:'B'},
+        {l:'(C) 被檢察官處以緩起訴處分或是職權不起訴的紀錄，也是個資法上的犯罪前科。',v:'C'},
+        {l:'(D) 蒐集個人資料時可以先與個人資料當事人約定拋棄個資法第3條所定之權利。',v:'D'}],ans:'C'},
+  {id:'q9',pts:10,text:'9. 下列敘述何者錯誤？',
+   ops:[{l:'(A) 向當事人蒐集特種個資時，如要取得當事人的書面同意，絕對不可以使用電子文件的方式。',v:'A'},
+        {l:'(B) 個資法第2條第2款所稱個人資料檔案，包含備份檔案。',v:'B'},
+        {l:'(C) 當事人請求查詢或閱覽個人資料或製給複製本者，公務機關或非公務機關得酌收必要成本費用。',v:'C'},
+        {l:'(D) 婚姻狀況也是屬於個人資料的一種。',v:'D'}],ans:'A'},
+  {id:'q10',pts:10,text:'10. 個資法對於個資之蒐集、處理及利用分別有定義，下列何者屬於「處理」的定義？',
+   ops:[{l:'(A) 個人資料之編輯。',v:'A'},{l:'(B) 個人資料之更正。',v:'B'},{l:'(C) 個人資料之檢索。',v:'C'},{l:'(D) 以上皆是。',v:'D'}],ans:'D'}
+];
+
+let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
+let acActiveIdx=-1, acMatches=[];
+
+// ══ AUTOCOMPLETE ══
+function onNameInput(){
+  const val = document.getElementById('iname').value.trim();
+  const badge = document.getElementById('titleBadge');
+  const titleTxt = document.getElementById('titleText');
+  const acList = document.getElementById('acList');
+  document.getElementById('ierr').textContent='';
+
+  // 完整符合 → 立即顯示職稱
+  if(STAFF[val]){
+    titleTxt.textContent = STAFF[val];
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+    titleTxt.textContent='';
+  }
+
+  // 模糊比對
+  if(val.length === 0){ acList.classList.remove('show'); acList.innerHTML=''; return; }
+  acMatches = NAMES.filter(n => n.includes(val));
+  if(acMatches.length === 0 || (acMatches.length===1 && acMatches[0]===val)){
+    acList.classList.remove('show'); acList.innerHTML=''; return;
+  }
+  acList.innerHTML = acMatches.map((n,i)=>
+    `<div class="ac-item" id="ac-${i}" onmousedown="pickAC(${i})">
+       <span class="ac-item-name">${n}</span>
+       <span class="ac-item-title">${STAFF[n]}</span>
+     </div>`
+  ).join('');
+  acActiveIdx=-1;
+  acList.classList.add('show');
+}
+
+function pickAC(idx){
+  const name = acMatches[idx];
+  document.getElementById('iname').value = name;
+  document.getElementById('titleText').textContent = STAFF[name];
+  document.getElementById('titleBadge').classList.add('show');
+  document.getElementById('acList').classList.remove('show');
+  document.getElementById('ierr').textContent='';
+}
+
+function hideAC(){ setTimeout(()=>document.getElementById('acList').classList.remove('show'), 180); }
+
+function onNameKey(e){
+  const list = document.getElementById('acList');
+  if(!list.classList.contains('show')) return;
+  if(e.key==='ArrowDown'){ e.preventDefault(); setACActive(acActiveIdx+1); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); setACActive(acActiveIdx-1); }
+  else if(e.key==='Enter' && acActiveIdx>=0){ e.preventDefault(); pickAC(acActiveIdx); }
+  else if(e.key==='Escape'){ list.classList.remove('show'); }
+}
+
+function setACActive(idx){
+  const items = document.querySelectorAll('.ac-item');
+  items.forEach(el=>el.classList.remove('active'));
+  acActiveIdx = Math.max(0, Math.min(idx, acMatches.length-1));
+  const el = document.getElementById('ac-'+acActiveIdx);
+  if(el){ el.classList.add('active'); el.scrollIntoView({block:'nearest'}); }
+}
+
+// ══ IDENTITY CONFIRM ══
+function confirmIdentity(){
+  const name = document.getElementById('iname').value.trim();
+  const dept = document.getElementById('idept').value.trim();
+  const err  = document.getElementById('ierr');
+
+  if(!name){ err.textContent='⚠ 請輸入姓名'; return; }
+  if(!STAFF[name]){ err.textContent=`⚠「${name}」不在本次訓練指定名單中，如有疑問請聯繫主管。`; return; }
+  if(!dept){ err.textContent='⚠ 請輸入部門 / 單位'; return; }
+
+  err.textContent='';
+  U = { name, title: STAFF[name], dept };
+
+  document.getElementById('ig').style.display='none';
+  document.getElementById('tc').classList.add('v');
+  document.getElementById('uav').textContent = name.charAt(0);
+  document.getElementById('un').textContent  = name + '（' + U.title + '）';
+  document.getElementById('ud').textContent  = dept;
+
+  const saved = localStorage.getItem('sheets_url');
+  if(saved) document.getElementById('surl').value = saved;
+
+  addLog('登入', `${name}（${U.title}・${dept}）確認身份進入訓練`);
+}
+
+// ══ LOG (internal only) ══
+function addLog(type, detail){
+  LOG.push({ time: new Date().toISOString(), type, detail });
+}
+
+// ══ VIDEO ══
+function playVideo(){
+  const cover = document.getElementById('vcover');
+  const frame = document.getElementById('vframe');
+  // 切換 src 加入 autoplay=1 觸發播放
+  frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  frame.classList.add('ready');
+  cover.style.opacity = '0';
+  cover.style.pointerEvents = 'none';
+  logVideoOpen();
+}
+function logVideoOpen(){
+  if(!videoOpened){
+    videoOpened=true;
+    videoOpenTime=new Date();
+    document.getElementById('vdot').classList.add('on');
+    document.getElementById('vtxt').textContent='▶ 影片播放中，請觀看完畢後再進行測驗';
+    addLog('影片', `${U.name} 開始播放影片（${videoOpenTime.toLocaleTimeString('zh-TW',{hour12:false})}）`);
+  }
+}
+
+// ══ BUILD QUIZ ══
+function buildQuiz(){
+  ANS={};
+  let h=`<div class="qst">共 10 題 · 每題 10 分 · 滿分 100 分</div>`;
+  KQ.forEach(q=>{
+    h+=`<div class="qblk" id="qb-${q.id}">
+      <div class="qmeta"><div class="qnum">第 ${q.id.replace('q','')} 題</div><div class="qpts">${q.pts} 分</div></div>
+      <div class="qtxt">${q.text}</div>
+      <div class="qops">${q.ops.map(o=>`<label class="qop" data-qid="${q.id}" data-v="${o.v}" onclick="selQ(event,'${q.id}','${o.v}')">
+        <input type="radio" name="${q.id}"><div class="rdot"></div><div class="qotxt">${o.l}</div></label>`).join('')}</div>
+    </div>`;
+  });
+  document.getElementById('qbody').innerHTML=h;
+  document.getElementById('qpb').style.width='0%';
+}
+
+function selQ(e,qid,val){
+  if(submitted)return;
+  document.querySelectorAll(`[data-qid="${qid}"]`).forEach(el=>el.classList.remove('sel'));
+  e.currentTarget.classList.add('sel');
+  ANS[qid]=val;
+  document.getElementById('qb-'+qid).classList.remove('ua');
+  document.getElementById('qpb').style.width=(Object.keys(ANS).length/10*100)+'%';
+}
+
+function openQuiz(){
+  if(submitted)return;
+  buildQuiz(); qOpenTime=new Date();
+  document.getElementById('qo').classList.add('open');
+  addLog('測驗', `${U.name} 開始作答（${qOpenTime.toLocaleTimeString('zh-TW',{hour12:false})}）`);
+}
+function closeQuiz(){ document.getElementById('qo').classList.remove('open'); }
+
+// ══ SUBMIT ══
+function submitQuiz(){
+  let miss=[];
+  KQ.forEach(q=>{ if(!ANS[q.id]){ miss.push(q.id); document.getElementById('qb-'+q.id).classList.add('ua'); }});
+  if(miss.length){
+    document.getElementById('qwarn').classList.add('show');
+    document.getElementById('qb-'+miss[0]).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('qwarn').classList.remove('show');
+  submitted=true;
+
+  let score=0;
+  KQ.forEach(q=>{ if(ANS[q.id]===q.ans) score+=q.pts; });
+
+  const now=new Date();
+  const dur=qOpenTime?Math.round((now-qOpenTime)/1000):0;
+  const durStr=dur>=60?`${Math.floor(dur/60)}分${dur%60}秒`:`${dur}秒`;
+  addLog('完成', `${U.name} 提交，得分 ${score} 分，時長 ${durStr}`);
+
+  document.getElementById('qo').classList.remove('open');
+  document.getElementById('ri').textContent=score>=80?'🎉':score>=60?'✅':'📚';
+  document.getElementById('rt').textContent=score>=80?'恭喜通過測驗！':score>=60?'測驗完成':'建議再次複習';
+  document.getElementById('rs').innerHTML=`${score}<span> / 100</span>`;
+  document.getElementById('rm').textContent=score>=80
+    ?'您對個人資料保護法有優良掌握，感謝認真完成本次教育訓練！'
+    :score>=60?'感謝完成本次評量，建議複習影片內容加深印象。'
+    :'建議再次觀看教育訓練影片，加強個資法知識後重新作答。';
+  document.getElementById('rinfo').innerHTML=
+    `<div class="rrow"><strong>姓名</strong>${U.name}（${U.title}）</div>
+     <div class="rrow"><strong>部門</strong>${U.dept}</div>
+     <div class="rrow"><strong>得分</strong>${score} / 100 分</div>
+     <div class="rrow"><strong>提交時間</strong>${now.toLocaleString('zh-TW')}</div>`;
+
+  let rv=`<h4>答題結果明細</h4>`;
+  KQ.forEach(q=>{
+    const ua=ANS[q.id], ok=(ua===q.ans);
+    const uaLabel=q.ops.find(o=>o.v===ua)?.l||ua;
+    const caLabel=q.ops.find(o=>o.v===q.ans)?.l||q.ans;
+    rv+=`<div class="rev-item"><div class="rev-icon">${ok?'✅':'❌'}</div>
+      <div class="rev-right"><div class="rev-q">第${q.id.replace('q','')}題</div>
+        <div class="rev-ans ${ok?'ok':'ng'}">您的答案：${uaLabel}${ok?'（正確）':` ／ 正解：${caLabel}`}</div>
+      </div></div>`;
+  });
+  document.getElementById('review').innerHTML=rv;
+  document.getElementById('ro').classList.add('open');
+
+  const btn=document.getElementById('bq');
+  btn.textContent=`已完成測驗（${score} 分）`; btn.disabled=true;
+
+  const rec={
+    姓名:U.name, 職稱:U.title, 部門:U.dept,
+    Q1答案:ANS.q1||'', Q2答案:ANS.q2||'', Q3答案:ANS.q3||'',
+    Q4答案:ANS.q4||'', Q5答案:ANS.q5||'', Q6答案:ANS.q6||'',
+    Q7答案:ANS.q7||'', Q8答案:ANS.q8||'', Q9答案:ANS.q9||'', Q10答案:ANS.q10||'',
+    Q1正誤:ANS.q1===KQ[0].ans?'O':'X', Q2正誤:ANS.q2===KQ[1].ans?'O':'X',
+    Q3正誤:ANS.q3===KQ[2].ans?'O':'X', Q4正誤:ANS.q4===KQ[3].ans?'O':'X',
+    Q5正誤:ANS.q5===KQ[4].ans?'O':'X', Q6正誤:ANS.q6===KQ[5].ans?'O':'X',
+    Q7正誤:ANS.q7===KQ[6].ans?'O':'X', Q8正誤:ANS.q8===KQ[7].ans?'O':'X',
+    Q9正誤:ANS.q9===KQ[8].ans?'O':'X', Q10正誤:ANS.q10===KQ[9].ans?'O':'X',
+    錯題數: KQ.filter(q=>ANS[q.id]!==q.ans).length,
+    得分:score,
+    觀看影片時間:videoOpened?(videoOpenTime?videoOpenTime.toLocaleString('zh-TW'):'已開啟'):'未開啟',
+    開始作答時間:qOpenTime?qOpenTime.toLocaleString('zh-TW'):'',
+    完成作答時間:now.toLocaleString('zh-TW')
+  };
+  try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
+  sendToSheets(rec);
+}
+
+// ══ SHEETS ══
+function saveSheetUrl(){
+  const url=document.getElementById('surl').value.trim(); if(!url)return;
+  localStorage.setItem('sheets_url',url);
+  const s=document.getElementById('ust'); s.style.display='block';
+  setTimeout(()=>s.style.display='none',3000);
+}
+async function sendToSheets(rec){
+  const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
+  if(!url) return;
+  const si=document.getElementById('si'); si.style.display='block';
+  try{
+    await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)});
+    si.textContent='✅ 已成功儲存至 Google Sheets';
+  }catch(e){
+    si.textContent='⚠ 儲存失敗，請確認網址設定';
+  }
+  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+}
+</script>
+
+<!-- SHEETS 說明 -->
+<div style="background:#0d1f3c;color:rgba(255,255,255,.7);padding:36px 24px;font-size:12px;line-height:1.9;">
+  <div style="max-width:900px;margin:0 auto;">
+    <div style="font-family:'Noto Serif TC',serif;font-size:16px;color:#e8b84b;margin-bottom:16px;font-weight:700;">📊 Google Sheets 串接說明</div>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 1</strong> — 建立 Google Sheets 試算表，工作表命名為「<strong style="color:#fff">115年度</strong>」，未來每年新增工作表累積紀錄。</p>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 2</strong> — 點選「擴充功能」→「Apps Script」，貼上以下程式碼後儲存：</p>
+    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheetName = '115年度';
+    var sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+      var headers = [
+        '姓名','職稱','部門',
+        'Q1答案','Q2答案','Q3答案','Q4答案','Q5答案',
+        'Q6答案','Q7答案','Q8答案','Q9答案','Q10答案',
+        'Q1正誤','Q2正誤','Q3正誤','Q4正誤','Q5正誤',
+        'Q6正誤','Q7正誤','Q8正誤','Q9正誤','Q10正誤',
+        '錯題數','得分',
+        '觀看影片時間','開始作答時間','完成作答時間'
+      ];
+      sheet.appendRow(headers);
+      var hRange = sheet.getRange(1, 1, 1, headers.length);
+      hRange.setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+    }
+
+    // 正確答案對照
+    var correctAnswers = {
+      Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
+      Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
+    };
+
+    var row = [
+      data['姓名']||'', data['職稱']||'', data['部門']||'',
+      data['Q1答案']||'', data['Q2答案']||'', data['Q3答案']||'',
+      data['Q4答案']||'', data['Q5答案']||'', data['Q6答案']||'',
+      data['Q7答案']||'', data['Q8答案']||'', data['Q9答案']||'', data['Q10答案']||'',
+      data['Q1正誤']||'', data['Q2正誤']||'', data['Q3正誤']||'',
+      data['Q4正誤']||'', data['Q5正誤']||'', data['Q6正誤']||'',
+      data['Q7正誤']||'', data['Q8正誤']||'', data['Q9正誤']||'', data['Q10正誤']||'',
+      data['錯題數']||0, data['得分']||0,
+      data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||''
+    ];
+
+    sheet.appendRow(row);
+
+    // 將答錯題目的答案欄位標為紅色（Q1~Q10答案欄位為第4~13欄，正誤欄為14~23欄）
+    var lastRow = sheet.getLastRow();
+    for (var i = 0; i < 10; i++) {
+      var correctCol = i + 4;  // Q1答案=第4欄
+      var wrongFlagCol = i + 14; // Q1正誤=第14欄
+      var wrongFlag = sheet.getRange(lastRow, wrongFlagCol).getValue();
+      if (wrongFlag === 'X') {
+        sheet.getRange(lastRow, correctCol).setFontColor('#cc0000').setFontWeight('bold');
+      }
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 3</strong> — 點選「部署」→「新增部署」→ 類型：<strong style="color:#fff">網頁應用程式</strong>，執行身分：<strong style="color:#fff">我</strong>，存取權：<strong style="color:#fff">任何人</strong> → 部署後複製網址。</p>
+    <p><strong style="color:#fff">Step 4</strong> — 將網址貼入頁面上方「Google Sheets 串接設定」欄位並儲存即完成。</p>
+  </div>
+</div>
+
+
+</body>
+</html>
