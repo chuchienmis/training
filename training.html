@@ -653,19 +653,20 @@ async function sendToSheets(rec){
   const si=document.getElementById('si');
   const leaveBtn=document.getElementById('leave-btn');
 
-  if(leaveBtn) leaveBtn.style.display='block';
-  if(!url){ return; }
+  if(!url){
+    if(leaveBtn) leaveBtn.style.display='block';
+    return;
+  }
 
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
 
-  // 判斷是否為 iPhone / iOS Safari / LINE
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isLINE = /Line/i.test(navigator.userAgent);
 
   if(isIOS || isLINE){
-    // iOS / LINE：先設旗標（localStorage 跨頁面保留），再跳轉到 Apps Script
-      const getUrl = url +
+    // iOS/LINE：跳轉到 Apps Script，寫完後跳回
+    const getUrl = url +
       '?action=submit' +
       '&年度=' + encodeURIComponent(rec['年度']||'') +
       '&員工編號=' + encodeURIComponent(rec['員工編號']||'') +
@@ -691,12 +692,13 @@ async function sendToSheets(rec){
     return;
   }
 
-  // 電腦瀏覽器：用 fetch 送出，不跳轉頁面
+  // 電腦瀏覽器：fetch 送出，不跳轉
   try{
     await fetch(url, {method:'POST', mode:'no-cors', body:JSON.stringify(rec)});
   }catch(e){}
 
   si.textContent='✅ 已儲存至 Google Sheets';
+  if(leaveBtn) leaveBtn.style.display='block';
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
@@ -782,7 +784,7 @@ function doGet(e) {
       return HtmlService.createHtmlOutput(
         '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html"></head>' +
         '</head><body><p style="font-family:sans-serif;text-align:center;margin-top:60px;">✅ 資料已儲存，正在返回...</p>' +
-        '<script>setTimeout(function(){window.location.replace("https://chuchienmis.github.io/training/training.html");},1500);</script>' +
+        '&lt;script&gt;setTimeout(function(){window.location.replace("https://chuchienmis.github.io/training/training.html");},1500);&lt;/script&gt;' +
         '</body></html>'
       );
     }
