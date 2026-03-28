@@ -659,10 +659,10 @@ async function sendToSheets(rec){
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
 
-  // 將資料拆成多個小欄位用 GET 送出（避免 URL 長度限制）
-  // Apps Script doGet 已可接收 submit action
+  // 把資料存到 sessionStorage，跳轉到 Apps Script 送出後跳回
   const getUrl = url +
     '?action=submit' +
+    '&callback=' + encodeURIComponent('https://chuchienmis.github.io/training/training.html?done=1') +
     '&年度=' + encodeURIComponent(rec['年度']||'') +
     '&員工編號=' + encodeURIComponent(rec['員工編號']||'') +
     '&姓名=' + encodeURIComponent(rec['姓名']||'') +
@@ -684,19 +684,9 @@ async function sendToSheets(rec){
     '&開始作答時間=' + encodeURIComponent(rec['開始作答時間']||'') +
     '&完成作答時間=' + encodeURIComponent(rec['完成作答時間']||'');
 
-  try{
-    // 用 Image tag 送 GET 請求（最相容，LINE/Safari/所有瀏覽器均支援）
-    await new Promise((resolve)=>{
-      const img = new Image();
-      img.onload = img.onerror = resolve;
-      img.src = getUrl;
-      setTimeout(resolve, 4000);
-    });
-    si.textContent='✅ 已儲存至 Google Sheets';
-  }catch(e){
-    si.textContent='✅ 資料已送出';
-  }
-  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+  // 直接跳轉到 Apps Script（最可靠，無任何跨域限制）
+  // Apps Script 寫入後會 redirect 回訓練頁面
+  window.location.href = getUrl;
 }
 
 // ══ 離開頁面 ══
@@ -727,6 +717,16 @@ window.addEventListener('load', function(){
   if(saved){ const el=document.getElementById('surl'); if(el) el.value=saved; }
   const savedLink = localStorage.getItem('sheets_link');
   if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
+
+  // 從 Apps Script redirect 回來（?done=1）→ 顯示完成訊息
+  if(window.location.search.indexOf('done=1') !== -1){
+    // 清除網址參數
+    history.replaceState({}, '', window.location.pathname);
+    const leaveBtn = document.getElementById('leave-btn');
+    if(leaveBtn) leaveBtn.style.display='block';
+    const si = document.getElementById('si');
+    if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
+  }
 });
 </script>
 
@@ -796,6 +796,13 @@ function doGet(e) {
       }
       if (data) {
         var result = writeData_(ss, data);
+        // 有 callback 就 redirect 回去，否則回傳 JSON
+        var callback = e.parameter['callback'] || '';
+        if (callback) {
+          return HtmlService.createHtmlOutput(
+            '<script>window.location.href="' + callback + '";<\/script>'
+          );
+        }
         return ContentService.createTextOutput(JSON.stringify(result))
           .setMimeType(ContentService.MimeType.JSON);
       }
