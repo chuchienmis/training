@@ -83,6 +83,7 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .dept-wrap select{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
 .dept-wrap select:focus{border-color:var(--green);background-color:var(--w)}
 .dept-wrap select.unselected{color:#bbb}
+.dept-wrap select option{color:#1a1a2e;background:#fff}
 
 .ierr{color:var(--red);font-size:13px;margin:4px 0 14px;min-height:18px;font-weight:500}
 .bcf{background:var(--navy);color:var(--w);border:none;padding:13px 44px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s,transform .1s;margin-top:4px}
@@ -215,21 +216,28 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <h2>請確認您的身份以開始訓練</h2>
 
     <div class="login-row">
-      <!-- 姓名：純文字輸入，不自動帶出 -->
+      <!-- 姓名：輸入後自動顯示職稱 -->
       <div class="name-wrap">
-        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"/>
+        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"
+          oninput="onNameCheck()"/>
+      </div>
+
+      <!-- 職稱 badge（自動帶入） -->
+      <div class="title-badge" id="titleBadge">
+        <span class="title-badge-icon">🏷</span>
+        <span id="titleText"></span>
       </div>
 
       <!-- 部門 -->
       <div class="dept-wrap">
         <select id="idept" class="unselected" onchange="this.classList.remove('unselected')">
           <option value="" disabled selected hidden>部門 / 單位</option>
-          <option>總經理室</option>
-          <option>業務部</option>
-          <option>工務部</option>
-          <option>管理部</option>
-          <option>財務部</option>
-          <option>資訊室</option>
+          <option style="color:#1a1a2e">總經理室</option>
+          <option style="color:#1a1a2e">業務部</option>
+          <option style="color:#1a1a2e">工務部</option>
+          <option style="color:#1a1a2e">管理部</option>
+          <option style="color:#1a1a2e">財務部</option>
+          <option style="color:#1a1a2e">資訊室</option>
         </select>
       </div>
     </div>
@@ -296,6 +304,9 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       </div>
     </div>
 
+    <!-- 離開按鈕（儲存成功後顯示） -->
+    <button id="leave-btn" style="display:none;width:100%;margin-bottom:20px;padding:14px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 12px rgba(26,107,47,.25);" onclick="window.close()">✅ 資料已儲存，點此關閉頁面</button>
+
     <!-- 2. 測驗 -->
     <div class="sl"><div class="sn">2</div><div class="st">完成學習評量測驗</div></div>
     <div class="qcta">
@@ -347,7 +358,6 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div class="rinfo" id="rinfo"></div>
       <div class="rev-wrap" id="review"></div>
       <button class="bdn" onclick="document.getElementById('ro').classList.remove('open')">確認完成</button>
-      <button id="leave-btn" style="display:none;margin-top:12px;width:100%;padding:14px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;" onclick="window.close()">✅ 資料已儲存，關閉此頁面</button>
     </div>
   </div>
 </div>
@@ -409,6 +419,21 @@ const KQ=[
 ];
 
 let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
+
+// ══ 姓名輸入即時顯示職稱 ══
+function onNameCheck(){
+  const val = document.getElementById('iname').value.trim();
+  const badge = document.getElementById('titleBadge');
+  const titleTxt = document.getElementById('titleText');
+  document.getElementById('ierr').textContent='';
+  if(STAFF[val]){
+    titleTxt.textContent = STAFF[val];
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+    titleTxt.textContent='';
+  }
+}
 
 // ══ IDENTITY CONFIRM ══
 function confirmIdentity(){
