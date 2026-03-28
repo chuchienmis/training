@@ -12,7 +12,7 @@ body{background:var(--cream);font-family:'Noto Sans TC',sans-serif;color:var(--t
 
 header{background:var(--navy);color:var(--w);position:relative;overflow:hidden}
 header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(200,150,42,.03) 40px,rgba(200,150,42,.03) 41px)}
-.hi{max-width:900px;margin:0 auto;padding:24px 24px 20px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
+.hi{max-width:900px;margin:0 auto;padding:16px 24px 14px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
 .hlogo{flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .hlogo img{width:60px;height:auto;object-fit:contain;display:block}
 .ht{text-align:left}
@@ -240,12 +240,19 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
 
   <!-- TRAINING CONTENT -->
   <div id="tc">
-    <div class="uchip">
-      <div class="uav" id="uav"></div>
-      <div>
-        <div class="un" id="un"></div>
-        <div class="ud" id="ud"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0;flex-wrap:wrap;gap:8px;">
+      <div class="uchip" style="margin-bottom:0">
+        <div class="uav" id="uav"></div>
+        <div>
+          <div class="un" id="un"></div>
+          <div class="ud" id="ud"></div>
+        </div>
       </div>
+      <!-- 管理者專用：查看紀錄按鈕（登入後若為黃晨晞則顯示） -->
+      <a id="sheets-btn" href="#" target="_blank"
+         style="display:none;align-items:center;gap:6px;background:#1a6b2f;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.15);flex-shrink:0;">
+        📊 查看訓練紀錄
+      </a>
     </div>
 
     <!-- 1. 影片 -->
@@ -299,10 +306,10 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <button class="bq" id="bq" onclick="openQuiz()">開始作答 →</button>
     </div>
 
-    <!-- Google Sheets 設定 -->
-    <div class="sinfo">
-      <h3>📊 Google Sheets 串接設定</h3>
-      <p>建立 Google Apps Script Web App 後，貼入網址即可自動儲存同仁測驗紀錄（詳見頁底說明）。</p>
+    <!-- Google Sheets 設定（隱藏，按 Ctrl+Shift+A 開啟） -->
+    <div class="sinfo" id="sinfo-panel" style="display:none">
+      <h3>📊 Google Sheets 串接設定（管理者專用）</h3>
+      <p>建立 Google Apps Script Web App 後，貼入網址即可自動儲存同仁測驗紀錄。</p>
       <div class="sir">
         <input type="text" id="surl" placeholder="貼上 Google Apps Script Web App 網址"/>
         <button class="bsu" onclick="saveSheetUrl()">儲存</button>
@@ -470,6 +477,21 @@ function confirmIdentity(){
   const saved = localStorage.getItem('sheets_url');
   if(saved) document.getElementById('surl').value = saved;
 
+  // 管理者功能：黃晨晞 登入時顯示查看紀錄按鈕及串接設定
+  const ADMINS = ['黃晨晞'];
+  if(ADMINS.includes(name)){
+    const btn = document.getElementById('sheets-btn');
+    btn.style.display = 'flex';
+    // 若有儲存試算表網址則設連結，否則連到 Google Sheets 首頁
+    const sheetsUrl = localStorage.getItem('sheets_url') || 'https://sheets.google.com';
+    // 從 Apps Script URL 嘗試萃取 spreadsheet ID（若有的話）
+    const savedUrl = localStorage.getItem('sheets_url') || '';
+    const idMatch = savedUrl.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+    btn.href = idMatch
+      ? `https://docs.google.com/spreadsheets/d/${idMatch[1]}`
+      : 'https://sheets.google.com';
+  }
+
   addLog('登入', `${name}（${U.title}・${dept}）確認身份進入訓練`);
 }
 
@@ -608,6 +630,12 @@ function saveSheetUrl(){
   localStorage.setItem('sheets_url',url);
   const s=document.getElementById('ust'); s.style.display='block';
   setTimeout(()=>s.style.display='none',3000);
+  // 更新查看紀錄按鈕連結
+  const btn=document.getElementById('sheets-btn');
+  if(btn){
+    const idMatch=url.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+    btn.href=idMatch?`https://docs.google.com/spreadsheets/d/${idMatch[1]}`:'https://sheets.google.com';
+  }
 }
 async function sendToSheets(rec){
   const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
@@ -621,10 +649,38 @@ async function sendToSheets(rec){
   }
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
+
+// ══ 管理者快捷鍵：Ctrl+Shift+A 顯示/隱藏串接設定 ══
+document.addEventListener('keydown', function(e){
+  if(e.ctrlKey && e.shiftKey && e.key==='A'){
+    e.preventDefault();
+    const panel  = document.getElementById('sinfo-panel');
+    const footer = document.getElementById('sheets-footer');
+    if(panel){
+      const isHidden = panel.style.display==='none';
+      panel.style.display  = isHidden ? 'block' : 'none';
+      if(footer) footer.style.display = isHidden ? 'block' : 'none';
+      if(isHidden){
+        const saved = localStorage.getItem('sheets_url');
+        if(saved) document.getElementById('surl').value = saved;
+        panel.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    }
+  }
+});
+
+// 頁面載入時自動讀取已存網址（背景靜默載入，不顯示面板）
+window.addEventListener('load', function(){
+  const saved = localStorage.getItem('sheets_url');
+  if(saved){
+    const el = document.getElementById('surl');
+    if(el) el.value = saved;
+  }
+});
 </script>
 
-<!-- SHEETS 說明 -->
-<div style="background:#0d1f3c;color:rgba(255,255,255,.7);padding:36px 24px;font-size:12px;line-height:1.9;">
+<!-- SHEETS 說明（隱藏，管理者透過 Ctrl+Shift+A 存取） -->
+<div id="sheets-footer" style="display:none;background:#0d1f3c;color:rgba(255,255,255,.7);padding:36px 24px;font-size:12px;line-height:1.9;">
   <div style="max-width:900px;margin:0 auto;">
     <div style="font-family:'Noto Serif TC',serif;font-size:16px;color:#e8b84b;margin-bottom:16px;font-weight:700;">📊 Google Sheets 串接說明</div>
     <p style="margin-bottom:10px;"><strong style="color:#fff">Step 1</strong> — 建立 Google Sheets 試算表，工作表命名為「<strong style="color:#fff">115年度</strong>」，未來每年新增工作表累積紀錄。</p>
