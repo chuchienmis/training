@@ -614,7 +614,11 @@ function submitQuiz(){
   // 每題合併：答案＋正誤，例如「O ✓」或「A ✗」
   function qResult(ans, correct){ return ans ? ans + (ans===correct?' ✓':' ✗') : '未作答'; }
 
+  // 民國年度（例如 2025 → 114、2026 → 115）
+  const rocYear = now.getFullYear() - 1911;
+
   const rec={
+    年度: rocYear + '年度',
     姓名:U.name, 職稱:U.title, 部門:U.dept,
     Q1:qResult(ANS.q1, KQ[0].ans), Q2:qResult(ANS.q2, KQ[1].ans),
     Q3:qResult(ANS.q3, KQ[2].ans), Q4:qResult(ANS.q4, KQ[3].ans),
@@ -701,10 +705,11 @@ window.addEventListener('load', function(){
   try {
     var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheetName = '115年度';
+
+    // 自動依民國年度切換分頁（115年度、116年度…）
+    var sheetName = data['年度'] || '115年度';
     var sheet = ss.getSheetByName(sheetName);
 
-    // 欄位：姓名、職稱、部門、Q1~Q10（答案+正誤合一）、錯題數、得分、3個時間
     var headers = [
       '姓名','職稱','部門',
       'Q1','Q2','Q3','Q4','Q5',
@@ -713,6 +718,7 @@ window.addEventListener('load', function(){
       '觀看影片時間','開始作答時間','完成作答時間'
     ];
 
+    // 分頁不存在 → 自動建立並寫入標題
     if (!sheet) {
       sheet = ss.insertSheet(sheetName);
       sheet.appendRow(headers);
@@ -720,7 +726,7 @@ window.addEventListener('load', function(){
         .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
     }
 
-    // 工作表存在但第一列是空的 → 補上標題
+    // 分頁存在但第一列是空的 → 補上標題
     if (sheet.getRange(1,1).getValue() === '') {
       sheet.insertRowBefore(1);
       sheet.getRange(1,1,1,headers.length).setValues([headers]);
@@ -739,7 +745,7 @@ window.addEventListener('load', function(){
 
     sheet.appendRow(row);
 
-    // Q1~Q10 在第4~13欄，答案含「✗」表示答錯 → 標紅色粗體
+    // 答案含「✗」→ 標紅色粗體
     var lastRow = sheet.getLastRow();
     for (var i = 0; i < 10; i++) {
       var col = i + 4;
