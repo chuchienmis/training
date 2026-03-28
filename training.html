@@ -652,56 +652,35 @@ async function sendToSheets(rec){
   if(!url) return;
   const si=document.getElementById('si'); si.style.display='block';
 
-  // 使用隱藏 iframe + form 方式送出，完全繞過 CORS 限制
-  // 適用於 LINE 內建瀏覽器、iOS Safari 等嚴格環境
+  // 將資料編碼為 GET 參數，用最相容的方式送出
+  // 適用於 LINE 內建瀏覽器、iOS Safari、所有環境
+  const params = new URLSearchParams();
+  params.append('action', 'submit');
+  params.append('payload', JSON.stringify(rec));
+  const getUrl = url + '?' + params.toString();
+
+  // 方法一：用 no-cors fetch GET（最廣泛支援）
+  let sent = false;
   try{
-    // 建立隱藏 iframe 作為 form target
-    let iframe = document.getElementById('_submit_frame');
-    if(!iframe){
-      iframe = document.createElement('iframe');
-      iframe.id = '_submit_frame';
-      iframe.name = '_submit_frame';
-      iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;';
-      document.body.appendChild(iframe);
-    }
-
-    // 建立隱藏 form
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = url;
-    form.target = '_submit_frame';
-    form.style.display = 'none';
-    form.enctype = 'application/x-www-form-urlencoded';
-
-    // 將所有資料序列化為單一欄位送出
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'payload';
-    input.value = JSON.stringify(rec);
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    // 等待送出完成後顯示成功
-    setTimeout(()=>{
-      si.textContent='✅ 已成功儲存至 Google Sheets';
-      const leaveBtn = document.getElementById('leave-btn');
-      if(leaveBtn) leaveBtn.style.display='block';
-      setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
-    }, 1500);
-
-  }catch(e){
-    // fallback：改用 fetch no-cors
+    await fetch(getUrl, {method:'GET', mode:'no-cors'});
+    sent = true;
+  }catch(e1){
+    // 方法二：用 Image beacon（LINE 內建瀏覽器備案）
     try{
-      await fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify(rec)});
-    }catch(e2){}
-    si.textContent='✅ 已成功儲存至 Google Sheets';
-    const leaveBtn = document.getElementById('leave-btn');
-    if(leaveBtn) leaveBtn.style.display='block';
-    setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+      await new Promise((resolve)=>{
+        const img = new Image();
+        img.onload = img.onerror = resolve;
+        img.src = getUrl;
+        setTimeout(resolve, 3000);
+      });
+      sent = true;
+    }catch(e2){ sent = false; }
   }
+
+  si.textContent = sent ? '✅ 已成功儲存至 Google Sheets' : '⚠ 儲存失敗，請確認網址設定';
+  const leaveBtn = document.getElementById('leave-btn');
+  if(leaveBtn) leaveBtn.style.display='block';
+  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
 // ══ 離開頁面 ══
@@ -741,14 +720,15 @@ window.addEventListener('load', function(){
     <div style="font-family:'Noto Serif TC',serif;font-size:16px;color:#e8b84b;margin-bottom:16px;font-weight:700;">📊 Google Sheets 串接說明</div>
     <p style="margin-bottom:10px;"><strong style="color:#fff">Step 1</strong> — 建立 Google Sheets 試算表，工作表命名為「<strong style="color:#fff">115年度</strong>」，未來每年新增工作表累積紀錄。</p>
     <p style="margin-bottom:10px;"><strong style="color:#fff">Step 2</strong> — 點選「擴充功能」→「Apps Script」，貼上以下程式碼後儲存：</p>
-    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">// ══ 查詢測驗次數（登入驗證用）══
+    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">// ══ doGet：查詢次數 + 接收測驗資料（相容 LINE/Safari）══
 function doGet(e) {
   try {
-    var action = e.parameter.action;
-    var name   = e.parameter.name || '';
+    var action = e.parameter.action || '';
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
+    // ── 查詢測驗次數 ──
     if (action === 'checkCount') {
+      var name = e.parameter.name || '';
       var rocYear = new Date().getFullYear() - 1911;
       var sheetName = rocYear + '年度';
       var sheet = ss.getSheetByName(sheetName);
@@ -765,6 +745,18 @@ function doGet(e) {
       return ContentService.createTextOutput(JSON.stringify({status:'ok', count: count}))
         .setMimeType(ContentService.MimeType.JSON);
     }
+
+    // ── 接收測驗資料（GET 方式，相容 LINE/Safari）──
+    if (action === 'submit') {
+      var payload = e.parameter.payload || '';
+      if (payload) {
+        var data = JSON.parse(decodeURIComponent(payload));
+        var result = writeData_(ss, data);
+        return ContentService.createTextOutput(JSON.stringify(result))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
     return ContentService.createTextOutput(JSON.stringify({status:'error', msg:'unknown action'}))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
@@ -773,136 +765,128 @@ function doGet(e) {
   }
 }
 
-// ══ 寫入測驗資料 ══
+// ══ 共用寫入邏輯（doGet submit + doPost 都呼叫這裡）══
+function writeData_(ss, data) {
+  var sheetName = data['年度'] || '115年度';
+  var sheet = ss.getSheetByName(sheetName);
+
+  var headers = [
+    '員工編號','姓名','職稱','部門',
+    'Q1','Q2','Q3','Q4','Q5',
+    'Q6','Q7','Q8','Q9','Q10',
+    '錯題數','得分',
+    '觀看影片時間','開始作答時間','完成作答時間','測驗次數'
+  ];
+
+  var correctAns = {
+    Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
+    Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
+  };
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    sheet.getRange(1,1,1,headers.length).setValues([headers])
+      .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
+    sheet.setFrozenColumns(2);
+    sheet.getRange('A2:A1000').setNumberFormat('@');
+  }
+
+  if (sheet.getRange(1,1).getValue() === '') {
+    sheet.insertRowBefore(1);
+    sheet.getRange(1,1,1,headers.length).setValues([headers]);
+    sheet.getRange(1,1,1,headers.length)
+      .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
+    sheet.setFrozenColumns(2);
+    sheet.getRange('A2:A1000').setNumberFormat('@');
+  }
+
+  var name    = data['姓名'] || '';
+  var empNo   = String(data['員工編號'] || '');
+  var newScore = Number(data['得分']) || 0;
+
+  var lastRow = sheet.getLastRow();
+  var existingRow = -1;
+  var oldCount = 0;
+  var oldScore = 0;
+  if (lastRow >= 2) {
+    var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+    for (var r = 0; r < nameCol.length; r++) {
+      if (nameCol[r][0] === name) {
+        existingRow = r + 2;
+        oldCount = Number(sheet.getRange(existingRow, 20).getValue()) || 1;
+        oldScore = Number(sheet.getRange(existingRow, 16).getValue()) || 0;
+        break;
+      }
+    }
+  }
+
+  var newCount = existingRow > 0 ? oldCount + 1 : 1;
+  var shouldUpdate = (existingRow < 0) || (newScore >= oldScore);
+
+  var newRow = [
+    empNo, name,
+    data['職稱']||'', data['部門']||'',
+    data['Q1']||'', data['Q2']||'', data['Q3']||'',
+    data['Q4']||'', data['Q5']||'', data['Q6']||'',
+    data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
+    data['錯題數']||0, newScore,
+    data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||'',
+    newCount
+  ];
+
+  var targetRow;
+  if (existingRow > 0) {
+    if (shouldUpdate) {
+      sheet.getRange(existingRow, 1, 1, newRow.length).setValues([newRow]);
+      sheet.getRange(existingRow, 5, 1, 10).setFontColor('#000000').setFontWeight('normal');
+    } else {
+      sheet.getRange(existingRow, 20).setValue(newCount);
+      sheet.getRange(existingRow, 19).setValue(data['完成作答時間']||'');
+    }
+    targetRow = existingRow;
+  } else {
+    sheet.appendRow(newRow);
+    targetRow = sheet.getLastRow();
+  }
+
+  sheet.getRange(targetRow, 1)
+    .setNumberFormat('@')
+    .setBackground(null)
+    .setValue(empNo);
+
+  if (shouldUpdate) {
+    var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
+    for (var i = 0; i < 10; i++) {
+      var ans = data[qKeys[i]] || '';
+      if (ans !== '' && ans !== correctAns[qKeys[i]]) {
+        sheet.getRange(targetRow, i + 5).setFontColor('#cc0000').setFontWeight('bold');
+      }
+    }
+  }
+
+  if (sheet.getLastRow() > 2) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length)
+      .sort({column: 1, ascending: true});
+  }
+
+  return {status:'ok', count: newCount, updated: shouldUpdate};
+}
+
+// ══ 寫入測驗資料（POST 方式）══
 function doPost(e) {
   try {
-    // 同時支援 JSON POST（fetch）和 form submit（iframe，相容 LINE/Safari）
     var data;
     try {
       data = JSON.parse(e.postData.contents);
     } catch(parseErr) {
-      // form submit 方式：資料在 payload 欄位
-      var payload = e.parameter.payload || e.postData.contents;
-      data = JSON.parse(payload);
+      var payload = e.parameter ? (e.parameter.payload || '') : '';
+      data = JSON.parse(payload || e.postData.contents);
     }
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    var sheetName = data['年度'] || '115年度';
-    var sheet = ss.getSheetByName(sheetName);
-
-    var headers = [
-      '員工編號','姓名','職稱','部門',
-      'Q1','Q2','Q3','Q4','Q5',
-      'Q6','Q7','Q8','Q9','Q10',
-      '錯題數','得分',
-      '觀看影片時間','開始作答時間','完成作答時間','測驗次數'
-    ];
-
-    var correctAns = {
-      Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
-      Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
-    };
-
-    if (!sheet) {
-      sheet = ss.insertSheet(sheetName);
-      // 標題列
-      sheet.getRange(1,1,1,headers.length).setValues([headers])
-        .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
-      // 凍結第一列
-      sheet.setFrozenRows(1);
-      sheet.setFrozenColumns(2);
-      // 員工編號欄預設文字格式
-      sheet.getRange('A2:A1000').setNumberFormat('@');
-    }
-
-    if (sheet.getRange(1,1).getValue() === '') {
-      sheet.insertRowBefore(1);
-      sheet.getRange(1,1,1,headers.length).setValues([headers]);
-      sheet.getRange(1,1,1,headers.length)
-        .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
-      sheet.setFrozenRows(1);
-      sheet.setFrozenColumns(2);
-      sheet.getRange('A2:A1000').setNumberFormat('@');
-    }
-
-    var name  = data['姓名'] || '';
-    var empNo = String(data['員工編號'] || '');
-    var newScore = Number(data['得分']) || 0;
-
-    // 找同名舊資料
-    var lastRow = sheet.getLastRow();
-    var existingRow = -1;
-    var oldCount = 0;
-    var oldScore = 0;
-    if (lastRow >= 2) {
-      var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
-      for (var r = 0; r < nameCol.length; r++) {
-        if (nameCol[r][0] === name) {
-          existingRow = r + 2;
-          oldCount = Number(sheet.getRange(existingRow, 20).getValue()) || 1;
-          oldScore = Number(sheet.getRange(existingRow, 16).getValue()) || 0;
-          break;
-        }
-      }
-    }
-
-    var newCount = existingRow > 0 ? oldCount + 1 : 1;
-
-    // 分數比較：只有新分數 >= 舊分數時才更新答題內容
-    var shouldUpdate = (existingRow < 0) || (newScore >= oldScore);
-
-    var newRow = [
-      empNo, name,
-      data['職稱']||'', data['部門']||'',
-      data['Q1']||'', data['Q2']||'', data['Q3']||'',
-      data['Q4']||'', data['Q5']||'', data['Q6']||'',
-      data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
-      data['錯題數']||0, newScore,
-      data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||'',
-      newCount
-    ];
-
-    var targetRow;
-    if (existingRow > 0) {
-      if (shouldUpdate) {
-        // 新分數較高 → 整列覆蓋
-        sheet.getRange(existingRow, 1, 1, newRow.length).setValues([newRow]);
-        sheet.getRange(existingRow, 5, 1, 10).setFontColor('#000000').setFontWeight('normal');
-      } else {
-        // 新分數較低 → 只更新次數與時間，保留舊答題內容
-        sheet.getRange(existingRow, 20).setValue(newCount);
-        sheet.getRange(existingRow, 19).setValue(data['完成作答時間']||'');
-      }
-      targetRow = existingRow;
-    } else {
-      sheet.appendRow(newRow);
-      targetRow = sheet.getLastRow();
-    }
-
-    // 員工編號欄：文字格式＋移除底色＋確保前導零
-    sheet.getRange(targetRow, 1)
-      .setNumberFormat('@')
-      .setBackground(null)
-      .setValue(empNo);
-
-    // 答錯的 Q 欄標紅色（僅在更新內容時重標）
-    if (shouldUpdate) {
-      var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
-      for (var i = 0; i < 10; i++) {
-        var ans = data[qKeys[i]] || '';
-        if (ans !== '' && ans !== correctAns[qKeys[i]]) {
-          sheet.getRange(targetRow, i + 5).setFontColor('#cc0000').setFontWeight('bold');
-        }
-      }
-    }
-
-    // 依員工編號排序
-    if (sheet.getLastRow() > 2) {
-      sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length)
-        .sort({column: 1, ascending: true});
-    }
-
-    return ContentService.createTextOutput(JSON.stringify({status:'ok', count: newCount, updated: shouldUpdate}))
+    var result = writeData_(ss, data);
+    return ContentService.createTextOutput(JSON.stringify(result))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
     return ContentService.createTextOutput(JSON.stringify({status:'error', msg:err.toString()}))
