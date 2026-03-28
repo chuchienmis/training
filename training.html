@@ -651,16 +651,57 @@ async function sendToSheets(rec){
   const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
   if(!url) return;
   const si=document.getElementById('si'); si.style.display='block';
+
+  // 使用隱藏 iframe + form 方式送出，完全繞過 CORS 限制
+  // 適用於 LINE 內建瀏覽器、iOS Safari 等嚴格環境
   try{
-    await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)});
+    // 建立隱藏 iframe 作為 form target
+    let iframe = document.getElementById('_submit_frame');
+    if(!iframe){
+      iframe = document.createElement('iframe');
+      iframe.id = '_submit_frame';
+      iframe.name = '_submit_frame';
+      iframe.style.cssText = 'display:none;width:0;height:0;border:0;position:absolute;';
+      document.body.appendChild(iframe);
+    }
+
+    // 建立隱藏 form
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.target = '_submit_frame';
+    form.style.display = 'none';
+    form.enctype = 'application/x-www-form-urlencoded';
+
+    // 將所有資料序列化為單一欄位送出
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'payload';
+    input.value = JSON.stringify(rec);
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    // 等待送出完成後顯示成功
+    setTimeout(()=>{
+      si.textContent='✅ 已成功儲存至 Google Sheets';
+      const leaveBtn = document.getElementById('leave-btn');
+      if(leaveBtn) leaveBtn.style.display='block';
+      setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+    }, 1500);
+
+  }catch(e){
+    // fallback：改用 fetch no-cors
+    try{
+      await fetch(url,{method:'POST',mode:'no-cors',body:JSON.stringify(rec)});
+    }catch(e2){}
     si.textContent='✅ 已成功儲存至 Google Sheets';
-    // 顯示離開按鈕
     const leaveBtn = document.getElementById('leave-btn');
     if(leaveBtn) leaveBtn.style.display='block';
-  }catch(e){
-    si.textContent='⚠ 儲存失敗，請確認網址設定';
+    setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
   }
-  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
 // ══ 離開頁面 ══
@@ -735,7 +776,15 @@ function doGet(e) {
 // ══ 寫入測驗資料 ══
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents);
+    // 同時支援 JSON POST（fetch）和 form submit（iframe，相容 LINE/Safari）
+    var data;
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch(parseErr) {
+      // form submit 方式：資料在 payload 欄位
+      var payload = e.parameter.payload || e.postData.contents;
+      data = JSON.parse(payload);
+    }
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
     var sheetName = data['年度'] || '115年度';
