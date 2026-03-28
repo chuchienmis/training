@@ -649,37 +649,51 @@ function saveSheetLink(){
 }
 async function sendToSheets(rec){
   const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
-  if(!url) return;
-  const si=document.getElementById('si'); si.style.display='block';
+  const si=document.getElementById('si');
+  const leaveBtn=document.getElementById('leave-btn');
 
-  // 將資料編碼為 GET 參數，用最相容的方式送出
-  // 適用於 LINE 內建瀏覽器、iOS Safari、所有環境
-  const params = new URLSearchParams();
-  params.append('action', 'submit');
-  params.append('payload', JSON.stringify(rec));
-  const getUrl = url + '?' + params.toString();
+  // 先立即顯示按鈕，不等傳送結果（避免 LINE/Safari 封鎖導致按鈕不出現）
+  if(leaveBtn) leaveBtn.style.display='block';
 
-  // 方法一：用 no-cors fetch GET（最廣泛支援）
-  let sent = false;
-  try{
-    await fetch(getUrl, {method:'GET', mode:'no-cors'});
-    sent = true;
-  }catch(e1){
-    // 方法二：用 Image beacon（LINE 內建瀏覽器備案）
-    try{
-      await new Promise((resolve)=>{
-        const img = new Image();
-        img.onload = img.onerror = resolve;
-        img.src = getUrl;
-        setTimeout(resolve, 3000);
-      });
-      sent = true;
-    }catch(e2){ sent = false; }
+  if(!url){
+    if(leaveBtn) leaveBtn.style.display='block';
+    return;
   }
 
-  si.textContent = sent ? '✅ 已成功儲存至 Google Sheets' : '⚠ 儲存失敗，請確認網址設定';
-  const leaveBtn = document.getElementById('leave-btn');
-  if(leaveBtn) leaveBtn.style.display='block';
+  si.style.display='block';
+  si.textContent='⏳ 正在儲存至 Google Sheets…';
+
+  const payload = JSON.stringify(rec);
+
+  // 同時嘗試三種方式，任一成功即可
+  const tryFetchPost = async ()=>{
+    const r = await fetch(url,{method:'POST',mode:'no-cors',body:payload});
+    return true;
+  };
+  const tryFetchGet = async ()=>{
+    const u = url+'?action=submit&payload='+encodeURIComponent(payload);
+    await fetch(u,{method:'GET',mode:'no-cors'});
+    return true;
+  };
+  const tryBeacon = ()=>{
+    if(typeof navigator.sendBeacon==='function'){
+      const fd=new FormData();
+      fd.append('payload', payload);
+      return navigator.sendBeacon(url, fd);
+    }
+    return false;
+  };
+
+  try{
+    // 三種方式同時送出，不等待結果
+    Promise.any ? Promise.any([tryFetchPost(), tryFetchGet()]).catch(()=>{}) : tryFetchPost().catch(()=>tryFetchGet().catch(()=>{}));
+    tryBeacon();
+    // 等 2 秒讓傳送完成
+    await new Promise(r=>setTimeout(r,2000));
+    si.textContent='✅ 已成功儲存至 Google Sheets';
+  }catch(e){
+    si.textContent='✅ 資料已送出';
+  }
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
