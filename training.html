@@ -751,8 +751,6 @@ window.addEventListener('load', function(){
   Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
 };
 
-var RETURN_URL = 'https://chuchienmis.github.io/training/training.html#done';
-
 function doGet(e) {
   try {
     var p = e.parameter;
@@ -790,8 +788,8 @@ function doGet(e) {
       writeData_(data);
       // 跳回訓練頁面，加上 done=1 讓頁面顯示完成按鈕
       return HtmlService.createHtmlOutput(
-        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=' + RETURN_URL + '"></head>' +
-        '<body><script>window.location.replace("' + RETURN_URL + '");<\/script></body></html>'
+        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html#done"></head>' +
+        '<body><script>window.location.replace("https://chuchienmis.github.io/training/training.html#done");</script></body></html>'
       );
     }
 
