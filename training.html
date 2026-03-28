@@ -304,9 +304,6 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       </div>
     </div>
 
-    <!-- 離開按鈕（儲存成功後顯示） -->
-    <button id="leave-btn" style="display:none;width:100%;margin-bottom:20px;padding:14px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 12px rgba(26,107,47,.25);" onclick="window.close()">✅ 資料已儲存，點此關閉頁面</button>
-
     <!-- 2. 測驗 -->
     <div class="sl"><div class="sn">2</div><div class="st">完成學習評量測驗</div></div>
     <div class="qcta">
@@ -316,6 +313,9 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       </div>
       <button class="bq" id="bq" onclick="openQuiz()">開始作答 →</button>
     </div>
+
+    <!-- 離開按鈕（儲存成功後顯示，位於評量下方） -->
+    <button id="leave-btn" style="display:none;width:100%;margin-top:4px;margin-bottom:20px;padding:16px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 12px rgba(26,107,47,.25);" onclick="leavePage()">✅ 資料已儲存，點此關閉頁面</button>
 
     <!-- Google Sheets 設定（隱藏，按 Ctrl+Shift+A 開啟） -->
     <div class="sinfo" id="sinfo-panel" style="display:none">
@@ -436,14 +436,39 @@ function onNameCheck(){
 }
 
 // ══ IDENTITY CONFIRM ══
-function confirmIdentity(){
+async function confirmIdentity(){
   const name = document.getElementById('iname').value.trim();
   const dept = document.getElementById('idept').value;
   const err  = document.getElementById('ierr');
+  const btn  = document.querySelector('.bcf');
 
   if(!name){ err.textContent='⚠ 請輸入姓名'; return; }
   if(!STAFF[name]){ err.textContent=`⚠「${name}」不在本次訓練指定名單中，如有疑問請聯繫主管。`; return; }
   if(!dept){ err.textContent='⚠ 請選擇部門 / 單位'; return; }
+
+  // ── 查詢測驗次數（透過 Apps Script doGet）──
+  const url = localStorage.getItem('sheets_url');
+  const MAX_ATTEMPTS = 2;
+
+  if(url){
+    btn.textContent='驗證中…'; btn.disabled=true;
+    try{
+      // 將 /exec 結尾的網址加上查詢參數
+      const queryUrl = url + '?action=checkCount&name=' + encodeURIComponent(name);
+      const resp = await fetch(queryUrl, {method:'GET', mode:'cors'});
+      if(resp.ok){
+        const json = await resp.json();
+        if(json.count >= MAX_ATTEMPTS){
+          err.innerHTML=`⚠ 每個人只可以測驗 ${MAX_ATTEMPTS} 次，您已經超過，無法再次登入測驗。<br><small style="color:#888">如有疑問請聯繫主管。</small>`;
+          btn.textContent='確認身份，進入訓練 →'; btn.disabled=false;
+          return;
+        }
+      }
+    }catch(e){
+      // 無法查詢（如網址未設定或網路問題）→ 允許進入，不阻擋
+    }
+    btn.textContent='確認身份，進入訓練 →'; btn.disabled=false;
+  }
 
   err.textContent='';
   U = { name, title: STAFF[name], dept, empNo: EMP_NO[name]||'' };
@@ -459,10 +484,10 @@ function confirmIdentity(){
 
   // 管理者功能：黃晨晞 登入時顯示查看紀錄按鈕
   if(name === '黃晨晞'){
-    const btn = document.getElementById('sheets-btn');
-    btn.style.display = 'flex';
+    const btn2 = document.getElementById('sheets-btn');
+    btn2.style.display = 'flex';
     const sheetsLink = localStorage.getItem('sheets_link');
-    btn.href = sheetsLink || 'https://sheets.google.com';
+    btn2.href = sheetsLink || 'https://sheets.google.com';
   }
 
   addLog('登入', `${name}（${U.title}・${dept}）確認身份進入訓練`);
@@ -637,7 +662,17 @@ async function sendToSheets(rec){
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
-// ══ 管理者快捷鍵：Ctrl+Shift+A 顯示/隱藏串接設定 ══
+// ══ 離開頁面（相容各瀏覽器）══
+function leavePage(){
+  // 先嘗試關閉分頁
+  window.open('','_self').close();
+  // 若瀏覽器阻擋關閉（如 Chrome 直接開啟的分頁），則導向空白頁
+  setTimeout(function(){
+    try{ window.close(); } catch(e){}
+    // 若仍未關閉，導向空白頁作為備案
+    window.location.href = 'about:blank';
+  }, 300);
+}
 document.addEventListener('keydown', function(e){
   if(e.ctrlKey && e.shiftKey && e.key==='A'){
     e.preventDefault();
@@ -671,7 +706,43 @@ window.addEventListener('load', function(){
     <div style="font-family:'Noto Serif TC',serif;font-size:16px;color:#e8b84b;margin-bottom:16px;font-weight:700;">📊 Google Sheets 串接說明</div>
     <p style="margin-bottom:10px;"><strong style="color:#fff">Step 1</strong> — 建立 Google Sheets 試算表，工作表命名為「<strong style="color:#fff">115年度</strong>」，未來每年新增工作表累積紀錄。</p>
     <p style="margin-bottom:10px;"><strong style="color:#fff">Step 2</strong> — 點選「擴充功能」→「Apps Script」，貼上以下程式碼後儲存：</p>
-    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">function doPost(e) {
+    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">// ══ 查詢測驗次數（登入驗證用）══
+function doGet(e) {
+  try {
+    var action = e.parameter.action;
+    var name   = e.parameter.name || '';
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    if (action === 'checkCount') {
+      // 計算此人在所有分頁中的測驗次數總和
+      var rocYear = new Date().getFullYear() - 1911;
+      var sheetName = rocYear + '年度';
+      var sheet = ss.getSheetByName(sheetName);
+      var count = 0;
+      if (sheet && sheet.getLastRow() >= 2) {
+        var nameCol = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
+        for (var r = 0; r < nameCol.length; r++) {
+          if (nameCol[r][0] === name) {
+            // 找到此人，讀取第20欄的測驗次數
+            count = sheet.getRange(r + 2, 20).getValue() || 1;
+            break;
+          }
+        }
+      }
+      var result = ContentService.createTextOutput(JSON.stringify({status:'ok', count: count}))
+        .setMimeType(ContentService.MimeType.JSON);
+      return result;
+    }
+    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:'unknown action'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// ══ 寫入測驗資料 ══
+function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -685,7 +756,7 @@ window.addEventListener('load', function(){
       'Q1','Q2','Q3','Q4','Q5',
       'Q6','Q7','Q8','Q9','Q10',
       '錯題數','得分',
-      '觀看影片時間','開始作答時間','完成作答時間'
+      '觀看影片時間','開始作答時間','完成作答時間','測驗次數'
     ];
 
     // 正確答案對照
@@ -710,25 +781,35 @@ window.addEventListener('load', function(){
     }
 
     var name = data['姓名'] || '';
+    var empNo = String(data['員工編號'] || '');
+
+    // 找同名舊資料
+    var lastRow = sheet.getLastRow();
+    var existingRow = -1;
+    var oldCount = 0;
+    if (lastRow >= 2) {
+      var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+      for (var r = 0; r < nameCol.length; r++) {
+        if (nameCol[r][0] === name) {
+          existingRow = r + 2;
+          oldCount = sheet.getRange(existingRow, 20).getValue() || 1;
+          break;
+        }
+      }
+    }
+
+    var newCount = existingRow > 0 ? oldCount + 1 : 1;
+
     var newRow = [
-      data['員工編號']||'', name,
+      empNo, name,
       data['職稱']||'', data['部門']||'',
       data['Q1']||'', data['Q2']||'', data['Q3']||'',
       data['Q4']||'', data['Q5']||'', data['Q6']||'',
       data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
       data['錯題數']||0, data['得分']||0,
-      data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||''
+      data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||'',
+      newCount
     ];
-
-    // 找同名舊資料 → 覆蓋；找不到 → 新增
-    var lastRow = sheet.getLastRow();
-    var existingRow = -1;
-    if (lastRow >= 2) {
-      var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
-      for (var r = 0; r < nameCol.length; r++) {
-        if (nameCol[r][0] === name) { existingRow = r + 2; break; }
-      }
-    }
 
     var targetRow;
     if (existingRow > 0) {
@@ -739,6 +820,12 @@ window.addEventListener('load', function(){
       sheet.appendRow(newRow);
       targetRow = sheet.getLastRow();
     }
+
+    // 員工編號欄：文字格式（保留前導零）且移除底色
+    sheet.getRange(targetRow, 1)
+      .setNumberFormat('@STRING@')
+      .setBackground(null)
+      .setValue(empNo);
 
     // 答錯的 Q 欄標紅色（Q1~Q10 在第5~14欄）
     var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
@@ -755,7 +842,7 @@ window.addEventListener('load', function(){
         .sort({column: 1, ascending: true});
     }
 
-    return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
+    return ContentService.createTextOutput(JSON.stringify({status:'ok', count: newCount}))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
     return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
