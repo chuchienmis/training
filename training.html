@@ -446,11 +446,12 @@ async function confirmIdentity(){
   if(!STAFF[name]){ err.textContent=`⚠「${name}」不在本次訓練指定名單中，如有疑問請聯繫主管。`; return; }
   if(!dept){ err.textContent='⚠ 請選擇部門 / 單位'; return; }
 
-  // ── 查詢測驗次數（透過 Apps Script doGet）──
+  // ── 查詢測驗次數（黃晨晞不受限制）──
   const url = localStorage.getItem('sheets_url');
   const MAX_ATTEMPTS = 2;
+  const NO_LIMIT_USERS = ['黃晨晞'];
 
-  if(url){
+  if(url && !NO_LIMIT_USERS.includes(name)){
     btn.textContent='驗證中…'; btn.disabled=true;
     try{
       // 將 /exec 結尾的網址加上查詢參數
@@ -714,7 +715,6 @@ function doGet(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
     if (action === 'checkCount') {
-      // 計算此人在所有分頁中的測驗次數總和
       var rocYear = new Date().getFullYear() - 1911;
       var sheetName = rocYear + '年度';
       var sheet = ss.getSheetByName(sheetName);
@@ -723,20 +723,18 @@ function doGet(e) {
         var nameCol = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
         for (var r = 0; r < nameCol.length; r++) {
           if (nameCol[r][0] === name) {
-            // 找到此人，讀取第20欄的測驗次數
-            count = sheet.getRange(r + 2, 20).getValue() || 1;
+            count = Number(sheet.getRange(r + 2, 20).getValue()) || 1;
             break;
           }
         }
       }
-      var result = ContentService.createTextOutput(JSON.stringify({status:'ok', count: count}))
+      return ContentService.createTextOutput(JSON.stringify({status:'ok', count: count}))
         .setMimeType(ContentService.MimeType.JSON);
-      return result;
     }
-    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:'unknown action'}))
+    return ContentService.createTextOutput(JSON.stringify({status:'error', msg:'unknown action'}))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
+    return ContentService.createTextOutput(JSON.stringify({status:'error', msg:err.toString()}))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
@@ -747,7 +745,6 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // 自動依民國年度切換分頁
     var sheetName = data['年度'] || '115年度';
     var sheet = ss.getSheetByName(sheetName);
 
@@ -759,7 +756,6 @@ function doPost(e) {
       '觀看影片時間','開始作答時間','完成作答時間','測驗次數'
     ];
 
-    // 正確答案對照
     var correctAns = {
       Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
       Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
@@ -767,32 +763,40 @@ function doPost(e) {
 
     if (!sheet) {
       sheet = ss.insertSheet(sheetName);
-      sheet.appendRow(headers);
-      sheet.getRange(1,1,1,headers.length)
+      // 標題列
+      sheet.getRange(1,1,1,headers.length).setValues([headers])
         .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+      // 凍結第一列
+      sheet.setFrozenRows(1);
+      // 員工編號欄預設文字格式
+      sheet.getRange('A2:A1000').setNumberFormat('@');
     }
 
-    // 第一列是空的 → 補上標題
     if (sheet.getRange(1,1).getValue() === '') {
       sheet.insertRowBefore(1);
       sheet.getRange(1,1,1,headers.length).setValues([headers]);
       sheet.getRange(1,1,1,headers.length)
         .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+      sheet.setFrozenRows(1);
+      sheet.getRange('A2:A1000').setNumberFormat('@');
     }
 
-    var name = data['姓名'] || '';
+    var name  = data['姓名'] || '';
     var empNo = String(data['員工編號'] || '');
+    var newScore = Number(data['得分']) || 0;
 
     // 找同名舊資料
     var lastRow = sheet.getLastRow();
     var existingRow = -1;
     var oldCount = 0;
+    var oldScore = 0;
     if (lastRow >= 2) {
       var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
       for (var r = 0; r < nameCol.length; r++) {
         if (nameCol[r][0] === name) {
           existingRow = r + 2;
-          oldCount = sheet.getRange(existingRow, 20).getValue() || 1;
+          oldCount = Number(sheet.getRange(existingRow, 20).getValue()) || 1;
+          oldScore = Number(sheet.getRange(existingRow, 16).getValue()) || 0;
           break;
         }
       }
@@ -800,52 +804,64 @@ function doPost(e) {
 
     var newCount = existingRow > 0 ? oldCount + 1 : 1;
 
+    // 分數比較：只有新分數 >= 舊分數時才更新答題內容
+    var shouldUpdate = (existingRow < 0) || (newScore >= oldScore);
+
     var newRow = [
       empNo, name,
       data['職稱']||'', data['部門']||'',
       data['Q1']||'', data['Q2']||'', data['Q3']||'',
       data['Q4']||'', data['Q5']||'', data['Q6']||'',
       data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
-      data['錯題數']||0, data['得分']||0,
+      data['錯題數']||0, newScore,
       data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||'',
       newCount
     ];
 
     var targetRow;
     if (existingRow > 0) {
-      sheet.getRange(existingRow, 1, 1, newRow.length).setValues([newRow]);
-      sheet.getRange(existingRow, 5, 1, 10).setFontColor('#000000').setFontWeight('normal');
+      if (shouldUpdate) {
+        // 新分數較高 → 整列覆蓋
+        sheet.getRange(existingRow, 1, 1, newRow.length).setValues([newRow]);
+        sheet.getRange(existingRow, 5, 1, 10).setFontColor('#000000').setFontWeight('normal');
+      } else {
+        // 新分數較低 → 只更新次數與時間，保留舊答題內容
+        sheet.getRange(existingRow, 20).setValue(newCount);
+        sheet.getRange(existingRow, 19).setValue(data['完成作答時間']||'');
+      }
       targetRow = existingRow;
     } else {
       sheet.appendRow(newRow);
       targetRow = sheet.getLastRow();
     }
 
-    // 員工編號欄：文字格式（保留前導零）且移除底色
+    // 員工編號欄：文字格式＋移除底色＋確保前導零
     sheet.getRange(targetRow, 1)
-      .setNumberFormat('@STRING@')
+      .setNumberFormat('@')
       .setBackground(null)
       .setValue(empNo);
 
-    // 答錯的 Q 欄標紅色（Q1~Q10 在第5~14欄）
-    var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
-    for (var i = 0; i < 10; i++) {
-      var ans = data[qKeys[i]] || '';
-      if (ans !== '' && ans !== correctAns[qKeys[i]]) {
-        sheet.getRange(targetRow, i + 5).setFontColor('#cc0000').setFontWeight('bold');
+    // 答錯的 Q 欄標紅色（僅在更新內容時重標）
+    if (shouldUpdate) {
+      var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
+      for (var i = 0; i < 10; i++) {
+        var ans = data[qKeys[i]] || '';
+        if (ans !== '' && ans !== correctAns[qKeys[i]]) {
+          sheet.getRange(targetRow, i + 5).setFontColor('#cc0000').setFontWeight('bold');
+        }
       }
     }
 
-    // 依員工編號由小到大排序
+    // 依員工編號排序
     if (sheet.getLastRow() > 2) {
       sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length)
         .sort({column: 1, ascending: true});
     }
 
-    return ContentService.createTextOutput(JSON.stringify({status:'ok', count: newCount}))
+    return ContentService.createTextOutput(JSON.stringify({status:'ok', count: newCount, updated: shouldUpdate}))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error',msg:err.toString()}))
+    return ContentService.createTextOutput(JSON.stringify({status:'error', msg:err.toString()}))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }</pre>
