@@ -80,9 +80,9 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .title-badge-icon{font-size:16px}
 
 .dept-wrap{flex:1}
-.dept-wrap input{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none}
-.dept-wrap input:focus{border-color:var(--green);background:var(--w)}
-.dept-wrap input::placeholder{color:#bbb}
+.dept-wrap select{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.dept-wrap select:focus{border-color:var(--green);background-color:var(--w)}
+.dept-wrap select.unselected{color:#bbb}
 
 .ierr{color:var(--red);font-size:13px;margin:4px 0 14px;min-height:18px;font-weight:500}
 .bcf{background:var(--navy);color:var(--w);border:none;padding:13px 44px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s,transform .1s;margin-top:4px}
@@ -230,7 +230,15 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
 
       <!-- 部門 -->
       <div class="dept-wrap">
-        <input type="text" id="idept" placeholder="部門 / 單位" maxlength="30"/>
+        <select id="idept" class="unselected" onchange="this.classList.remove('unselected')">
+          <option value="" disabled selected hidden>部門 / 單位</option>
+          <option>總經理室</option>
+          <option>業務部</option>
+          <option>工務部</option>
+          <option>管理部</option>
+          <option>財務部</option>
+          <option>資訊室</option>
+        </select>
       </div>
     </div>
 
@@ -309,12 +317,17 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <!-- Google Sheets 設定（隱藏，按 Ctrl+Shift+A 開啟） -->
     <div class="sinfo" id="sinfo-panel" style="display:none">
       <h3>📊 Google Sheets 串接設定（管理者專用）</h3>
-      <p>建立 Google Apps Script Web App 後，貼入網址即可自動儲存同仁測驗紀錄。</p>
+      <p style="margin-bottom:10px">① Apps Script 網址 — 同仁作答後自動寫入紀錄</p>
       <div class="sir">
         <input type="text" id="surl" placeholder="貼上 Google Apps Script Web App 網址"/>
         <button class="bsu" onclick="saveSheetUrl()">儲存</button>
       </div>
-      <div class="ust" id="ust">✅ 網址已儲存</div>
+      <p style="margin-top:14px;margin-bottom:10px">② 試算表網址 — 讓「查看訓練紀錄」按鈕可以直接開啟</p>
+      <div class="sir">
+        <input type="text" id="ssheet" placeholder="貼上 Google Sheets 試算表網址（https://docs.google.com/spreadsheets/d/...）"/>
+        <button class="bsu" onclick="saveSheetLink()">儲存</button>
+      </div>
+      <div class="ust" id="ust">✅ 已儲存</div>
     </div>
   </div>
 </div>
@@ -482,14 +495,8 @@ function confirmIdentity(){
   if(ADMINS.includes(name)){
     const btn = document.getElementById('sheets-btn');
     btn.style.display = 'flex';
-    // 若有儲存試算表網址則設連結，否則連到 Google Sheets 首頁
-    const sheetsUrl = localStorage.getItem('sheets_url') || 'https://sheets.google.com';
-    // 從 Apps Script URL 嘗試萃取 spreadsheet ID（若有的話）
-    const savedUrl = localStorage.getItem('sheets_url') || '';
-    const idMatch = savedUrl.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
-    btn.href = idMatch
-      ? `https://docs.google.com/spreadsheets/d/${idMatch[1]}`
-      : 'https://sheets.google.com';
+    const sheetsLink = localStorage.getItem('sheets_link');
+    btn.href = sheetsLink || 'https://sheets.google.com';
   }
 
   addLog('登入', `${name}（${U.title}・${dept}）確認身份進入訓練`);
@@ -604,16 +611,16 @@ function submitQuiz(){
   const btn=document.getElementById('bq');
   btn.textContent=`已完成測驗（${score} 分）`; btn.disabled=true;
 
+  // 每題合併：答案＋正誤，例如「O ✓」或「A ✗」
+  function qResult(ans, correct){ return ans ? ans + (ans===correct?' ✓':' ✗') : '未作答'; }
+
   const rec={
     姓名:U.name, 職稱:U.title, 部門:U.dept,
-    Q1答案:ANS.q1||'', Q2答案:ANS.q2||'', Q3答案:ANS.q3||'',
-    Q4答案:ANS.q4||'', Q5答案:ANS.q5||'', Q6答案:ANS.q6||'',
-    Q7答案:ANS.q7||'', Q8答案:ANS.q8||'', Q9答案:ANS.q9||'', Q10答案:ANS.q10||'',
-    Q1正誤:ANS.q1===KQ[0].ans?'O':'X', Q2正誤:ANS.q2===KQ[1].ans?'O':'X',
-    Q3正誤:ANS.q3===KQ[2].ans?'O':'X', Q4正誤:ANS.q4===KQ[3].ans?'O':'X',
-    Q5正誤:ANS.q5===KQ[4].ans?'O':'X', Q6正誤:ANS.q6===KQ[5].ans?'O':'X',
-    Q7正誤:ANS.q7===KQ[6].ans?'O':'X', Q8正誤:ANS.q8===KQ[7].ans?'O':'X',
-    Q9正誤:ANS.q9===KQ[8].ans?'O':'X', Q10正誤:ANS.q10===KQ[9].ans?'O':'X',
+    Q1:qResult(ANS.q1, KQ[0].ans), Q2:qResult(ANS.q2, KQ[1].ans),
+    Q3:qResult(ANS.q3, KQ[2].ans), Q4:qResult(ANS.q4, KQ[3].ans),
+    Q5:qResult(ANS.q5, KQ[4].ans), Q6:qResult(ANS.q6, KQ[5].ans),
+    Q7:qResult(ANS.q7, KQ[6].ans), Q8:qResult(ANS.q8, KQ[7].ans),
+    Q9:qResult(ANS.q9, KQ[8].ans), Q10:qResult(ANS.q10, KQ[9].ans),
     錯題數: KQ.filter(q=>ANS[q.id]!==q.ans).length,
     得分:score,
     觀看影片時間:videoOpened?(videoOpenTime?videoOpenTime.toLocaleString('zh-TW'):'已開啟'):'未開啟',
@@ -629,13 +636,19 @@ function saveSheetUrl(){
   const url=document.getElementById('surl').value.trim(); if(!url)return;
   localStorage.setItem('sheets_url',url);
   const s=document.getElementById('ust'); s.style.display='block';
-  setTimeout(()=>s.style.display='none',3000);
-  // 更新查看紀錄按鈕連結
+  s.textContent='✅ Apps Script 網址已儲存';
+  setTimeout(()=>{ s.style.display='none'; s.textContent='✅ 已儲存'; },3000);
+}
+
+function saveSheetLink(){
+  const url=document.getElementById('ssheet').value.trim(); if(!url)return;
+  localStorage.setItem('sheets_link',url);
+  const s=document.getElementById('ust'); s.style.display='block';
+  s.textContent='✅ 試算表網址已儲存，按鈕連結已更新';
+  // 立即更新按鈕連結
   const btn=document.getElementById('sheets-btn');
-  if(btn){
-    const idMatch=url.match(/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
-    btn.href=idMatch?`https://docs.google.com/spreadsheets/d/${idMatch[1]}`:'https://sheets.google.com';
-  }
+  if(btn) btn.href=url;
+  setTimeout(()=>{ s.style.display='none'; s.textContent='✅ 已儲存'; },3000);
 }
 async function sendToSheets(rec){
   const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
@@ -672,10 +685,9 @@ document.addEventListener('keydown', function(e){
 // 頁面載入時自動讀取已存網址（背景靜默載入，不顯示面板）
 window.addEventListener('load', function(){
   const saved = localStorage.getItem('sheets_url');
-  if(saved){
-    const el = document.getElementById('surl');
-    if(el) el.value = saved;
-  }
+  if(saved){ const el=document.getElementById('surl'); if(el) el.value=saved; }
+  const savedLink = localStorage.getItem('sheets_link');
+  if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
 });
 </script>
 
@@ -691,50 +703,49 @@ window.addEventListener('load', function(){
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var sheetName = '115年度';
     var sheet = ss.getSheetByName(sheetName);
+
+    // 欄位：姓名、職稱、部門、Q1~Q10（答案+正誤合一）、錯題數、得分、3個時間
+    var headers = [
+      '姓名','職稱','部門',
+      'Q1','Q2','Q3','Q4','Q5',
+      'Q6','Q7','Q8','Q9','Q10',
+      '錯題數','得分',
+      '觀看影片時間','開始作答時間','完成作答時間'
+    ];
+
     if (!sheet) {
       sheet = ss.insertSheet(sheetName);
-      var headers = [
-        '姓名','職稱','部門',
-        'Q1答案','Q2答案','Q3答案','Q4答案','Q5答案',
-        'Q6答案','Q7答案','Q8答案','Q9答案','Q10答案',
-        'Q1正誤','Q2正誤','Q3正誤','Q4正誤','Q5正誤',
-        'Q6正誤','Q7正誤','Q8正誤','Q9正誤','Q10正誤',
-        '錯題數','得分',
-        '觀看影片時間','開始作答時間','完成作答時間'
-      ];
       sheet.appendRow(headers);
-      var hRange = sheet.getRange(1, 1, 1, headers.length);
-      hRange.setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+      sheet.getRange(1,1,1,headers.length)
+        .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
     }
 
-    // 正確答案對照
-    var correctAnswers = {
-      Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
-      Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
-    };
+    // 工作表存在但第一列是空的 → 補上標題
+    if (sheet.getRange(1,1).getValue() === '') {
+      sheet.insertRowBefore(1);
+      sheet.getRange(1,1,1,headers.length).setValues([headers]);
+      sheet.getRange(1,1,1,headers.length)
+        .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
+    }
 
     var row = [
       data['姓名']||'', data['職稱']||'', data['部門']||'',
-      data['Q1答案']||'', data['Q2答案']||'', data['Q3答案']||'',
-      data['Q4答案']||'', data['Q5答案']||'', data['Q6答案']||'',
-      data['Q7答案']||'', data['Q8答案']||'', data['Q9答案']||'', data['Q10答案']||'',
-      data['Q1正誤']||'', data['Q2正誤']||'', data['Q3正誤']||'',
-      data['Q4正誤']||'', data['Q5正誤']||'', data['Q6正誤']||'',
-      data['Q7正誤']||'', data['Q8正誤']||'', data['Q9正誤']||'', data['Q10正誤']||'',
+      data['Q1']||'', data['Q2']||'', data['Q3']||'',
+      data['Q4']||'', data['Q5']||'', data['Q6']||'',
+      data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
       data['錯題數']||0, data['得分']||0,
       data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||''
     ];
 
     sheet.appendRow(row);
 
-    // 將答錯題目的答案欄位標為紅色（Q1~Q10答案欄位為第4~13欄，正誤欄為14~23欄）
+    // Q1~Q10 在第4~13欄，答案含「✗」表示答錯 → 標紅色粗體
     var lastRow = sheet.getLastRow();
     for (var i = 0; i < 10; i++) {
-      var correctCol = i + 4;  // Q1答案=第4欄
-      var wrongFlagCol = i + 14; // Q1正誤=第14欄
-      var wrongFlag = sheet.getRange(lastRow, wrongFlagCol).getValue();
-      if (wrongFlag === 'X') {
-        sheet.getRange(lastRow, correctCol).setFontColor('#cc0000').setFontWeight('bold');
+      var col = i + 4;
+      var val = String(sheet.getRange(lastRow, col).getValue());
+      if (val.indexOf('✗') !== -1) {
+        sheet.getRange(lastRow, col).setFontColor('#cc0000').setFontWeight('bold');
       }
     }
 
