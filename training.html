@@ -652,48 +652,54 @@ async function sendToSheets(rec){
   const si=document.getElementById('si');
   const leaveBtn=document.getElementById('leave-btn');
 
-  // 先立即顯示按鈕，不等傳送結果（避免 LINE/Safari 封鎖導致按鈕不出現）
+  // 立即顯示按鈕
   if(leaveBtn) leaveBtn.style.display='block';
-
-  if(!url){
-    if(leaveBtn) leaveBtn.style.display='block';
-    return;
-  }
+  if(!url){ return; }
 
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
 
   const payload = JSON.stringify(rec);
 
-  // 同時嘗試三種方式，任一成功即可
-  const tryFetchPost = async ()=>{
-    const r = await fetch(url,{method:'POST',mode:'no-cors',body:payload});
-    return true;
-  };
-  const tryFetchGet = async ()=>{
-    const u = url+'?action=submit&payload='+encodeURIComponent(payload);
-    await fetch(u,{method:'GET',mode:'no-cors'});
-    return true;
-  };
-  const tryBeacon = ()=>{
-    if(typeof navigator.sendBeacon==='function'){
-      const fd=new FormData();
-      fd.append('payload', payload);
-      return navigator.sendBeacon(url, fd);
-    }
-    return false;
-  };
-
+  // ★ 最可靠方式：用隱藏 iframe 接收 form 回應
+  // 在 LINE 內建瀏覽器、iOS Safari 都能正常運作
   try{
-    // 三種方式同時送出，不等待結果
-    Promise.any ? Promise.any([tryFetchPost(), tryFetchGet()]).catch(()=>{}) : tryFetchPost().catch(()=>tryFetchGet().catch(()=>{}));
-    tryBeacon();
-    // 等 2 秒讓傳送完成
-    await new Promise(r=>setTimeout(r,2000));
-    si.textContent='✅ 已成功儲存至 Google Sheets';
+    // 建立隱藏 iframe
+    let iframe = document.getElementById('_gs_frame');
+    if(!iframe){
+      iframe = document.createElement('iframe');
+      iframe.id = '_gs_frame';
+      iframe.name = '_gs_frame';
+      iframe.style.cssText = 'display:none;position:absolute;width:0;height:0;';
+      document.body.appendChild(iframe);
+    }
+
+    // 建立隱藏 form，送出到 iframe
+    const form = document.createElement('form');
+    form.method = 'GET';
+    form.action = url;
+    form.target = '_gs_frame';
+    form.style.display = 'none';
+
+    const f1 = document.createElement('input');
+    f1.type = 'hidden'; f1.name = 'action'; f1.value = 'submit';
+    form.appendChild(f1);
+
+    const f2 = document.createElement('input');
+    f2.type = 'hidden'; f2.name = 'payload'; f2.value = payload;
+    form.appendChild(f2);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
   }catch(e){
-    si.textContent='✅ 資料已送出';
+    // 備案：fetch
+    fetch(url+'?action=submit&payload='+encodeURIComponent(payload),{method:'GET',mode:'no-cors'}).catch(()=>{});
   }
+
+  await new Promise(r=>setTimeout(r,2500));
+  si.textContent='✅ 已儲存至 Google Sheets';
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
