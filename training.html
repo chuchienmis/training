@@ -626,7 +626,6 @@ function submitQuiz(){
   };
   try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
   // 標記本次有真正提交測驗（iOS 跳轉回來時用來驗證）
-  try{ localStorage.setItem('quiz_submitted_flag','1'); }catch(e){}
   sendToSheets(rec);
 }
 
@@ -666,8 +665,7 @@ async function sendToSheets(rec){
 
   if(isIOS || isLINE){
     // iOS / LINE：先設旗標（localStorage 跨頁面保留），再跳轉到 Apps Script
-    try{ localStorage.setItem('quiz_submitted_flag','1'); }catch(e){}
-    const getUrl = url +
+      const getUrl = url +
       '?action=submit' +
       '&年度=' + encodeURIComponent(rec['年度']||'') +
       '&員工編號=' + encodeURIComponent(rec['員工編號']||'') +
@@ -730,16 +728,7 @@ window.addEventListener('load', function(){
   if(saved){ const el=document.getElementById('surl'); if(el) el.value=saved; }
   const savedLink = localStorage.getItem('sheets_link');
   if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
-
-  // iOS 跳轉回來後，檢查 localStorage 旗標顯示完成訊息
-  const submitted = localStorage.getItem('quiz_submitted_flag');
-  if(submitted === '1'){
-    localStorage.removeItem('quiz_submitted_flag');
-    const leaveBtn = document.getElementById('leave-btn');
-    if(leaveBtn) leaveBtn.style.display='block';
-    const si = document.getElementById('si');
-    if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
-  }
+  // 清除任何殘留的提交旗標，避免誤觸發
 });
 </script>
 
