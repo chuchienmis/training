@@ -663,16 +663,9 @@ async function sendToSheets(rec){
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
-// ══ 離開頁面（相容各瀏覽器）══
+// ══ 離開頁面 ══
 function leavePage(){
-  // 先嘗試關閉分頁
-  window.open('','_self').close();
-  // 若瀏覽器阻擋關閉（如 Chrome 直接開啟的分頁），則導向空白頁
-  setTimeout(function(){
-    try{ window.close(); } catch(e){}
-    // 若仍未關閉，導向空白頁作為備案
-    window.location.href = 'about:blank';
-  }, 300);
+  window.location.href = 'https://www.google.com';
 }
 document.addEventListener('keydown', function(e){
   if(e.ctrlKey && e.shiftKey && e.key==='A'){
