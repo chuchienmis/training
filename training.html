@@ -12,7 +12,7 @@ body{background:var(--cream);font-family:'Noto Sans TC',sans-serif;color:var(--t
 
 header{background:var(--navy);color:var(--w);position:relative;overflow:hidden}
 header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(200,150,42,.03) 40px,rgba(200,150,42,.03) 41px)}
-.hi{max-width:900px;margin:0 auto;padding:16px 24px 14px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
+.hi{max-width:900px;margin:0 auto;padding:8px 24px 14px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
 .hlogo{flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .hlogo img{width:60px;height:auto;object-fit:contain;display:block}
 .ht{text-align:left}
@@ -215,17 +215,9 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <h2>請確認您的身份以開始訓練</h2>
 
     <div class="login-row">
-      <!-- 姓名 + autocomplete -->
+      <!-- 姓名：純文字輸入，不自動帶出 -->
       <div class="name-wrap">
-        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"
-          oninput="onNameInput()" onblur="hideAC()" onkeydown="onNameKey(event)"/>
-        <div class="ac-list" id="acList"></div>
-      </div>
-
-      <!-- 職稱 badge（自動帶入） -->
-      <div class="title-badge" id="titleBadge">
-        <span class="title-badge-icon">🏷</span>
-        <span id="titleText"></span>
+        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"/>
       </div>
 
       <!-- 部門 -->
@@ -355,6 +347,7 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div class="rinfo" id="rinfo"></div>
       <div class="rev-wrap" id="review"></div>
       <button class="bdn" onclick="document.getElementById('ro').classList.remove('open')">確認完成</button>
+      <button id="leave-btn" style="display:none;margin-top:12px;width:100%;padding:14px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;" onclick="window.close()">✅ 資料已儲存，關閉此頁面</button>
     </div>
   </div>
 </div>
@@ -372,6 +365,17 @@ const STAFF = {
   '黃禹竣':'助理員','劉德泓':'助理員','王璽凱':'助理員','林琮炫':'助理員',
   '蔡凱程':'雇員','陳東彥':'雇員'
 };
+
+// ══ 員工編號（姓名 → 編號）══
+const EMP_NO = {
+  '林昭偉':'003','李志倉':'004','陳儒彥':'007','陳炳宏':'008','蕭惠萍':'009',
+  '彭敬文':'013','陳淑貞':'014','邱育生':'015','黃美月':'021','黃晨晞':'023',
+  '林曉琪':'033','陳郁夫':'037','鍾興翰':'042','廖珮雯':'046','廖偉村':'054',
+  '白沛豫':'060','林孟賢':'061','陳人豪':'066','洪姝筠':'067','陳朝鑫':'068',
+  '張鈞豪':'070','劉建彣':'071','黃禹竣':'072','劉德泓':'074','王璽凱':'075',
+  '林琮炫':'077','蔡凱程':'078','陳東彥':'079'
+};
+
 const NAMES = Object.keys(STAFF);
 
 // ══ 題目 ══
@@ -405,81 +409,19 @@ const KQ=[
 ];
 
 let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
-let acActiveIdx=-1, acMatches=[];
-
-// ══ AUTOCOMPLETE ══
-function onNameInput(){
-  const val = document.getElementById('iname').value.trim();
-  const badge = document.getElementById('titleBadge');
-  const titleTxt = document.getElementById('titleText');
-  const acList = document.getElementById('acList');
-  document.getElementById('ierr').textContent='';
-
-  // 完整符合 → 立即顯示職稱
-  if(STAFF[val]){
-    titleTxt.textContent = STAFF[val];
-    badge.classList.add('show');
-  } else {
-    badge.classList.remove('show');
-    titleTxt.textContent='';
-  }
-
-  // 模糊比對
-  if(val.length === 0){ acList.classList.remove('show'); acList.innerHTML=''; return; }
-  acMatches = NAMES.filter(n => n.includes(val));
-  if(acMatches.length === 0 || (acMatches.length===1 && acMatches[0]===val)){
-    acList.classList.remove('show'); acList.innerHTML=''; return;
-  }
-  acList.innerHTML = acMatches.map((n,i)=>
-    `<div class="ac-item" id="ac-${i}" onmousedown="pickAC(${i})">
-       <span class="ac-item-name">${n}</span>
-       <span class="ac-item-title">${STAFF[n]}</span>
-     </div>`
-  ).join('');
-  acActiveIdx=-1;
-  acList.classList.add('show');
-}
-
-function pickAC(idx){
-  const name = acMatches[idx];
-  document.getElementById('iname').value = name;
-  document.getElementById('titleText').textContent = STAFF[name];
-  document.getElementById('titleBadge').classList.add('show');
-  document.getElementById('acList').classList.remove('show');
-  document.getElementById('ierr').textContent='';
-}
-
-function hideAC(){ setTimeout(()=>document.getElementById('acList').classList.remove('show'), 180); }
-
-function onNameKey(e){
-  const list = document.getElementById('acList');
-  if(!list.classList.contains('show')) return;
-  if(e.key==='ArrowDown'){ e.preventDefault(); setACActive(acActiveIdx+1); }
-  else if(e.key==='ArrowUp'){ e.preventDefault(); setACActive(acActiveIdx-1); }
-  else if(e.key==='Enter' && acActiveIdx>=0){ e.preventDefault(); pickAC(acActiveIdx); }
-  else if(e.key==='Escape'){ list.classList.remove('show'); }
-}
-
-function setACActive(idx){
-  const items = document.querySelectorAll('.ac-item');
-  items.forEach(el=>el.classList.remove('active'));
-  acActiveIdx = Math.max(0, Math.min(idx, acMatches.length-1));
-  const el = document.getElementById('ac-'+acActiveIdx);
-  if(el){ el.classList.add('active'); el.scrollIntoView({block:'nearest'}); }
-}
 
 // ══ IDENTITY CONFIRM ══
 function confirmIdentity(){
   const name = document.getElementById('iname').value.trim();
-  const dept = document.getElementById('idept').value.trim();
+  const dept = document.getElementById('idept').value;
   const err  = document.getElementById('ierr');
 
   if(!name){ err.textContent='⚠ 請輸入姓名'; return; }
   if(!STAFF[name]){ err.textContent=`⚠「${name}」不在本次訓練指定名單中，如有疑問請聯繫主管。`; return; }
-  if(!dept){ err.textContent='⚠ 請輸入部門 / 單位'; return; }
+  if(!dept){ err.textContent='⚠ 請選擇部門 / 單位'; return; }
 
   err.textContent='';
-  U = { name, title: STAFF[name], dept };
+  U = { name, title: STAFF[name], dept, empNo: EMP_NO[name]||'' };
 
   document.getElementById('ig').style.display='none';
   document.getElementById('tc').classList.add('v');
@@ -490,9 +432,8 @@ function confirmIdentity(){
   const saved = localStorage.getItem('sheets_url');
   if(saved) document.getElementById('surl').value = saved;
 
-  // 管理者功能：黃晨晞 登入時顯示查看紀錄按鈕及串接設定
-  const ADMINS = ['黃晨晞'];
-  if(ADMINS.includes(name)){
+  // 管理者功能：黃晨晞 登入時顯示查看紀錄按鈕
+  if(name === '黃晨晞'){
     const btn = document.getElementById('sheets-btn');
     btn.style.display = 'flex';
     const sheetsLink = localStorage.getItem('sheets_link');
@@ -611,20 +552,21 @@ function submitQuiz(){
   const btn=document.getElementById('bq');
   btn.textContent=`已完成測驗（${score} 分）`; btn.disabled=true;
 
-  // 每題合併：答案＋正誤，例如「O ✓」或「A ✗」
-  function qResult(ans, correct){ return ans ? ans + (ans===correct?' ✓':' ✗') : '未作答'; }
+  // 每題：只送出答案，正誤由 Apps Script 判斷並標色
+  function qResult(ans){ return ans || '未作答'; }
 
   // 民國年度（例如 2025 → 114、2026 → 115）
   const rocYear = now.getFullYear() - 1911;
 
   const rec={
     年度: rocYear + '年度',
+    員工編號: U.empNo,
     姓名:U.name, 職稱:U.title, 部門:U.dept,
-    Q1:qResult(ANS.q1, KQ[0].ans), Q2:qResult(ANS.q2, KQ[1].ans),
-    Q3:qResult(ANS.q3, KQ[2].ans), Q4:qResult(ANS.q4, KQ[3].ans),
-    Q5:qResult(ANS.q5, KQ[4].ans), Q6:qResult(ANS.q6, KQ[5].ans),
-    Q7:qResult(ANS.q7, KQ[6].ans), Q8:qResult(ANS.q8, KQ[7].ans),
-    Q9:qResult(ANS.q9, KQ[8].ans), Q10:qResult(ANS.q10, KQ[9].ans),
+    Q1:qResult(ANS.q1), Q2:qResult(ANS.q2),
+    Q3:qResult(ANS.q3), Q4:qResult(ANS.q4),
+    Q5:qResult(ANS.q5), Q6:qResult(ANS.q6),
+    Q7:qResult(ANS.q7), Q8:qResult(ANS.q8),
+    Q9:qResult(ANS.q9), Q10:qResult(ANS.q10),
     錯題數: KQ.filter(q=>ANS[q.id]!==q.ans).length,
     得分:score,
     觀看影片時間:videoOpened?(videoOpenTime?videoOpenTime.toLocaleString('zh-TW'):'已開啟'):'未開啟',
@@ -661,6 +603,9 @@ async function sendToSheets(rec){
   try{
     await fetch(url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec)});
     si.textContent='✅ 已成功儲存至 Google Sheets';
+    // 顯示離開按鈕
+    const leaveBtn = document.getElementById('leave-btn');
+    if(leaveBtn) leaveBtn.style.display='block';
   }catch(e){
     si.textContent='⚠ 儲存失敗，請確認網址設定';
   }
@@ -706,19 +651,24 @@ window.addEventListener('load', function(){
     var data = JSON.parse(e.postData.contents);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // 自動依民國年度切換分頁（115年度、116年度…）
+    // 自動依民國年度切換分頁
     var sheetName = data['年度'] || '115年度';
     var sheet = ss.getSheetByName(sheetName);
 
     var headers = [
-      '姓名','職稱','部門',
+      '員工編號','姓名','職稱','部門',
       'Q1','Q2','Q3','Q4','Q5',
       'Q6','Q7','Q8','Q9','Q10',
       '錯題數','得分',
       '觀看影片時間','開始作答時間','完成作答時間'
     ];
 
-    // 分頁不存在 → 自動建立並寫入標題
+    // 正確答案對照
+    var correctAns = {
+      Q1:'O', Q2:'O', Q3:'X', Q4:'X', Q5:'O',
+      Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
+    };
+
     if (!sheet) {
       sheet = ss.insertSheet(sheetName);
       sheet.appendRow(headers);
@@ -726,7 +676,7 @@ window.addEventListener('load', function(){
         .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
     }
 
-    // 分頁存在但第一列是空的 → 補上標題
+    // 第一列是空的 → 補上標題
     if (sheet.getRange(1,1).getValue() === '') {
       sheet.insertRowBefore(1);
       sheet.getRange(1,1,1,headers.length).setValues([headers]);
@@ -734,8 +684,10 @@ window.addEventListener('load', function(){
         .setFontWeight('bold').setBackground('#0d1f3c').setFontColor('#ffffff');
     }
 
-    var row = [
-      data['姓名']||'', data['職稱']||'', data['部門']||'',
+    var name = data['姓名'] || '';
+    var newRow = [
+      data['員工編號']||'', name,
+      data['職稱']||'', data['部門']||'',
       data['Q1']||'', data['Q2']||'', data['Q3']||'',
       data['Q4']||'', data['Q5']||'', data['Q6']||'',
       data['Q7']||'', data['Q8']||'', data['Q9']||'', data['Q10']||'',
@@ -743,16 +695,39 @@ window.addEventListener('load', function(){
       data['觀看影片時間']||'', data['開始作答時間']||'', data['完成作答時間']||''
     ];
 
-    sheet.appendRow(row);
-
-    // 答案含「✗」→ 標紅色粗體
+    // 找同名舊資料 → 覆蓋；找不到 → 新增
     var lastRow = sheet.getLastRow();
-    for (var i = 0; i < 10; i++) {
-      var col = i + 4;
-      var val = String(sheet.getRange(lastRow, col).getValue());
-      if (val.indexOf('✗') !== -1) {
-        sheet.getRange(lastRow, col).setFontColor('#cc0000').setFontWeight('bold');
+    var existingRow = -1;
+    if (lastRow >= 2) {
+      var nameCol = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+      for (var r = 0; r < nameCol.length; r++) {
+        if (nameCol[r][0] === name) { existingRow = r + 2; break; }
       }
+    }
+
+    var targetRow;
+    if (existingRow > 0) {
+      sheet.getRange(existingRow, 1, 1, newRow.length).setValues([newRow]);
+      sheet.getRange(existingRow, 5, 1, 10).setFontColor('#000000').setFontWeight('normal');
+      targetRow = existingRow;
+    } else {
+      sheet.appendRow(newRow);
+      targetRow = sheet.getLastRow();
+    }
+
+    // 答錯的 Q 欄標紅色（Q1~Q10 在第5~14欄）
+    var qKeys = ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'];
+    for (var i = 0; i < 10; i++) {
+      var ans = data[qKeys[i]] || '';
+      if (ans !== '' && ans !== correctAns[qKeys[i]]) {
+        sheet.getRange(targetRow, i + 5).setFontColor('#cc0000').setFontWeight('bold');
+      }
+    }
+
+    // 依員工編號由小到大排序
+    if (sheet.getLastRow() > 2) {
+      sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length)
+        .sort({column: 1, ascending: true});
     }
 
     return ContentService.createTextOutput(JSON.stringify({status:'ok'}))
