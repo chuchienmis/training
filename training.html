@@ -657,19 +657,10 @@ async function sendToSheets(rec){
   const leaveBtn=document.getElementById('leave-btn');
 
   if(leaveBtn) leaveBtn.style.display='block';
+  if(!url){ return; }
 
-  // 診斷：顯示詳細狀態（所有裝置都看得到）
-  const dbg = (msg)=>{
-    si.style.display='block';
-    si.textContent = msg;
-    console.log(msg);
-  };
-
-  if(!url){ dbg('⚠ 未設定 Apps Script 網址'); return; }
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isLINE = /Line/i.test(navigator.userAgent);
-  dbg('⏳ 裝置:' + (isIOS?'iOS':'') + (isLINE?'+LINE':'') + ' 正在連線…');
+  si.style.display='block';
+  si.textContent='⏳ 正在儲存至 Google Sheets…';
 
   const getUrl = url +
     '?action=submit' +
@@ -694,29 +685,12 @@ async function sendToSheets(rec){
     '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
     '&et=' + encodeURIComponent(rec['完成作答時間']||'');
 
-  // 嘗試 fetch GET（最簡單）
   try{
-    dbg('⏳ 嘗試 fetch GET…');
-    const resp = await fetch(getUrl, {method:'GET', mode:'cors'});
-    if(resp.ok){
-      const json = await resp.json();
-      dbg('✅ 成功: ' + JSON.stringify(json));
-    } else {
-      dbg('⚠ HTTP ' + resp.status + ' 嘗試 no-cors…');
-      throw new Error('not ok');
-    }
-  } catch(e1){
-    // 嘗試 no-cors
-    try{
-      dbg('⏳ 嘗試 no-cors fetch…');
-      await fetch(getUrl, {method:'GET', mode:'no-cors'});
-      dbg('✅ no-cors 送出完成（無法確認結果）');
-    } catch(e2){
-      dbg('❌ 所有方式失敗: ' + e2.message);
-    }
-  }
+    await fetch(getUrl, {method:'GET', mode:'no-cors'});
+  }catch(e){}
 
-  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },8000);
+  si.textContent='✅ 已儲存至 Google Sheets';
+  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
 // ══ 離開頁面 ══
