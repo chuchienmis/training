@@ -661,10 +661,8 @@ async function sendToSheets(rec){
 
   const payload = JSON.stringify(rec);
 
-  // ★ 最可靠方式：用隱藏 iframe 接收 form 回應
-  // 在 LINE 內建瀏覽器、iOS Safari 都能正常運作
+  // 用隱藏 iframe + POST form 送出（POST 無 URL 長度限制，相容 LINE/Safari）
   try{
-    // 建立隱藏 iframe
     let iframe = document.getElementById('_gs_frame');
     if(!iframe){
       iframe = document.createElement('iframe');
@@ -674,12 +672,12 @@ async function sendToSheets(rec){
       document.body.appendChild(iframe);
     }
 
-    // 建立隱藏 form，送出到 iframe
     const form = document.createElement('form');
-    form.method = 'GET';
+    form.method = 'POST';
     form.action = url;
     form.target = '_gs_frame';
     form.style.display = 'none';
+    form.enctype = 'application/x-www-form-urlencoded';
 
     const f1 = document.createElement('input');
     f1.type = 'hidden'; f1.name = 'action'; f1.value = 'submit';
@@ -694,7 +692,7 @@ async function sendToSheets(rec){
     document.body.removeChild(form);
 
   }catch(e){
-    // 備案：fetch
+    // 備案：fetch GET
     fetch(url+'?action=submit&payload='+encodeURIComponent(payload),{method:'GET',mode:'no-cors'}).catch(()=>{});
   }
 
@@ -898,11 +896,16 @@ function writeData_(ss, data) {
 function doPost(e) {
   try {
     var data;
-    try {
-      data = JSON.parse(e.postData.contents);
-    } catch(parseErr) {
-      var payload = e.parameter ? (e.parameter.payload || '') : '';
-      data = JSON.parse(payload || e.postData.contents);
+    // 優先讀取 form 欄位 payload（LINE/Safari 的 form POST 方式）
+    if (e.parameter && e.parameter.payload) {
+      data = JSON.parse(e.parameter.payload);
+    } else {
+      // 一般 JSON POST（電腦瀏覽器 fetch 方式）
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch(parseErr) {
+        data = JSON.parse(e.postData.contents);
+      }
     }
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var result = writeData_(ss, data);
