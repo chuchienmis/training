@@ -731,18 +731,14 @@ window.addEventListener('load', function(){
   const savedLink = localStorage.getItem('sheets_link');
   if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
 
-  // 從 Apps Script redirect 回來（#done）→ 只有真正提交過才顯示完成訊息
-  if(window.location.hash === '#done'){
-    history.replaceState({}, '', window.location.pathname + window.location.search);
-    // 檢查 localStorage 是否有提交旗標（iOS 跳轉後 sessionStorage 會消失，改用 localStorage）
-    const submitted = localStorage.getItem('quiz_submitted_flag');
-    if(submitted === '1'){
-      localStorage.removeItem('quiz_submitted_flag');
-      const leaveBtn = document.getElementById('leave-btn');
-      if(leaveBtn) leaveBtn.style.display='block';
-      const si = document.getElementById('si');
-      if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
-    }
+  // iOS 跳轉回來後，檢查 localStorage 旗標顯示完成訊息
+  const submitted = localStorage.getItem('quiz_submitted_flag');
+  if(submitted === '1'){
+    localStorage.removeItem('quiz_submitted_flag');
+    const leaveBtn = document.getElementById('leave-btn');
+    if(leaveBtn) leaveBtn.style.display='block';
+    const si = document.getElementById('si');
+    if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
   }
 });
 </script>
@@ -795,8 +791,10 @@ function doGet(e) {
       writeData_(data);
       // 跳回訓練頁面，加上 done=1 讓頁面顯示完成按鈕
       return HtmlService.createHtmlOutput(
-        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html#done"></head>' +
-        '<body><script>window.location.replace("https://chuchienmis.github.io/training/training.html#done");</script></body></html>'
+        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html"></head>' +
+        '</head><body><p style="font-family:sans-serif;text-align:center;margin-top:60px;">✅ 資料已儲存，正在返回...</p>' +
+        '<script>setTimeout(function(){window.location.replace("https://chuchienmis.github.io/training/training.html");},1500);</script>' +
+        '</body></html>'
       );
     }
 
