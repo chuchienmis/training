@@ -625,6 +625,8 @@ function submitQuiz(){
     完成作答時間:now.toLocaleString('zh-TW')
   };
   try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
+  // 標記本次有真正提交測驗（iOS 跳轉回來時用來驗證）
+  try{ localStorage.setItem('quiz_submitted_flag','1'); }catch(e){}
   sendToSheets(rec);
 }
 
@@ -663,7 +665,8 @@ async function sendToSheets(rec){
   const isLINE = /Line/i.test(navigator.userAgent);
 
   if(isIOS || isLINE){
-    // iOS / LINE：直接跳轉到 Apps Script，寫完後跳回
+    // iOS / LINE：先設旗標（localStorage 跨頁面保留），再跳轉到 Apps Script
+    try{ localStorage.setItem('quiz_submitted_flag','1'); }catch(e){}
     const getUrl = url +
       '?action=submit' +
       '&年度=' + encodeURIComponent(rec['年度']||'') +
@@ -728,14 +731,18 @@ window.addEventListener('load', function(){
   const savedLink = localStorage.getItem('sheets_link');
   if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
 
-  // 從 Apps Script redirect 回來（?done=1）→ 顯示完成訊息
+  // 從 Apps Script redirect 回來（#done）→ 只有真正提交過才顯示完成訊息
   if(window.location.hash === '#done'){
-    // 清除網址參數
     history.replaceState({}, '', window.location.pathname + window.location.search);
-    const leaveBtn = document.getElementById('leave-btn');
-    if(leaveBtn) leaveBtn.style.display='block';
-    const si = document.getElementById('si');
-    if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
+    // 檢查 localStorage 是否有提交旗標（iOS 跳轉後 sessionStorage 會消失，改用 localStorage）
+    const submitted = localStorage.getItem('quiz_submitted_flag');
+    if(submitted === '1'){
+      localStorage.removeItem('quiz_submitted_flag');
+      const leaveBtn = document.getElementById('leave-btn');
+      if(leaveBtn) leaveBtn.style.display='block';
+      const si = document.getElementById('si');
+      if(si){ si.style.display='block'; si.textContent='✅ 已儲存至 Google Sheets'; }
+    }
   }
 });
 </script>
