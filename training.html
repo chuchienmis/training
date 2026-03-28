@@ -654,65 +654,66 @@ async function sendToSheets(rec){
   const leaveBtn=document.getElementById('leave-btn');
 
   if(leaveBtn) leaveBtn.style.display='block';
-  if(!url){ return; }
 
-  si.style.display='block';
-  si.textContent='⏳ 正在儲存至 Google Sheets…';
+  // 診斷：顯示詳細狀態（所有裝置都看得到）
+  const dbg = (msg)=>{
+    si.style.display='block';
+    si.textContent = msg;
+    console.log(msg);
+  };
+
+  if(!url){ dbg('⚠ 未設定 Apps Script 網址'); return; }
 
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isLINE = /Line/i.test(navigator.userAgent);
+  dbg('⏳ 裝置:' + (isIOS?'iOS':'') + (isLINE?'+LINE':'') + ' 正在連線…');
 
-  if(isIOS || isLINE){
-    // iOS/LINE：用 XHR 非同步 GET（比 fetch 更相容）
-    const getUrl = url +
-      '?action=submit' +
-      '&yr=' + encodeURIComponent(rec['年度']||'') +
-      '&no=' + encodeURIComponent(rec['員工編號']||'') +
-      '&nm=' + encodeURIComponent(rec['姓名']||'') +
-      '&tt=' + encodeURIComponent(rec['職稱']||'') +
-      '&dp=' + encodeURIComponent(rec['部門']||'') +
-      '&q1=' + encodeURIComponent(rec['Q1']||'') +
-      '&q2=' + encodeURIComponent(rec['Q2']||'') +
-      '&q3=' + encodeURIComponent(rec['Q3']||'') +
-      '&q4=' + encodeURIComponent(rec['Q4']||'') +
-      '&q5=' + encodeURIComponent(rec['Q5']||'') +
-      '&q6=' + encodeURIComponent(rec['Q6']||'') +
-      '&q7=' + encodeURIComponent(rec['Q7']||'') +
-      '&q8=' + encodeURIComponent(rec['Q8']||'') +
-      '&q9=' + encodeURIComponent(rec['Q9']||'') +
-      '&q10=' + encodeURIComponent(rec['Q10']||'') +
-      '&wr=' + encodeURIComponent(rec['錯題數']||0) +
-      '&sc=' + encodeURIComponent(rec['得分']||0) +
-      '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
-      '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
-      '&et=' + encodeURIComponent(rec['完成作答時間']||'');
+  const getUrl = url +
+    '?action=submit' +
+    '&yr=' + encodeURIComponent(rec['年度']||'') +
+    '&no=' + encodeURIComponent(rec['員工編號']||'') +
+    '&nm=' + encodeURIComponent(rec['姓名']||'') +
+    '&tt=' + encodeURIComponent(rec['職稱']||'') +
+    '&dp=' + encodeURIComponent(rec['部門']||'') +
+    '&q1=' + encodeURIComponent(rec['Q1']||'') +
+    '&q2=' + encodeURIComponent(rec['Q2']||'') +
+    '&q3=' + encodeURIComponent(rec['Q3']||'') +
+    '&q4=' + encodeURIComponent(rec['Q4']||'') +
+    '&q5=' + encodeURIComponent(rec['Q5']||'') +
+    '&q6=' + encodeURIComponent(rec['Q6']||'') +
+    '&q7=' + encodeURIComponent(rec['Q7']||'') +
+    '&q8=' + encodeURIComponent(rec['Q8']||'') +
+    '&q9=' + encodeURIComponent(rec['Q9']||'') +
+    '&q10=' + encodeURIComponent(rec['Q10']||'') +
+    '&wr=' + encodeURIComponent(rec['錯題數']||0) +
+    '&sc=' + encodeURIComponent(rec['得分']||0) +
+    '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
+    '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
+    '&et=' + encodeURIComponent(rec['完成作答時間']||'');
 
-    // 方法1：XHR
-    try{
-      await new Promise((resolve, reject)=>{
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', getUrl, true);
-        xhr.timeout = 10000;
-        xhr.onload = resolve;
-        xhr.onerror = reject;
-        xhr.ontimeout = reject;
-        xhr.send();
-      });
-      si.textContent='✅ 已儲存至 Google Sheets';
-    }catch(e){
-      // 方法2：跳轉（備案）
-      window.location.href = getUrl;
-      return;
+  // 嘗試 fetch GET（最簡單）
+  try{
+    dbg('⏳ 嘗試 fetch GET…');
+    const resp = await fetch(getUrl, {method:'GET', mode:'cors'});
+    if(resp.ok){
+      const json = await resp.json();
+      dbg('✅ 成功: ' + JSON.stringify(json));
+    } else {
+      dbg('⚠ HTTP ' + resp.status + ' 嘗試 no-cors…');
+      throw new Error('not ok');
     }
-  } else {
-    // 電腦瀏覽器：fetch POST
+  } catch(e1){
+    // 嘗試 no-cors
     try{
-      await fetch(url, {method:'POST', mode:'no-cors', body:JSON.stringify(rec)});
-    }catch(e){}
-    si.textContent='✅ 已儲存至 Google Sheets';
+      dbg('⏳ 嘗試 no-cors fetch…');
+      await fetch(getUrl, {method:'GET', mode:'no-cors'});
+      dbg('✅ no-cors 送出完成（無法確認結果）');
+    } catch(e2){
+      dbg('❌ 所有方式失敗: ' + e2.message);
+    }
   }
 
-  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },8000);
 }
 
 // ══ 離開頁面 ══
