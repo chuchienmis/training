@@ -653,10 +653,8 @@ async function sendToSheets(rec){
   const si=document.getElementById('si');
   const leaveBtn=document.getElementById('leave-btn');
 
-  if(!url){
-    if(leaveBtn) leaveBtn.style.display='block';
-    return;
-  }
+  if(leaveBtn) leaveBtn.style.display='block';
+  if(!url){ return; }
 
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
@@ -665,40 +663,55 @@ async function sendToSheets(rec){
   const isLINE = /Line/i.test(navigator.userAgent);
 
   if(isIOS || isLINE){
-    // iOS/LINE：跳轉到 Apps Script，寫完後跳回
+    // iOS/LINE：用 XHR 非同步 GET（比 fetch 更相容）
     const getUrl = url +
       '?action=submit' +
-      '&年度=' + encodeURIComponent(rec['年度']||'') +
-      '&員工編號=' + encodeURIComponent(rec['員工編號']||'') +
-      '&姓名=' + encodeURIComponent(rec['姓名']||'') +
-      '&職稱=' + encodeURIComponent(rec['職稱']||'') +
-      '&部門=' + encodeURIComponent(rec['部門']||'') +
-      '&Q1=' + encodeURIComponent(rec['Q1']||'') +
-      '&Q2=' + encodeURIComponent(rec['Q2']||'') +
-      '&Q3=' + encodeURIComponent(rec['Q3']||'') +
-      '&Q4=' + encodeURIComponent(rec['Q4']||'') +
-      '&Q5=' + encodeURIComponent(rec['Q5']||'') +
-      '&Q6=' + encodeURIComponent(rec['Q6']||'') +
-      '&Q7=' + encodeURIComponent(rec['Q7']||'') +
-      '&Q8=' + encodeURIComponent(rec['Q8']||'') +
-      '&Q9=' + encodeURIComponent(rec['Q9']||'') +
-      '&Q10=' + encodeURIComponent(rec['Q10']||'') +
-      '&錯題數=' + encodeURIComponent(rec['錯題數']||0) +
-      '&得分=' + encodeURIComponent(rec['得分']||0) +
-      '&觀看影片時間=' + encodeURIComponent(rec['觀看影片時間']||'') +
-      '&開始作答時間=' + encodeURIComponent(rec['開始作答時間']||'') +
-      '&完成作答時間=' + encodeURIComponent(rec['完成作答時間']||'');
-    window.location.href = getUrl;
-    return;
+      '&yr=' + encodeURIComponent(rec['年度']||'') +
+      '&no=' + encodeURIComponent(rec['員工編號']||'') +
+      '&nm=' + encodeURIComponent(rec['姓名']||'') +
+      '&tt=' + encodeURIComponent(rec['職稱']||'') +
+      '&dp=' + encodeURIComponent(rec['部門']||'') +
+      '&q1=' + encodeURIComponent(rec['Q1']||'') +
+      '&q2=' + encodeURIComponent(rec['Q2']||'') +
+      '&q3=' + encodeURIComponent(rec['Q3']||'') +
+      '&q4=' + encodeURIComponent(rec['Q4']||'') +
+      '&q5=' + encodeURIComponent(rec['Q5']||'') +
+      '&q6=' + encodeURIComponent(rec['Q6']||'') +
+      '&q7=' + encodeURIComponent(rec['Q7']||'') +
+      '&q8=' + encodeURIComponent(rec['Q8']||'') +
+      '&q9=' + encodeURIComponent(rec['Q9']||'') +
+      '&q10=' + encodeURIComponent(rec['Q10']||'') +
+      '&wr=' + encodeURIComponent(rec['錯題數']||0) +
+      '&sc=' + encodeURIComponent(rec['得分']||0) +
+      '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
+      '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
+      '&et=' + encodeURIComponent(rec['完成作答時間']||'');
+
+    // 方法1：XHR
+    try{
+      await new Promise((resolve, reject)=>{
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', getUrl, true);
+        xhr.timeout = 10000;
+        xhr.onload = resolve;
+        xhr.onerror = reject;
+        xhr.ontimeout = reject;
+        xhr.send();
+      });
+      si.textContent='✅ 已儲存至 Google Sheets';
+    }catch(e){
+      // 方法2：跳轉（備案）
+      window.location.href = getUrl;
+      return;
+    }
+  } else {
+    // 電腦瀏覽器：fetch POST
+    try{
+      await fetch(url, {method:'POST', mode:'no-cors', body:JSON.stringify(rec)});
+    }catch(e){}
+    si.textContent='✅ 已儲存至 Google Sheets';
   }
 
-  // 電腦瀏覽器：fetch 送出，不跳轉
-  try{
-    await fetch(url, {method:'POST', mode:'no-cors', body:JSON.stringify(rec)});
-  }catch(e){}
-
-  si.textContent='✅ 已儲存至 Google Sheets';
-  if(leaveBtn) leaveBtn.style.display='block';
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
