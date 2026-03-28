@@ -782,10 +782,10 @@ function doGet(e) {
       writeData_(data);
       // 跳回訓練頁面，加上 done=1 讓頁面顯示完成按鈕
       return HtmlService.createHtmlOutput(
-        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html"></head>' +
-        '</head><body><p style="font-family:sans-serif;text-align:center;margin-top:60px;">✅ 資料已儲存，正在返回...</p>' +
+        '&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta http-equiv="refresh" content="0;url=https://chuchienmis.github.io/training/training.html"&gt;</head>' +
+        '&lt;/head&gt;&lt;body&gt;<p style="font-family:sans-serif;text-align:center;margin-top:60px;">✅ 資料已儲存，正在返回...</p>' +
         '&lt;script&gt;setTimeout(function(){window.location.replace("https://chuchienmis.github.io/training/training.html");},1500);&lt;/script&gt;' +
-        '</body></html>'
+        '&lt;/body&gt;&lt;/html&gt;'
       );
     }
 
