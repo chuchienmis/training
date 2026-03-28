@@ -729,9 +729,9 @@ window.addEventListener('load', function(){
   if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
 
   // 從 Apps Script redirect 回來（?done=1）→ 顯示完成訊息
-  if(window.location.search.indexOf('done=1') !== -1){
+  if(window.location.hash === '#done'){
     // 清除網址參數
-    history.replaceState({}, '', window.location.pathname);
+    history.replaceState({}, '', window.location.pathname + window.location.search);
     const leaveBtn = document.getElementById('leave-btn');
     if(leaveBtn) leaveBtn.style.display='block';
     const si = document.getElementById('si');
@@ -751,7 +751,7 @@ window.addEventListener('load', function(){
   Q6:'D', Q7:'D', Q8:'C', Q9:'A', Q10:'D'
 };
 
-var RETURN_URL = 'https://chuchienmis.github.io/training/training.html';
+var RETURN_URL = 'https://chuchienmis.github.io/training/training.html#done';
 
 function doGet(e) {
   try {
@@ -790,8 +790,8 @@ function doGet(e) {
       writeData_(data);
       // 跳回訓練頁面，加上 done=1 讓頁面顯示完成按鈕
       return HtmlService.createHtmlOutput(
-        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=' + RETURN_URL + '?done=1"></head>' +
-        '<body><script>window.location.replace("' + RETURN_URL + '?done=1");<\/script></body></html>'
+        '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=' + RETURN_URL + '"></head>' +
+        '<body><script>window.location.replace("' + RETURN_URL + '");<\/script></body></html>'
       );
     }
 
