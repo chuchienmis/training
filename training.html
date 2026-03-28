@@ -420,6 +420,9 @@ const KQ=[
 
 let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
 
+// ★ Apps Script 網址（直接寫死，確保 iPhone/LINE 也能使用）
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5LoJx11mV8L7ed_boSjjJD3QRKRoUeOaHV018rKm11UARIILF-h1h_xu4tk63aDblhw/exec';
+
 // ══ 姓名輸入即時顯示職稱 ══
 function onNameCheck(){
   const val = document.getElementById('iname').value.trim();
@@ -447,7 +450,7 @@ async function confirmIdentity(){
   if(!dept){ err.textContent='⚠ 請選擇部門 / 單位'; return; }
 
   // ── 查詢測驗次數（黃晨晞不受限制）──
-  const url = localStorage.getItem('sheets_url');
+  const url = APPS_SCRIPT_URL || localStorage.getItem('sheets_url');
   const MAX_ATTEMPTS = 2;
   const NO_LIMIT_USERS = ['黃晨晞'];
 
@@ -649,7 +652,7 @@ function saveSheetLink(){
   setTimeout(()=>{ s.style.display='none'; s.textContent='✅ 已儲存'; },3000);
 }
 async function sendToSheets(rec){
-  const url=localStorage.getItem('sheets_url')||document.getElementById('surl').value.trim();
+  const url = APPS_SCRIPT_URL || localStorage.getItem('sheets_url') || document.getElementById('surl').value.trim();
   const si=document.getElementById('si');
   const leaveBtn=document.getElementById('leave-btn');
 
