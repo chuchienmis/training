@@ -659,45 +659,43 @@ async function sendToSheets(rec){
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
 
-  const payload = JSON.stringify(rec);
+  // 將資料拆成多個小欄位用 GET 送出（避免 URL 長度限制）
+  // Apps Script doGet 已可接收 submit action
+  const getUrl = url +
+    '?action=submit' +
+    '&年度=' + encodeURIComponent(rec['年度']||'') +
+    '&員工編號=' + encodeURIComponent(rec['員工編號']||'') +
+    '&姓名=' + encodeURIComponent(rec['姓名']||'') +
+    '&職稱=' + encodeURIComponent(rec['職稱']||'') +
+    '&部門=' + encodeURIComponent(rec['部門']||'') +
+    '&Q1=' + encodeURIComponent(rec['Q1']||'') +
+    '&Q2=' + encodeURIComponent(rec['Q2']||'') +
+    '&Q3=' + encodeURIComponent(rec['Q3']||'') +
+    '&Q4=' + encodeURIComponent(rec['Q4']||'') +
+    '&Q5=' + encodeURIComponent(rec['Q5']||'') +
+    '&Q6=' + encodeURIComponent(rec['Q6']||'') +
+    '&Q7=' + encodeURIComponent(rec['Q7']||'') +
+    '&Q8=' + encodeURIComponent(rec['Q8']||'') +
+    '&Q9=' + encodeURIComponent(rec['Q9']||'') +
+    '&Q10=' + encodeURIComponent(rec['Q10']||'') +
+    '&錯題數=' + encodeURIComponent(rec['錯題數']||0) +
+    '&得分=' + encodeURIComponent(rec['得分']||0) +
+    '&觀看影片時間=' + encodeURIComponent(rec['觀看影片時間']||'') +
+    '&開始作答時間=' + encodeURIComponent(rec['開始作答時間']||'') +
+    '&完成作答時間=' + encodeURIComponent(rec['完成作答時間']||'');
 
-  // 用隱藏 iframe + POST form 送出（POST 無 URL 長度限制，相容 LINE/Safari）
   try{
-    let iframe = document.getElementById('_gs_frame');
-    if(!iframe){
-      iframe = document.createElement('iframe');
-      iframe.id = '_gs_frame';
-      iframe.name = '_gs_frame';
-      iframe.style.cssText = 'display:none;position:absolute;width:0;height:0;';
-      document.body.appendChild(iframe);
-    }
-
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = url;
-    form.target = '_gs_frame';
-    form.style.display = 'none';
-    form.enctype = 'application/x-www-form-urlencoded';
-
-    const f1 = document.createElement('input');
-    f1.type = 'hidden'; f1.name = 'action'; f1.value = 'submit';
-    form.appendChild(f1);
-
-    const f2 = document.createElement('input');
-    f2.type = 'hidden'; f2.name = 'payload'; f2.value = payload;
-    form.appendChild(f2);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
+    // 用 Image tag 送 GET 請求（最相容，LINE/Safari/所有瀏覽器均支援）
+    await new Promise((resolve)=>{
+      const img = new Image();
+      img.onload = img.onerror = resolve;
+      img.src = getUrl;
+      setTimeout(resolve, 4000);
+    });
+    si.textContent='✅ 已儲存至 Google Sheets';
   }catch(e){
-    // 備案：fetch GET
-    fetch(url+'?action=submit&payload='+encodeURIComponent(payload),{method:'GET',mode:'no-cors'}).catch(()=>{});
+    si.textContent='✅ 資料已送出';
   }
-
-  await new Promise(r=>setTimeout(r,2500));
-  si.textContent='✅ 已儲存至 Google Sheets';
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
 }
 
@@ -764,11 +762,39 @@ function doGet(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // ── 接收測驗資料（GET 方式，相容 LINE/Safari）──
+    // ── 接收測驗資料（GET 個別欄位方式，最相容 LINE/Safari）──
     if (action === 'submit') {
-      var payload = e.parameter.payload || '';
-      if (payload) {
-        var data = JSON.parse(decodeURIComponent(payload));
+      var data;
+      // 方式A：個別欄位（新版，最相容）
+      if (e.parameter['姓名']) {
+        data = {
+          '年度':    e.parameter['年度']    || '',
+          '員工編號': e.parameter['員工編號'] || '',
+          '姓名':    e.parameter['姓名']    || '',
+          '職稱':    e.parameter['職稱']    || '',
+          '部門':    e.parameter['部門']    || '',
+          'Q1':  e.parameter['Q1']  || '',
+          'Q2':  e.parameter['Q2']  || '',
+          'Q3':  e.parameter['Q3']  || '',
+          'Q4':  e.parameter['Q4']  || '',
+          'Q5':  e.parameter['Q5']  || '',
+          'Q6':  e.parameter['Q6']  || '',
+          'Q7':  e.parameter['Q7']  || '',
+          'Q8':  e.parameter['Q8']  || '',
+          'Q9':  e.parameter['Q9']  || '',
+          'Q10': e.parameter['Q10'] || '',
+          '錯題數': Number(e.parameter['錯題數']) || 0,
+          '得分':   Number(e.parameter['得分'])   || 0,
+          '觀看影片時間': e.parameter['觀看影片時間'] || '',
+          '開始作答時間': e.parameter['開始作答時間'] || '',
+          '完成作答時間': e.parameter['完成作答時間'] || ''
+        };
+      }
+      // 方式B：舊版 payload JSON
+      else if (e.parameter.payload) {
+        data = JSON.parse(decodeURIComponent(e.parameter.payload));
+      }
+      if (data) {
         var result = writeData_(ss, data);
         return ContentService.createTextOutput(JSON.stringify(result))
           .setMimeType(ContentService.MimeType.JSON);
@@ -896,15 +922,26 @@ function writeData_(ss, data) {
 function doPost(e) {
   try {
     var data;
-    // 優先讀取 form 欄位 payload（LINE/Safari 的 form POST 方式）
+    // 方式1：form POST 的 payload 欄位（LINE/Safari iframe form 方式）
     if (e.parameter && e.parameter.payload) {
       data = JSON.parse(e.parameter.payload);
-    } else {
-      // 一般 JSON POST（電腦瀏覽器 fetch 方式）
+    }
+    // 方式2：form POST 的 postData（application/x-www-form-urlencoded）
+    else if (e.postData && e.postData.contents) {
+      var raw = e.postData.contents;
+      // 嘗試直接 JSON parse
       try {
-        data = JSON.parse(e.postData.contents);
-      } catch(parseErr) {
-        data = JSON.parse(e.postData.contents);
+        data = JSON.parse(raw);
+      } catch(e1) {
+        // 嘗試 URL decode 後 parse payload 參數
+        try {
+          var decoded = decodeURIComponent(raw);
+          var match = decoded.match(/payload=(.+)/);
+          if (match) data = JSON.parse(match[1]);
+          else data = JSON.parse(decoded);
+        } catch(e2) {
+          data = JSON.parse(raw);
+        }
       }
     }
     var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -912,7 +949,7 @@ function doPost(e) {
     return ContentService.createTextOutput(JSON.stringify(result))
       .setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error', msg:err.toString()}))
+    return ContentService.createTextOutput(JSON.stringify({status:'error', msg:err.toString(), raw: e.postData ? e.postData.contents : 'no postData', param: JSON.stringify(e.parameter)}))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }</pre>
