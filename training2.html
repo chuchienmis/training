@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>竹建瓦斯股份有限公司 115年個資保護教育訓練</title>
+<!-- Open Graph：控制 LINE/FB 分享預覽 -->
+<meta property="og:title" content="115年度竹建瓦斯個資保護教育訓練">
+<meta property="og:description" content="115年度竹建瓦斯個資保護教育訓練">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://chuchienmis.github.io/training/training2.html">
+<meta property="og:image" content="https://chuchienmis.github.io/training/line_preview.jpg">
+<meta property="og:image:width" content="1192">
+<meta property="og:image:height" content="872">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0d1f3c;--navy2:#1a3458;--green:#1a6b2f;--green2:#2e9147;--red:#c0292a;--gold:#c8962a;--goldl:#e8b84b;--cream:#f7f3ec;--td:#1a1a2e;--tm:#3a3a5c;--w:#fff;--bdr:rgba(26,107,47,.2);--sh:0 8px 40px rgba(13,31,60,.12)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);font-family:'Noto Sans TC',sans-serif;color:var(--td);min-height:100vh}
+
+header{background:var(--navy);color:var(--w);position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(200,150,42,.03) 40px,rgba(200,150,42,.03) 41px)}
+.hi{max-width:900px;margin:0 auto;padding:16px 24px 14px;position:relative;display:flex;justify-content:center;align-items:center;gap:12px}
+.hlogo{flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hlogo img{width:60px;height:auto;object-fit:contain;display:block}
+.ht{text-align:left}
+.ht h1{font-family:'Noto Serif TC',serif;font-size:clamp(18px,3.2vw,28px);font-weight:900;line-height:1.4;letter-spacing:1px;color:var(--w)}
+.hsub{font-size:clamp(14px,2.2vw,18px);color:var(--goldl);margin-top:5px;letter-spacing:1px;font-family:'Noto Serif TC',serif;font-weight:700}
+.gline{width:52px;height:2px;background:linear-gradient(90deg,var(--gold),var(--goldl));margin-top:8px;border-radius:2px}
+/* RWD */
+@media(max-width:600px){
+  .hi{padding:16px 14px 14px;gap:8px}
+  .hlogo img{width:44px}
+  .ht h1{font-size:17px;letter-spacing:.5px}
+  .hsub{font-size:13px}
+  .main{padding:20px 14px 60px}
+  .login-row{flex-direction:column;max-width:100%}
+  .name-wrap,.dept-wrap,.title-badge{width:100%;min-width:0}
+  .title-badge{justify-content:center}
+  .vplayer,.vframe-wrap{padding-bottom:56.25%}
+  .qcta{flex-direction:column;align-items:flex-start;padding:18px}
+  .bq{width:100%;text-align:center}
+  .qm{border-radius:0;margin:0}
+  .qbody{padding:14px 16px}
+  .qmh{padding:14px 16px}
+  .qfoot{padding:0 16px 20px}
+  .qblk{padding:14px 16px}
+  .rm{border-radius:12px}
+  .rb{padding:16px 18px 20px}
+  .rscore{font-size:48px}
+  .sinfo{padding:16px 18px}
+  .sir{flex-direction:column}
+  .bsu{width:100%}
+  .sir input{width:100%}
+}
+@media(max-width:400px){
+  .ht h1{font-size:17px}
+  .qop{padding:8px 10px;gap:8px}
+  .qotxt{font-size:12px}
+}
+
+.main{max-width:900px;margin:0 auto;padding:30px 24px 80px}
+
+/* IDENTITY GATE */
+#ig{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:40px 36px;text-align:center;box-shadow:var(--sh)}
+#ig h2{font-family:'Noto Serif TC',serif;font-size:19px;color:var(--navy);margin-bottom:8px}
+#ig p{font-size:13px;color:var(--tm);margin-bottom:28px;line-height:1.7}
+
+.login-row{display:flex;gap:12px;align-items:flex-start;max-width:480px;margin:0 auto 8px}
+@media(max-width:480px){.login-row{flex-direction:column}}
+
+.name-wrap{flex:1;position:relative}
+.name-wrap input{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none}
+.name-wrap input:focus{border-color:var(--green);background:var(--w)}
+.name-wrap input::placeholder{color:#bbb}
+
+/* autocomplete dropdown */
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--w);border:1.5px solid var(--green);border-radius:10px;box-shadow:0 8px 24px rgba(13,31,60,.12);z-index:100;overflow:hidden;display:none}
+.ac-list.show{display:block}
+.ac-item{padding:11px 16px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:space-between;transition:background .12s}
+.ac-item:hover,.ac-item.active{background:#f0faf2}
+.ac-item-name{color:var(--td);font-weight:500}
+.ac-item-title{color:var(--green);font-size:12px;font-weight:600;background:rgba(26,107,47,.1);padding:2px 8px;border-radius:10px}
+
+/* title preview badge */
+.title-badge{display:none;align-items:center;gap:8px;background:rgba(26,107,47,.08);border:1.5px solid var(--bdr);border-radius:10px;padding:11px 16px;font-size:14px;color:var(--navy);font-weight:600;white-space:nowrap;min-width:90px;justify-content:center}
+.title-badge.show{display:flex}
+.title-badge-icon{font-size:16px}
+
+.dept-wrap{flex:1}
+.dept-wrap select{width:100%;padding:13px 16px;border:1.5px solid #d0cec8;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;color:var(--td);background:var(--cream);transition:border-color .2s;outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.dept-wrap select:focus{border-color:var(--green);background-color:var(--w)}
+.dept-wrap select.unselected{color:#bbb}
+.dept-wrap select option{color:#1a1a2e;background:#fff}
+
+.ierr{color:var(--red);font-size:13px;margin:4px 0 14px;min-height:18px;font-weight:500}
+.bcf{background:var(--navy);color:var(--w);border:none;padding:13px 44px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s,transform .1s;margin-top:4px}
+.bcf:hover{background:var(--navy2)}.bcf:active{transform:scale(.98)}
+
+/* TRAINING CONTENT */
+#tc{display:none}#tc.v{display:block}
+.uchip{display:flex;align-items:center;gap:10px;background:var(--w);border:1px solid var(--bdr);border-radius:30px;padding:7px 18px 7px 9px;margin-bottom:24px;width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.uav{width:34px;height:34px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--w);font-weight:700;font-size:13px;flex-shrink:0}
+.un{font-weight:700;font-size:14px;color:var(--navy)}.ud{font-size:12px;color:var(--tm)}
+
+.sl{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.sn{width:30px;height:30px;background:var(--navy);color:var(--w);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.st{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;color:var(--navy)}
+
+/* VIDEO CARD */
+.vcard{background:var(--w);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:26px}
+.vcard-top{background:var(--navy);padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.vcard-title{color:var(--w);font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+/* video player */
+.vplayer{position:relative;width:100%;padding-bottom:56.25%;background:#000;cursor:pointer}
+.vplayer iframe{position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;pointer-events:none;transition:opacity .3s}
+.vplayer iframe.ready{opacity:1;pointer-events:auto}
+.vthumb-cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+.vthumb-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vthumb-cover:hover .vplay-circle{transform:scale(1.08)}
+.vplay-circle{position:relative;z-index:1;transition:transform .2s}
+.vstatus{padding:10px 22px;background:#f5f2ed;border-top:1px solid #ece9e3;font-size:12px;color:var(--tm);display:flex;align-items:center;gap:8px}
+.vstatus-dot{width:8px;height:8px;border-radius:50%;background:#bbb;flex-shrink:0;transition:background .3s}
+.vstatus-dot.on{background:#22c55e}
+
+/* QUIZ CTA */
+.qcta{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:22px 26px;box-shadow:var(--sh);margin-bottom:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.qcta h3{font-family:'Noto Serif TC',serif;font-size:16px;color:var(--navy);margin-bottom:5px}
+.qcta p{font-size:12px;color:var(--tm)}
+.bq{background:linear-gradient(135deg,var(--green),var(--green2));color:var(--w);border:none;padding:12px 26px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;white-space:nowrap;box-shadow:0 4px 12px rgba(26,107,47,.3);transition:opacity .2s,transform .1s}
+.bq:hover{opacity:.88}.bq:active{transform:scale(.98)}.bq:disabled{background:#aaa;box-shadow:none;opacity:1;cursor:not-allowed}
+
+/* SHEETS SETTING */
+.sinfo{background:var(--w);border:1px solid var(--bdr);border-radius:14px;padding:20px 24px;box-shadow:var(--sh)}
+.sinfo h3{font-family:'Noto Serif TC',serif;font-size:15px;color:var(--navy);margin-bottom:9px}
+.sinfo p{font-size:12px;color:var(--tm);margin-bottom:6px;line-height:1.7}
+.sir{display:flex;gap:8px;align-items:center;margin-top:9px}
+.sir input{flex:1;padding:9px 12px;border:1.5px solid #d0cec8;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--td);background:var(--cream);outline:none}
+.sir input:focus{border-color:var(--green)}
+.bsu{background:var(--green);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.bsu:hover{background:var(--green2)}
+.ust{font-size:11px;margin-top:5px;color:var(--green);display:none}
+
+/* QUIZ OVERLAY */
+#qo{display:none;position:fixed;inset:0;background:rgba(13,31,60,.72);z-index:1000;overflow-y:auto;backdrop-filter:blur(4px);padding:18px 14px}
+#qo.open{display:flex;align-items:flex-start;justify-content:center}
+.qm{background:var(--cream);border-radius:16px;width:100%;max-width:720px;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;animation:su .3s ease;margin:auto}
+@keyframes su{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.qmh{background:var(--navy);padding:17px 24px;display:flex;align-items:center;justify-content:space-between}
+.qmh h2{font-family:'Noto Serif TC',serif;color:var(--w);font-size:16px}
+.qcl{background:rgba(255,255,255,.15);border:none;color:var(--w);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.qcl:hover{background:rgba(255,255,255,.28)}
+.qpbw{background:#ddd;height:3px}.qpb{height:3px;background:var(--green);width:0%;transition:width .4s}
+.qbody{padding:20px 24px}
+.qst{font-family:'Noto Serif TC',serif;font-size:13px;font-weight:700;color:var(--navy);background:rgba(26,107,47,.08);border-left:4px solid var(--green);padding:9px 13px;border-radius:0 6px 6px 0;margin-bottom:12px}
+.qblk{background:var(--w);border:1px solid #e0ddd6;border-radius:10px;padding:18px 20px;margin-bottom:12px;transition:box-shadow .2s}
+.qblk:hover{box-shadow:0 4px 14px rgba(13,31,60,.08)}.qblk.ua{border-color:var(--red)!important}
+.qmeta{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.qnum{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--green);text-transform:uppercase}
+.qpts{font-size:10px;background:var(--navy);color:var(--w);padding:2px 7px;border-radius:10px}
+.qtxt{font-size:14px;font-weight:500;color:var(--navy);line-height:1.65;margin-bottom:11px}
+.qops{display:flex;flex-direction:column;gap:7px}
+.qop{display:flex;align-items:center;gap:11px;padding:9px 13px;border:1.5px solid #e0ddd8;border-radius:8px;cursor:pointer;transition:all .15s;background:var(--cream);user-select:none}
+.qop:hover{border-color:var(--green);background:#f0faf2}
+.qop input{display:none}
+.rdot{width:17px;height:17px;border:2px solid #ccc;border-radius:50%;flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.qop.sel{border-color:var(--green);background:#e8f5ec}
+.qop.sel .rdot{border-color:var(--green);background:var(--green)}
+.qop.sel .rdot::after{content:'';width:6px;height:6px;background:#fff;border-radius:50%;display:block}
+.qotxt{font-size:13px;color:var(--td)}
+.qfoot{padding:0 24px 24px}
+.qwarn{background:#fff8e6;border:1px solid var(--goldl);border-radius:8px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:11px;display:none}
+.qwarn.show{display:block}
+.bsub{width:100%;background:var(--navy);color:var(--w);border:none;padding:14px;border-radius:10px;font-family:'Noto Sans TC',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:2px;transition:background .2s}
+.bsub:hover{background:var(--navy2)}
+
+/* RESULT OVERLAY */
+#ro{display:none;position:fixed;inset:0;background:rgba(13,31,60,.78);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);overflow-y:auto}
+#ro.open{display:flex}
+.rm{background:var(--w);border-radius:16px;max-width:480px;width:100%;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35);animation:su .3s ease;text-align:center;margin:auto}
+.rh{background:var(--navy);padding:26px 24px 18px}
+.ri{font-size:44px;margin-bottom:8px}
+.rh h2{color:var(--w);font-family:'Noto Serif TC',serif;font-size:18px}
+.rb{padding:20px 24px 24px}
+.rscore{font-size:60px;font-weight:900;color:var(--navy);font-family:'Noto Serif TC',serif;line-height:1}
+.rscore span{font-size:19px;font-weight:400;color:var(--tm)}
+.rmsg{font-size:13px;color:var(--tm);margin:8px 0 14px;line-height:1.6}
+.rinfo{background:var(--cream);border-radius:8px;padding:12px 14px;margin-bottom:14px;text-align:left}
+.rrow{display:flex;gap:8px;font-size:12px;color:var(--tm);margin-bottom:3px}
+.rrow:last-child{margin-bottom:0}.rrow strong{color:var(--navy);min-width:56px}
+.rev-wrap{text-align:left;margin-bottom:16px}
+.rev-wrap h4{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #eee}
+.rev-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;padding:6px 0;border-bottom:1px solid #f5f2ed;line-height:1.5}
+.rev-item:last-child{border-bottom:none}
+.rev-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.rev-right{flex:1}
+.rev-q{color:var(--td);font-size:12px}
+.rev-ans{font-size:11px;margin-top:2px}
+.rev-ans.ok{color:var(--green);font-weight:600}
+.rev-ans.ng{color:var(--red)}
+.bdn{background:var(--navy);color:var(--w);border:none;padding:11px 32px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px}
+
+/* SIGNATURE OVERLAY */
+#so{display:none;position:fixed;inset:0;background:rgba(13,31,60,.82);z-index:2500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);overflow-y:auto}
+#so.open{display:flex}
+.sm{background:var(--w);border-radius:16px;max-width:520px;width:100%;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.35);animation:su .3s ease;text-align:center;margin:auto}
+.sh{background:var(--navy);padding:18px 24px}
+.sh h2{color:var(--w);font-family:'Noto Serif TC',serif;font-size:17px}
+.sh p{color:rgba(255,255,255,.7);font-size:12px;margin-top:4px}
+.sb{padding:20px 24px 24px}
+#sig-canvas{border:2px solid #d0cec8;border-radius:10px;width:100%;touch-action:none;cursor:crosshair;background:#fff;display:block}
+.sig-actions{display:flex;gap:10px;margin-top:12px}
+.sig-clear{flex:1;background:#f0ede8;color:var(--td);border:none;padding:10px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.sig-clear:hover{background:#e0ddd6}
+.sig-submit{flex:2;background:var(--green);color:#fff;border:none;padding:10px;border-radius:8px;font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px}
+.sig-submit:hover{background:var(--green2)}
+.sig-hint{font-size:11px;color:var(--tm);margin-top:8px;text-align:center}
+
+#si{display:none;position:fixed;bottom:20px;right:20px;background:var(--navy);color:var(--w);padding:10px 16px;border-radius:8px;font-size:12px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.25);z-index:3000;animation:su .3s ease}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hi">
+    <div class="hlogo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH4AAACoCAYAAAAmRFq6AAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAoi0lEQVR4nO2deZRlVX3vP3vvM96p5upquummAWkEmnmQeR5EBdQ4K8agiYkrWfpiHpogxicafU+fJiGuF+doXCrRGIkKiIogQzMPytDM3U0PVV3Tne8Z9t7vj3NvVTVBiSI19f2sdVd31b1Vdc7+7t8efsM+0KVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0mXpsRbserALfR0LjVzoC5hveoA/PeNCDga7bg/uAHuU8OvB/sWxp7MuTbn0lPMoLvQFLSDOQl/AfLEO7ApgfVKlVK8xoSQrgQcW+sIWiD3G4tcAHzrpGIrjE/TWKqwxlj/ZcAQv3UOH+z1C+H3Bvm/DkazaVmd1rgeiCFGZZp0b8J7DjuHwPVD8PUL4IWC9k2dlJFHTDQpWUTTgTU5zXGmQ/oW+wAVg2Qt/FNjLjjqafL1JNFXBqcf0hwX6Ao+w0SR4ahuXHXkqJ4BdswdZ/rIW/jCw7zviIPZuxrhRi8HBfgqlHqZ37CRuNOj1FSOeQ/9Ulb859lRWLvQFzyPLVvjjwP7ZUes5SDsMa0iSiLFGjbqO6V2zN+V6BdeVtKIquUadI8uaKw47iX32EKtflsLvC7YfOJw8A7UIUa2ihMTtLdB0JNvHd9E30E+tWibnQhFNfqrKylrE2oW++HliWQrfC/zNhqNZPRmRixM8KZBS0ko1LUciijkacUrODbH1Jn2hTypa5GzK5ceezMv2AKtfdsIfAPYDp55NbqpGoZXga1AGlAVhwSIxSLASkPieQyuqY6WhgGHFaJmPHn/6sh/yl5Xwa8GuBUammqweHKJlUqQFx0iUAdcYfG3wNAgrsQgSBMr3iHUT0WxygMrTt6vC4ELfzIvMshJ+ALj0yFMZakZUd42SWIMW2S061uJrg2MMypr2jUscz6XaaiClxCYt0nqZ/iTl8lNO5ZBlbPXLRvjDwF524mn0Tk4Q1itIq8n1lYiUJJUSTxt8rXFsgkADYJC0mglSKHzfp9jXS5QTpFGNddtrfPLYU9l/mYq/LIRfB3YVsG89pq/VYKQQoJSg2mygJRgADIIURArCYAArJL4fEnohqTHsmh5nqlFmuLeH1VpS2jbBgQt6Zy8ey0L4QeCKI0+jZ9soq3MBUaNMmHOJ0wSQWAGJ0qRKY0WCFZpUghZQrzdxHI/YGHAVK0eGmR7fRatR4cChFVyyz5GctwytfskLfyjYS485kZ5KhR4hadVqOI5DvVKlJ19EmWw1bySkEozIXggDGMLQpVotE7gheb/Ijs07GewdJHQdotFRjunr5437H8pyy9pZ0sIfAHYDsHJsJ4Mln5ZjaDmSprZ4OKgkQVmTiWwFBoXFRVqBsCBISWnieaAig9Nw6QmHiesGJ9EUiVHVnawLLQMLfbO/Z5a08APAH67bj319j+nxUeq6hQpDpOMitUWm7RW8BSOyfTu2s4cnGwpEihVp25wFjnZw9GzHUHGdUqPGe485lBOXkdUvWeGPAfs3x5/Ivv0DmWPGGELPRwJpmgIghHje32NFtupvuobI0SiboqwlVZBKSWOqwj5hH4fEAe89+mUcvEzEf/6WWYTsB/afzjqb8InHGdKWolAErodJNTZJkQg8qTAms3Zoz+vMqpZ9bUAkGCmJpIujXQqRg2sMkWMwQhN4kkasqRl40nPZvH4VH77+erYs0bbrsCRz7vqAwo6drA9z6GaCsECqMXGC1YYwCHGUolmrI51ff4sSEMbBCjDCkKqExLGgQVqBtBKrJUm9xkjfALlcDqccszewZZ7u9cViyQ31R4K9/OQz6Y0i4qkpXGuxSQqpwXe9zPK1RscJSqnf/MusRFqFMgLHWASaVMWk0gAWaQVaW4rFImmrTm37VobKVS49/ASOWuJD/pIS/lCwHzv6JPYfGyVIE3K9vTSbTaw2OELiSYWjFCZJSZIE5zdYewdhJY6WhKnBMylaaiI3ndn2NZotjBSYUOF7sELD3tWIS489k0OXsPhLSngHGGw0WBFFFDREtSY5N6QQhFhjqNfrpFGM4zgolc3xvxnZ9uVLfA2+NiBStLAkElIhyZeKNFpNrARHCkytwohyGJhuMDQP9/xisaSEv/iU8/EdRRLFlHDxWhalLTpOkBZ8x82CLTYzxM6/vw4jQAuBFeBqCFKDq7N9f8vNXo04wlcOUaVGGHgkOsbqmLxOeNcJ587Hbb8oLCnhP3fTj9hpGhQGVtCsNCgp/7+1tDa/5kOWzKOn2+8LK1FG7rYTCMMQ3wsJHB/f8bGOpCEjbJ/H52697vdxWwvCkhH+ok+/xj4KYnSoyKOVOm5YmOOc+c2vDnPtvyOuFhYtsj27ERIrMvE9Y3CNpTpdplaroVPB5ESZvqFhxmyLhwp1Nkt450deuyTn+SUh/Ju/9Eb7QLyJV195tv3ELRt5os+jVcoxXq3PWOvz8VzqCAwCg5WGVAoS4WBwEFbgaHC1oVQsUOgpYV2PwshePLxrJ7W9ernk5/eLl19xPvdUH+XCz79hyYm/+IVfg90eTLA12kx5KOHBGPHX99/LkwVJsHoVsZJYeN7XsxFkVq+sQVhIhUMiXSwqW+lbg2NTWo0aiU6pasPj9SrjwyU+dNM9AGzeW7Crr8mEOwFrsaxfOqv8RS/8OR87nzs3301xVZF7xx7mtK+fYx8DsSkHm+KI6Pn26r8Bwazwpp2LJ4yDtBItwAqLwqKEws3lifuLbF1V4HYQZ195ur1z6nF2qmkeLT/B2Ve8CjYtHW/eohb+os+83D62YxM2J5isTDCVTPGLnbfz5q+90l5x812Mrxyk7jrPO8fPnecFc32tBmVtFsHLugGeVigjabmWhmvIuS4ySmm2EsZ8h0t+tFG8/p9fY++ffoZyWseUYCweZ9Po45x15au6Fv/7oNmXsF2PkhRSKArodTA9mi3OJI+B+MBtP2N7Pk/Zy5MoiZUahEaikVYibWa9ypKFZoXBivbe3srsM+0MXIlF2mzeBzAotFBoR7BT19k1kudvb78NgC39KXW/jvQaGFXHLVmeaWzBGXEXqKV+exat8Cf+w+n23uqjRD1NkmIT0gi8BDtd47GxLbzqqxfY+0B88P6NbA6GqDgOfijxRYRjY9JYI62Ho1U7vVpnARlhsYC0EmEdtIbA80njCClSlC9pRC1yNo9jAqaVZduw4k/u3cjdII7/wjn27q33kLq7sHoSzzZJWjUYbHLHzls5/asXLgmrX5TCv+mLb7KPl59gUlShKKEZQwhECSJ0KOsat089zNn/52y7EcTk6kGmApexSg0pJRhLX6lnzm+UM8P93D26BZRS1JsNlCtRgcNkpYzn+YRWEscpOz3J1hV57gdx3j+dax+pb0aWDAkJhZ5sggh7QISGyeZO7tt2P+d/8eJFL/6iFH5KTCFKgEwhAWLAldAAz/NwAsFYfQvhuhCAD/74W0znPNz+lVSagjSRTE6NIZyE2NFEClKhMDio9kpeS0OiDNIRxEYTSUviOqigQD5XxEsirAPPlEpc9tMH4ADsdKFKNd5JVJ3AaCg3QPmK5nYglrj5ImkYU/WnFrD1/nssrlXoGuzZHziXu0fvhhHFZHMU8hKMQbkeJBqrwZUuWhtK9RxnD57Et9/5A3Ei2I8efAT7VRPWhAET06NYT5JIBTgok1m7a7IATCqzPu8LQAqmdIqQHn6qEInG0TGjwwUufviX3AXi5V8+3d40eTe2kP2QEIJ6dRrlCwSSNBK4KiRtGPro59hVx3Ltm767uNp3DovK4s/94Gt4sLoJPQSTtVHCvgBPOBABDUveK2BSTdRsIQoJlWCa67b+lLd//nx7C4inVpSohiW2j04Thj6ImFRZUgnCKpRRaCHbTh8DQtOKI7TMRhJrDNJqcBR6ZCUPemSi//159t7KZupOi5aq0WiWqe+Yxs33olsW6QSEfp4kinBKUHbH2bj9Js752isW7ZC/qISvl5pMONNU3AqUoNloIXSKiyIQHrVKA+EqVK8giSz0gLvG4RG2AnDJz24Um2SMGeyn2mzhComwWTZt5oPvuGXJ8u0wKM+l2WyiLIRKoYTA9Be5qTXNp+//JQCVvSw70wkoOJimAQnOyhJJHEEYkBpLc7yMchWJrkMxoeJPMu6OwUsWp1Nn0Qh/1jdeb+/ech9iUGB1DC5ZbmRicIVCKReTJEhH4eV8MNlCf1elypPxdo7/+sstwP9++C5G+wJEvohuWDydhVxFu/mz1TwzLy/w8ZSH14xxIk0ziXnSNPnEEw+xEcQpXzzFPjD2ADIwEMeo/iCr0BAptJpgDcZa+lavRCmBdEHHKSbVPF1+nFdc8eqFa9TfwKIQ/uwvvMbes/lOmkGDVnMKisz4Wh0J2iTEaUTY24M2muZkC3wQHogA6m6LeyYf4aQrz7G3g7jdTjDmK4Sfx9UCPwWJRliDY0C1s2ytgKmJSXKej2ey8Gyjt8jW4ZC7QJz+xQvtfeXHqabjuK4GnaIjDaFDWm5k6w8lIGoxNb0Lk0aIFNBQ3MtlsjrFTZtu4PVXvW3RWf2CC3/Bl19nH55+gJo3jSyYbLnZBNluUwMIR5AoTVM3QYpsNEjBJoCARlInVlM8MPUr3vTZV9pPPvAgo8M9TCkPT/jIVkSaNBHSUHJzyIZFW0MrTQAIHBehDVUsjxU9Lr/xds76p/PsjbX7qbstXCURSQNXArGElkK6ILQBHYEnEK5BSI2bggc0JhJUHqJSkxse/ykXffEti0r8BRd+p3mGsjtO7DcwMpn5vrBgTDtZQhq0SkF2vG4OWJnVSaTghx6OE+H2a7YNNNkSI/7njbfwdN5lZ6tBcXAYx5U4StAqV/GVQxjkKPb0MjIywtYdO2l5AY2RAa64+04etYhdIxEmLKOdBGEtwrY9fIZZb9+MlJlH0IjsPS/NEjsAVC+Uc1NMeLvms1mflwUV/swrz7Pb4s1U5TQ4McImM0O8MmANaAmpImvRdsEjFqR2EMbDyeWI45ik2iROprh/10O87puvtfeA2L5+iMnhIk/u2pE5dloJVgoSYWm0mpSrVbaP7qR3zWqesJoH84LbQJz+L+faX+24D3QZaSMQWbm1QeLYBMdG2ZSRrRsz2i0prUQZB2mybzTLEbHTZFP5Qc796gWLxuoXTPiLvvBGu2liE5PpRJZMJy1W6yy1GcAqaNe62bm7YWt2i7OmtQbWQF8vIGKSIOaaR27m7Z9/o33b964XTw46mH1XEjkuibHIwEVLUMpFuS7h8BCPNCvsWjvMJ27ZyPn/eIa94ZnbEGGKm3MRIgZMexsoQbRr69sdVMyJ+9qZoFC7ageyc1kCGGts4+naE7zq7/9gUYg//8Kvx7IWO+6M0yxGtEQCqp3jrsm210ZgLKDaogt2a2hps3JnKw1OIUBIqFQz40uiKqIHHs1Nwj7YS2+6j3vdmB0mJfU8WsqSCE3oByBctjRjxof7+auNt3CPQUzvDax20a0GyUSEsu2pRsr2K0vXyjqjg+jsEtqWn0pIlCGVJusPUdbKsijZ1niGaKAFaxZ+izf/wm9CnP3xC3hs+gkm7TTWsSAyQZUBBWAEqQWEnPEtCgtKg6Pb/UAarExJqy1y+RAngESA4yvSIOXuiUc486PnsxnExzf+knivFbQCnxhDmsYIa5hqtrDDq/i7jXfwIIhz/t9Z9tYnb4fGBA6WnoILol1qJ1KQHa8fJMLBMit6Z7uYOIbISUmUwUiyDtsAXEHdqXPXljt51Sf+YN6b/dnMu/BnXXmh3bTjMUbTiSwAIzKzFqnIChukyrJjjQWpsks0We67OxNCnTm7CK9HUh9tEqXgF0s0603wDbGZ5LYt9/P2L73Z3gfiCc8y6TlYawmEQFiLV+plm1HcAuIVnznD3p0+Co7BUT6eo6g0k1nTlO2wrpQY4WCExLSHfWVBmXYmkATrZutPZFapo1wPIRRBX0DNr3PDwzfyhm/8yYJa/bwL769QPFPfiuoRWBkDFmEE1lqsFEhHZcOoaa+c7H+9xLmJFXHD4Pf6uG5AtVwDX6KVBreFKMU84WSr6St+cSubAohciR8GbG/UGcv5fOLOnwBQXSmYkGPgtkjjiKZOcEOVrd06EmVDDdjsGm17u9nJ3pn5zJxsD2kVaImuxzSjiMSPcYcdnmg8BusWbsif1yDCRf96gf3F9luZ8KchzCpaedZQCcw0akbmds3KlmffN+3pQWo/W0WTpUknTlYI6ZoUV4NKejii50huuuQGcQjYr+53AGtSy9b+Ht5/713cAOLCf3yjvS2+gTE1ihwC0wASgVR5RBojidFqTocz3szO0sz0S5NFE+diQVgH2/6QEAKbpgjt0Bv2sc7Zh3veuXFBAjnzZvEX/vMF9q4td9D0q6BSvGK4W8lmR2w7Z07PXmbm/U4alZ15v2NlnX1VFnhBpNkJGArifMLdE4/wqi9dbH8FYvOKPp5eOcwvZIvNAbz+U2+2d1QfpGwmKAy0RW+BV+rDJFnd/Ewn63RSZq/p2RaOZTeXcDZtZZt6KSXSdbFOyrQdZ0v0FK/8yqsXxOrnR/j9sY3eFjW/TiOJcHMu8WgTmryg6jMrDdaJ0E6TxGmiVQQyBgXag9iFCEW9VafpjwPw2ltvF9/ry/Heu38lnhyG6XUxO9iMKAoadUADCtJmAo6DlemzOmTb3StTrEyZ6XAYRDv0O3fBp4TM3rftTqksOAarUypRlYpssBDZufMyzJz5lVfajdtvggFNSzbQabZXk8LBkjDrBfktEbNLgMyvI9tuNbKXBhkV6KeEMx1x0srj+c47fjBzzyd88eV24/QdmHCasCRpjiV4BYnj5mhMN1GlPFpXgFlrx7bLqmU6Z86XWY5+O2dvJssHieM4xGmSWb4S7ZVp9gE/zVGYGmJD76H8/M//c16H/Bfd4s/4h1fZR5ub0UVN3dbRbrYsL+TyyNTsNrf/tlhB2wEAFi9bThuZWa2RYBx6laI1vZ3xaII7t97O26/8Ywtw5pfeYO+b/BVmsA45TbOV4PWAbllELMHx0GmrnYA/+zc7Fj07xGer/c7Qroxs7+2zJE9jDEJYZrw+nXo+CdIReH05npx8hld+9nXzavUvuvBh6DJVmaBl0mxObwGhojZdIU2T5/vx52dG/CwsJqzJBpDUgVTRKpcpFQNWrCoSSctUUgbASoEfhm03MBCDK310ZLGpxQ9UFgV61kkaz3kJs1pm/87x42uTYmUWaGJuCYDOjmyZqlRotFq4gf/C2+K34EUX/ofv+ndx0kuOQTkFkH4WWYs0OBAUvdl059+VjuVJg5ApQmSOIDcWeGm2n25Zwc7tmkPWn8jVn/k2AD97x7fEob3rYdppZ11Cox7h+A5apsS6Bc6s6h1xMxeymfk+8Kx7yBwMHVezsW2nY2dbMmcRaBJBTuU46eiT+d67/3V5DfUA177v+6wfOQSSAtTBD0KQ0DLxC1tlWLJhvT302o4H0IKfZkkYxneJVY6jDj2Dn3zo+yDgws9eZNkPe+Pl/8lRex+NqoTkKOEIDyf0iUwTa1LQZrcarEzAbEG32xTV7gwd+WdEF6Ydh5hzrWQLPlc45AjZsPoQ/uN9n38BjfC7MT+r+i2IvZM1OBN50L1ElXaGzbMDML8lwoJKReYPzwph0BpMAo41SCmJ3CItp5f6ZHarp376QjaO38frL/9DeApRmCoy1BjBq+cgdoh0EwIywRQz1j7jlWu/OnN6x4pntqO0y6/pHKTYfrUX/9IqbEvg6xz5uEBYcWHL/Ce9zts+/ro3fV2ctc9pFHUvxfxQljb9AgtPhJW4hLjGy/zhMeDBwIp+qtUUk1qYFgzlV/PglVeDD9v1ONP5BrvMKByAvfEj17Bh8AjCuERfYRgbG1QARJnHOPPUtv3Ddk5HnTMSzMW0Ld1I0/bxgwxccDM3n4xd8qKHXFJkTXEt1/7pVcvbgQNw7WVf4+DhDVTHWlAHT/CCVvVYh1Y5QYkiQdibrSGMx+joFD0jBTzrc9ZLz2LHP9wIGg75y9N5YuejOIOSX+66l9MuPQO2IK5/17+Lfn+Y8ngdN8yhG0AJTDzrKBJzXMdWtA35OdzJnfdnnDuuwEwlMG7p6R3C0zlk1eWQkUO441M3v4Cbf2HMr6/+KUSu7LE6tzelYh9xjRfkwEEY/GKONE1o1WqQatwwB0bQrMaIGlQf3gU1OPp9ZzFa2YIxMa24QU2U2bTjES64MttG7bfmAPJuD0kDHFdBkqV/ZcjZqFCbbL5nxvKfsxMIsu1bQRKsLFHeOkUPPYSNEKfsw5MLV9cw70Gan/3Fd8UB/jrcWg4iD2FfyFF7KUbWEX4N3CxsmjQqePk8BVvipJeewO2f+xk8hMgNBOyq7iKwDl7sIFyPNDDUvRrsi736g19m3coDcKMANwqgwoxfKRNZtFO+2t+T7dX8nDwBYSVyxpPH7IKuYUjrCYM9I5hpy3H7v4wfv/vqBS22WLA/ftxXzrGP1B+mxhhGRb/T7xA284JqQHrtSG6Qx614vNSu5b7/ex8oOOP953FH5R6SHk3SihAYjIjoc3spNXpZM7A/N33yOpBw1EfP5ont91Iz46g8JClY62UZQQAyygSfG1NoZ+5mVp+VZ5nOIGHBCwLi0YRCq4fT9z+L/3zzwszrc1mw1CvVCElrLtJ6v/PvEIBjBb5UOJ4HMZhKTM72sD6fPS74ZR86h/vSTbTCFhFVTFBDD0SIgmYqmWBb+iRbo6c56tJXgoUCJUxFkndcbNqZr83MPC+szDRvz+Gd7WMniDPXedMhrrfoKfbi41Mg9wJa7ffHggl/63u+L16297G4SQjWg042y4zlyN0WSYJ2oxoHYZ2ZOVV5LnGsiWsxXlAiZ4d56cAhfPud3xRsQbT6IibTpyFIs1+Q96ChM4vMgxiyPFV+FNWjwYMbP/hdDl5xKE4zj211VvRg1NygDDNDfBaTn3XadEK3ovMZQGoPypLDVh/ON9/81QW3dljgLNufvuVb4qCRQ0EH5IMSpgE5J8DGJothK2cm705pcBLwUhfPhCjhgBBExFgFYS5ETBhOHTiJW9/6A8Fa7ElfPMPev30j9FhSEyNTB1lxwfqQZncfa5AjcMejP+OMyy+CxxC3XfETNux1PGE6hIndLLIWGCwR+BZrgCa4uFkmsAIClzhKCUs5kgZYDZ4DRJCXAxy7+kR+9kfXLArRYRHk1RcqAUNymNpYFRl6oCF0A3w/gGY645VzJXjCzY4ZN5o0jdHGZo0uwE47HL/fSVzz1m8L1mHP/vAFPDr9CFZFM/OxMhLHOCjttL0wQC+YmkWFlseefpBX/PNbLJsRBTGE08xT8vpwghyUEwjBxBbhCPzQI43brjgpiZMEmVeUJ2s4JejrC4jHoRSsYF1xf65/638sGtFhEQj/83f/QBxSXA+2F+PkaTUjTBKDycqkOtE3yKpcWyohdVrZWsvJ3pMyZCRdixprz58WKrlJal4lC6UmmehZZm4rW0x2VuQTEPT7lMIedk7tZDI/CuuxP/jrr3H0vseS1jVpM4JCO/InBTYFbbOpQ+BBPaVYyCp5yUFqYXJHi2KuRDAdMBIPLorM2rksjl54APaI/3U+m8qbMM1RtK2RSLIaOgGk4EQCYSWJC8gs1VbJrIIpr4c4wT+d66+4Clw495MXccu2G2m45Wftr007lm5mO5QEmiDqLit69qLebHDgqkO487IbQMORV5zKQ2P3k3oReAYSS5rEACjPQeGTJAmWOOuIFvAVBVHC7hCcNnISP/yjhd26PRcLbvEAPIoYmCwR7JKEIodwHbwimQ+ezNWZ0s6nU3rmqrWGnN/H6uK+XP/HVwkUnPDBl3Pr4zcTeU1MYlBG4WqFlSnaMRiVbcVEOyGm4OUgAr/gsas5StOr8sAzd3P6Jy8CH4bkCnpq/eRtkbSeksYaIRV+zkOnKSbSuCrzRcggS7TwjENtR5WjDzx5UYoOi0V44Cd/9i1x0spjUTWFTSBOQBTIxk1NVizpqCxw0h6+ZVNhxhT79r0E1mLP/B+v5/GpTSSFhMTE5Ev5bIinnRTZztaG9vbLQGOymaXqeRZyhjRtEfS73HDvNZz44fO47oNXcdQ+x5KMGkJTwHN9/NAjKsf4QYCxKalOkKHARBY/DIjHI/rz+8LORdO8/4VFdWVXX/INcUBxP4ZLqwCwDeaEXdsxLw2koKzDoNyL41eeyDXv/VcoQqV/FxPOTkReQxN02QISLfVstK2z9zYSV3tILRlYMUhEhK7HuMWA8tQEwb4eU2oMQvjRW74lTnzJKeSiAkkU0UqbFAaLRLUWwhN4OQcznXXQqJbie0Ocsvo4bvyz7y1Ka4dFJjzArZ+6mRF3L2gq8NorONGOjxqTRfU09IlBVgdrueEj3wfgqEtP5aHKL9Fhg2alxkDPAFILrDCkTjobHu24WI2LMApXBUxNTWULszwkSQt6FK1alafHnuLk958P67DXX/bvHL7maHr8AZjOTstCgtYJsY4gB0o5KEoctNcG/uO1X1+0osMiFJ4tiBXRELmkH+IcGBc0BK6Xie5IArefdFSwQozAU4jX/e07uPupW6iLcWQORCio1+ugIFHJjOt0ZvTAaZe6ZImTwlGzCz2HLB3ahUTHPDT+S477wFnggZxysdOKXKlEeec0btEHH0yarRt0xeLXQobixf8Ig8UnPPCjd10tjhg8nFKjQN7kcFVAqxlnx6A4BdKK5cSDT+aaK74DwLbpzfSuKkABzDSZ097NHi6kVbvIQTOTAZMFXWT2LPlOTv6zcuSFyRZsFTGJHABiuP5T32HDysPw60XyPX0klSir8jJQzPUTyn5O2ud4fnzxtxe1tcMiFR7glndcL04YOAJn2hI6OZAK5eWhDIfvfSg//MBVYOCMz73cjpltTJenZypTHSQtWqS5ZCbBUaYOMvGyVZ6YkyHzXBiQWiEsuH0O9269k+P+9kwI4eYPX8uB+UNwUg8UeEJCA6pjdQ7aawM//uvvzE8DvUAWrfAAA+UCPVER1VRgA5K6JWh5+E0HXLjg7y5mJzvZET+DHzqIhGy1L5xsCE5mEtxRRqFmqiJMu1BiTpJkpxPMjaoKQ6NSRvsxj4z/ipe9/xzYjBjyRjBl8FWepGLp7xlkKFhNvpGDxxeJb+R5WNTCf+PPrxJHrjoMp6oQOkfe62fD6kO45TM/BQ2bm9t4aNd91FUd6XjkZA7fD4iiOBOvPQxndW4aI/RMHnz2dSb+blmzaRaYMSohdRLcMMRaS1nsQg5r2Ad79R/9izh876NwpnI4rQJOPeAAbz9uuuIHC9VUvzVLonee+uWz7C+euZ/jjjuO2/78B6Dh5L+9iE2Tm2gNTVCJx6FskMolyPk06jWQ4IcuaTOb2I0yux2yILVsJ4G0z69pV0HOlkhlX/sij040WhjsWMyZB13ITz/0fUjg3I+/gV9uu581g6vZ+PafLIm27LCoLb5DEPu8tLgP6bY6AOd87HU8vvNxJuNxKjvHQFmc3hxGJzQqNdyil3kApx38JHverHXJjqNq7+MFBkSchVuFwU093NTLMmrF7GIvamR/k0hQXDnInRO3csxHTocnEf6OEqocImpL74GdS0L46979Q7HOW8WdH78BAqjIKjtaW5ElC/0u1C1pmiJyLjggkUSNCE95s/ntc4sZ2nTy5mby8Y3Cdk7h6Mz1ThYd9gNFZBpUyrsQPRbWYq9+3xfE0WuO4rb3XLukrB2WyFA/wwHYoz5yDvdsvwubqyByFhvrLMRq5EzGbsczB7TToNIZrx2GtgOnfbRpe0j34uwoi1hlP+dpjSQlsga/IGi1LIHv0qokBLaPo/Y5hVv+8vvw1BJrwzZLwuI7/MFfvYMnnnoKt6DAS7E1PVu90BZTtosWjTBomc6pap39HDbbwwMznrxEGVKl2z58ibRZNNBzIGpacKEVJ3iej5SS+x+/jzMve90CtcQLZ0kJr2sJResjahZq4BTbm3TROQMvS42S7efRdQIxHTf/jPDMlNuh2ufcWgeMmyJJcGxCoiyxyrK1vE4rCRDKIRAhbhl6dTjfTfB7Y8kNU6d97hX2von7kCMpk43RrNwJZlKcpZFzerN5jnPyOl9nz6NxrSGRoNvFqjLOTtbqnGcvjEE4WVg4CENa2xOKZgUnrjiWa9+5eIMwz8eSsniAn3/2hxy59waiXRrfKc6kZs3UsEkz64ZlzgkVnRed/89u36Sd+TjGyU7SUNZkT7IQYD2ZRfuqBsfp4cQNJy5p0WEJCs+jiGHbh18PyFFCmtmt1NxzdOZmvP66tGeE2S3im30YUO34fTtwoxND39AQyZSllJTwKvNby/5isGR77blfeo29Y/ROaqUxEve/FmTMtXIA2XbMmLbYswmY2b+pelaVVLtQIp/zqJUTqAgGCi/huN4j+NHF31qy7dZhSd/AKd94pb1r7Be0/HK7pKn9RnsVv5v4M2fUm92OzpvbOSzZUE+nAxigAQ4BvtyLg3oO5s63ze9ZNS8WS2+on4PfCMinBUJbQETZM2doPyggOxdnzhFpz1rkWZH1BRmCTiB0cpgmOGTHmJKQlUsDvgkJKiH9rYH5v8kXiSUt/PUf/w5rimvJpUXyogeZqMxKXVBh52Tk3UXP4vCzpDEQdqp0IG1qfBWAD3oMwrBA3vRw1IpDue5di6MK5vfBkhaepxB3f/pWDho5FFVR+GmOvp4hGAc9mZVEPZf4u+EBCdSaDfp6Bwgcn2iqhZsKeod7aU5p9hs+gB9f8s1lIzosdeEBHkN40z5BM0+JHqaemSC/spDl5LczbrKVzGzsfeaM+XYYlnatRC2q4SpJMcyTTFmmn64w7O5NsdUzzzf14rNsevGFX3mjveOpWzErUqbFJJFuV+J0Fnp6NuTaSbWyIqtxk57CKKCqCSy4IqBufNb07M9L7D5cf8nifXDg78rSt/g233/Ht8TRBx5LY6JBVIsIi/6sVc8J3uxW1mxACR8TmawH+CACaCUx/cEIPenQshQdlpHwAAVyhNanP99Lq7773j7zxZgZ0bNHjkp0alGOn+3nE4hCCIf6GPKGuP9j1y7IfcwHy0r4b775a+KwVUdjK9mDipizr+8s7GZPls+OrJAKBNnBiDIEU4XK1hYHFPaDzctnKnw2y/LGzvzaq+3N5duI/EnwDbRSaEBpMKSys0mp6FLXAk2K7BxMqBSkBWS9yAkrX8bNb/vOsmybDsvK4jvkqwVExQWTg8kUvz9b5VcmmoQ5iNMEIbOQruPRDtn6OK0Chw4fzs2XL40U6RfCshT+6vd8XZxz8GnIKYnIl4h21CDNjsFrtZ9dk7aaCAmxASIII48R2cMaNbBks2p+G5b1DZ709fPszaO34Q0LRKtG0koxjsjOnhPgug6J1hS9QczmhFP2PZlr3r48fPHPx7K0+A43f/Rajj3weOLt03jGxRXgBFnWjHQlSZLiBwPUxhLO2HDaHiM6LHPheRThbof+/Fqq402CXJG0lUDgYbQBI4h2JfSJIcTievTri84e0cNf+93X22ufuoG6X0OaGBNp1LCPbikG9DrWe/tx67sW58kVLxbL2+LbfPe1V4kDV23AFXlCGeAHLjqR0HTYt7APt37i6oW+xHln6ZWA/I4M6wH8mofwkiy1pqEo2AH6G0V4Ys8Y+eayR1g8wDVv/TdxwuojsTVBb24Y2Qg4cq/DuO5Pl34aVZf/Bqd883yb+9gqe8q/XWQX29lz88keY/EdnEmf/miYcGJhHgnSZQG56JMX77GW3qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly57AP8fC2tpJf2umO4AAAAASUVORK5CYII=" alt="竹建瓦斯Logo"/>
+    </div>
+    <div class="ht">
+      <h1>竹建瓦斯股份有限公司</h1>
+      <div class="hsub">115年度個人資料保護法教育訓練</div>
+      <div class="gline"></div>
+    </div>
+  </div>
+</header>
+<div class="main">
+
+  <!-- IDENTITY GATE -->
+  <div id="ig">
+    <h2>請確認您的身份以開始訓練</h2>
+
+    <div class="login-row">
+      <!-- 姓名：輸入後自動顯示職稱 -->
+      <div class="name-wrap">
+        <input type="text" id="iname" placeholder="請輸入姓名" maxlength="10" autocomplete="off"
+          oninput="onNameCheck()"/>
+      </div>
+
+      <!-- 職稱 badge（自動帶入） -->
+      <div class="title-badge" id="titleBadge">
+        <span class="title-badge-icon">🏷</span>
+        <span id="titleText"></span>
+      </div>
+
+      <!-- 部門 -->
+      <div class="dept-wrap">
+        <select id="idept" class="unselected" onchange="this.classList.remove('unselected')">
+          <option value="" disabled selected hidden>部門 / 單位</option>
+          <option style="color:#1a1a2e">總經理室</option>
+          <option style="color:#1a1a2e">業務部</option>
+          <option style="color:#1a1a2e">工務部</option>
+          <option style="color:#1a1a2e">管理部</option>
+          <option style="color:#1a1a2e">財務部</option>
+          <option style="color:#1a1a2e">資訊室</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ierr" id="ierr"></div>
+    <button class="bcf" onclick="confirmIdentity()">確認身份，進入訓練 →</button>
+  </div>
+
+  <!-- TRAINING CONTENT -->
+  <div id="tc">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0;flex-wrap:wrap;gap:8px;">
+      <div class="uchip" style="margin-bottom:20px">
+        <div class="uav" id="uav"></div>
+        <div>
+          <div class="un" id="un"></div>
+          <div class="ud" id="ud"></div>
+        </div>
+      </div>
+      <!-- 管理者專用：查看紀錄按鈕（登入後若為黃晨晞則顯示） -->
+      <a id="sheets-btn" href="#" target="_blank"
+         style="display:none;align-items:center;gap:6px;background:#1a6b2f;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.15);flex-shrink:0;">
+        📊 查看訓練紀錄
+      </a>
+    </div>
+
+    <!-- 1. 影片 -->
+    <div class="sl"><div class="sn">1</div><div class="st">觀看教育訓練影片</div></div>
+    <div class="vcard">
+      <div class="vcard-top">
+        <div class="vcard-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polygon points="5,3 19,12 5,21"/></svg>
+          115年度個人資料保護法教育訓練講座
+        </div>
+        <span style="font-size:11px;color:rgba(255,255,255,.45);">經濟部能源署</span>
+      </div>
+
+      <!-- 播放器：iframe 預先載入但隱藏，縮圖蓋在上方 -->
+      <div class="vplayer" id="vplayer">
+        <!-- iframe 預載，autoplay=0，點擊後切換為 autoplay=1 -->
+        <iframe
+          id="vframe"
+          src="https://www.youtube.com/embed/BtjS95wb-yQ?rel=0&modestbranding=1&playsinline=1"
+          title="115年度個人資料保護法教育訓練"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+        <!-- 縮圖蓋板 -->
+        <div class="vthumb-cover" id="vcover" onclick="playVideo()">
+          <img src="https://img.youtube.com/vi/BtjS95wb-yQ/hqdefault.jpg" alt="影片縮圖"
+               onerror="this.src='https://img.youtube.com/vi/BtjS95wb-yQ/mqdefault.jpg'"/>
+          <div class="vplay-circle">
+            <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg" width="72" height="50">
+              <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#ff0000"/>
+              <path d="M45 24 27 14v20" fill="#fff"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="vstatus">
+        <div class="vstatus-dot" id="vdot"></div>
+        <span id="vtxt">點擊上方縮圖即可在此頁面直接觀看影片</span>
+      </div>
+    </div>
+
+    <!-- 2. 測驗 -->
+    <div class="sl"><div class="sn">2</div><div class="st">完成學習評量測驗</div></div>
+    <div class="qcta">
+      <div>
+        <h3>個人資料保護法 — 學習評量</h3>
+        <p>共 10 題（每題 10 分，滿分 100 分），請依課程內容作答後提交</p>
+      </div>
+      <button class="bq" id="bq" onclick="openQuiz()">開始作答 →</button>
+    </div>
+
+    <!-- 離開按鈕（儲存成功後顯示，位於評量下方） -->
+    <button id="leave-btn" style="display:none;width:100%;margin-top:4px;margin-bottom:20px;padding:16px;background:#1a6b2f;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 12px rgba(26,107,47,.25);" onclick="leavePage()">✅ 資料已儲存，點此關閉頁面</button>
+
+    <!-- Google Sheets 設定（隱藏，按 Ctrl+Shift+A 開啟） -->
+    <div class="sinfo" id="sinfo-panel" style="display:none">
+      <h3>📊 Google Sheets 串接設定（管理者專用）</h3>
+      <p style="margin-bottom:10px">① Apps Script 網址 — 同仁作答後自動寫入紀錄</p>
+      <div class="sir">
+        <input type="text" id="surl" placeholder="貼上 Google Apps Script Web App 網址"/>
+        <button class="bsu" onclick="saveSheetUrl()">儲存</button>
+      </div>
+      <p style="margin-top:14px;margin-bottom:10px">② 試算表網址 — 讓「查看訓練紀錄」按鈕可以直接開啟</p>
+      <div class="sir">
+        <input type="text" id="ssheet" placeholder="貼上 Google Sheets 試算表網址（https://docs.google.com/spreadsheets/d/...）"/>
+        <button class="bsu" onclick="saveSheetLink()">儲存</button>
+      </div>
+      <div class="ust" id="ust">✅ 已儲存</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ OVERLAY -->
+<div id="qo">
+  <div class="qm">
+    <div class="qmh"><h2>📝 個資法學習評量（10 題）</h2><button class="qcl" onclick="closeQuiz()">✕</button></div>
+    <div class="qpbw"><div class="qpb" id="qpb"></div></div>
+    <div class="qbody" id="qbody"></div>
+    <div class="qfoot">
+      <div class="qwarn" id="qwarn">⚠ 請確認所有 10 題均已作答後再提交。</div>
+      <button class="bsub" onclick="submitQuiz()">提交測驗答案</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div id="ro">
+  <div class="rm">
+    <div class="rh"><div class="ri" id="ri">🎉</div><h2 id="rt">測驗完成</h2></div>
+    <div class="rb">
+      <div class="rscore" id="rs">0<span> / 100</span></div>
+      <div class="rmsg" id="rm"></div>
+      <div class="rinfo" id="rinfo"></div>
+      <div class="rev-wrap" id="review"></div>
+      <button class="bdn" onclick="openSignature()">確認完成，前往簽名 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNATURE OVERLAY -->
+<div id="so">
+  <div class="sm">
+    <div class="sh">
+      <h2>✍️ 請簽名確認</h2>
+      <p>請用手指（手機）或滑鼠（電腦）在下方空白處簽名</p>
+    </div>
+    <div class="sb">
+      <canvas id="sig-canvas" width="460" height="180"></canvas>
+      <div class="sig-actions">
+        <button class="sig-clear" onclick="clearSignature()">🗑 清除重簽</button>
+        <button class="sig-submit" onclick="submitSignature()">✅ 確認簽名送出</button>
+      </div>
+      <div class="sig-hint">簽名後資料將儲存至系統，無法修改</div>
+    </div>
+  </div>
+</div>
+
+<div id="si">⏳ 正在儲存至 Google Sheets…</div>
+
+<script>
+// ══ 員工名單（姓名 → 職稱）══
+const STAFF = {
+  '童政宏':'總經理','董哲淵':'高級專員',
+  '林昭偉':'經理','李志倉':'經理','陳儒彥':'經理','陳炳宏':'經理','蕭惠萍':'經理',
+  '彭敬文':'課長','陳淑貞':'副理','邱育生':'副理','黃美月':'副理','黃晨晞':'副理',
+  '林曉琪':'課長','陳郁夫':'課長','鍾興翰':'課長','廖珮雯':'課長','廖偉村':'代理課長',
+  '白沛豫':'專員','林孟賢':'專員','陳人豪':'代理專員','洪姝筠':'代理專員',
+  '陳朝鑫':'秘書','張鈞豪':'工務員','劉建彣':'工務員',
+  '黃禹竣':'助理員','劉德泓':'助理員','王璽凱':'助理員','林琮炫':'助理員',
+  '蔡凱程':'雇員','陳東彥':'雇員'
+};
+
+// ══ 員工編號（姓名 → 編號）══
+const EMP_NO = {
+  '童政宏':'001','林昭偉':'003','李志倉':'004','陳儒彥':'007','陳炳宏':'008','蕭惠萍':'009',
+  '彭敬文':'013','陳淑貞':'014','邱育生':'015','黃美月':'021','黃晨晞':'023',
+  '林曉琪':'033','陳郁夫':'037','鍾興翰':'042','廖珮雯':'046','廖偉村':'054','董哲淵':'053',
+  '白沛豫':'060','林孟賢':'061','陳人豪':'066','洪姝筠':'067','陳朝鑫':'068',
+  '張鈞豪':'070','劉建彣':'071','黃禹竣':'072','劉德泓':'074','王璽凱':'075',
+  '林琮炫':'077','蔡凱程':'078','陳東彥':'079'
+};
+
+// ══ 正確部門對照（姓名 → 部門）══
+const STAFF_DEPT = {
+  '童政宏':'總經理室','林昭偉':'總經理室','董哲淵':'總經理室','陳朝鑫':'總經理室',
+  '李志倉':'業務部','陳淑貞':'業務部','陳郁夫':'業務部','廖珮雯':'業務部',
+  '林孟賢':'業務部','黃禹竣':'業務部','林琮炫':'業務部','蔡凱程':'業務部',
+  '陳儒彥':'管理部','林曉琪':'管理部','鍾興翰':'管理部','廖偉村':'管理部','白沛豫':'管理部',
+  '陳炳宏':'工務部','彭敬文':'工務部','邱育生':'工務部','陳人豪':'工務部',
+  '張鈞豪':'工務部','劉建彣':'工務部','劉德泓':'工務部','王璽凱':'工務部','陳東彥':'工務部',
+  '蕭惠萍':'財務部','黃美月':'財務部','洪姝筠':'財務部',
+  '黃晨晞':'資訊室'
+};
+
+const NAMES = Object.keys(STAFF);
+
+// ══ 題目 ══
+const KQ=[
+  {id:'q1',pts:10,text:'1. 可以直接或間接識別個人的資料，皆屬於個人資料',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q2',pts:10,text:'2. 以任何方式取得個人資料，都屬於個資法所規範蒐集個人資料的行為',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q3',pts:10,text:'3. 自然人不是個資法所稱的非公務機關範圍，所以不適用個資法',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'X'},
+  {id:'q4',pts:10,text:'4. 在任何情況下都不可以蒐集、處理或利用特種個人資料',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'X'},
+  {id:'q5',pts:10,text:'5. 非公務機關蒐集之個人資料，經當事人同意後，可以做特定目的外之利用',
+   ops:[{l:'○ 是（Ｏ）',v:'O'},{l:'✕ 否（Ｘ）',v:'X'}],ans:'O'},
+  {id:'q6',pts:10,text:'6. 以下何者屬於個資法中定義的個人資料？',
+   ops:[{l:'(A) 公司統編',v:'A'},{l:'(B) 公益基金會的捐款帳號',v:'B'},{l:'(C) ChatGPT（人工智慧聊天機器人）的姓名',v:'C'},{l:'(D) 以上皆非',v:'D'}],ans:'D'},
+  {id:'q7',pts:10,text:'7. 以下何者屬於個資法第6條之特種個人資料？',
+   ops:[{l:'(A) 犯罪前科',v:'A'},{l:'(B) 基因',v:'B'},{l:'(C) 病歷',v:'C'},{l:'(D) 以上皆是',v:'D'}],ans:'D'},
+  {id:'q8',pts:10,text:'8. 下列敘述何者正確？',
+   ops:[{l:'(A) 依個資法之規定，個人資料應永久保存，不得進行銷毀。',v:'A'},
+        {l:'(B) 公務機關或非公務機關委託他人蒐集、處理或利用個人資料時，並不負有監督該他人之義務。',v:'B'},
+        {l:'(C) 被檢察官處以緩起訴處分或是職權不起訴的紀錄，也是個資法上的犯罪前科。',v:'C'},
+        {l:'(D) 蒐集個人資料時可以先與個人資料當事人約定拋棄個資法第3條所定之權利。',v:'D'}],ans:'C'},
+  {id:'q9',pts:10,text:'9. 下列敘述何者錯誤？',
+   ops:[{l:'(A) 向當事人蒐集特種個資時，如要取得當事人的書面同意，絕對不可以使用電子文件的方式。',v:'A'},
+        {l:'(B) 個資法第2條第2款所稱個人資料檔案，包含備份檔案。',v:'B'},
+        {l:'(C) 當事人請求查詢或閱覽個人資料或製給複製本者，公務機關或非公務機關得酌收必要成本費用。',v:'C'},
+        {l:'(D) 婚姻狀況也是屬於個人資料的一種。',v:'D'}],ans:'A'},
+  {id:'q10',pts:10,text:'10. 個資法對於個資之蒐集、處理及利用分別有定義，下列何者屬於「處理」的定義？',
+   ops:[{l:'(A) 個人資料之編輯。',v:'A'},{l:'(B) 個人資料之更正。',v:'B'},{l:'(C) 個人資料之檢索。',v:'C'},{l:'(D) 以上皆是。',v:'D'}],ans:'D'}
+];
+
+let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
+
+// ★ Apps Script 網址（直接寫死，確保 iPhone/LINE 也能使用）
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtl9z1L2HQteXGVkcGXj9nvaNq9hWm9TaB9q7Pz3iFVe282npwELE8DS-Fajao9f9WpQ/exec';
+
+// ══ 姓名輸入即時顯示職稱 ══
+function onNameCheck(){
+  const val = document.getElementById('iname').value.trim();
+  const badge = document.getElementById('titleBadge');
+  const titleTxt = document.getElementById('titleText');
+  document.getElementById('ierr').textContent='';
+  if(STAFF[val]){
+    titleTxt.textContent = STAFF[val];
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+    titleTxt.textContent='';
+  }
+}
+
+// ══ IDENTITY CONFIRM ══
+async function confirmIdentity(){
+  const name = document.getElementById('iname').value.trim();
+  const dept = document.getElementById('idept').value;
+  const err  = document.getElementById('ierr');
+  const btn  = document.querySelector('.bcf');
+
+  if(!name){ err.textContent='⚠ 請輸入姓名'; return; }
+  if(!STAFF[name]){ err.textContent=`⚠「${name}」不在本次訓練指定名單中，如有疑問請聯繫主管。`; return; }
+  if(!dept){ err.textContent='⚠ 請選擇部門 / 單位'; return; }
+
+  // 部門驗證
+  const correctDept = STAFF_DEPT[name];
+  if(correctDept && dept !== correctDept){
+    err.textContent='⚠ 請重新選擇正確部門';
+    return;
+  }
+
+  // ── 查詢測驗次數（黃晨晞不受限制）──
+  const url = APPS_SCRIPT_URL || localStorage.getItem('sheets_url');
+  const MAX_ATTEMPTS = 2;
+  const NO_LIMIT_USERS = ['黃晨晞', '童政宏'];
+
+  if(url && !NO_LIMIT_USERS.includes(name)){
+    btn.textContent='驗證中…'; btn.disabled=true;
+    try{
+      // 將 /exec 結尾的網址加上查詢參數
+      const queryUrl = url + '?action=checkCount&name=' + encodeURIComponent(name);
+      const resp = await fetch(queryUrl, {method:'GET', mode:'cors'});
+      if(resp.ok){
+        const json = await resp.json();
+        if(json.count >= MAX_ATTEMPTS){
+          err.innerHTML=`⚠ 每個人只可以測驗 ${MAX_ATTEMPTS} 次，您已經超過，無法再次登入測驗。<br><small style="color:#888">如有疑問請聯繫主管。</small>`;
+          btn.textContent='確認身份，進入訓練 →'; btn.disabled=false;
+          return;
+        }
+      }
+    }catch(e){
+      // 無法查詢（如網址未設定或網路問題）→ 允許進入，不阻擋
+    }
+    btn.textContent='確認身份，進入訓練 →'; btn.disabled=false;
+  }
+
+  err.textContent='';
+  U = { name, title: STAFF[name], dept, empNo: EMP_NO[name]||'' };
+
+  document.getElementById('ig').style.display='none';
+  document.getElementById('tc').classList.add('v');
+  document.getElementById('uav').textContent = name.charAt(0);
+  document.getElementById('un').textContent  = name + '（' + U.title + '）';
+  document.getElementById('ud').textContent  = dept;
+
+  const saved = localStorage.getItem('sheets_url');
+  if(saved) document.getElementById('surl').value = saved;
+
+  // 管理者功能：黃晨晞 登入時顯示查看紀錄按鈕
+  if(name === '黃晨晞'){
+    const btn2 = document.getElementById('sheets-btn');
+    btn2.style.display = 'flex';
+    const sheetsLink = localStorage.getItem('sheets_link');
+    btn2.href = sheetsLink || 'https://sheets.google.com';
+  }
+
+  addLog('登入', `${name}（${U.title}・${dept}）確認身份進入訓練`);
+}
+
+// ══ LOG (internal only) ══
+function addLog(type, detail){
+  LOG.push({ time: new Date().toISOString(), type, detail });
+}
+
+// ══ VIDEO ══
+function playVideo(){
+  const cover = document.getElementById('vcover');
+  const frame = document.getElementById('vframe');
+  // 切換 src 加入 autoplay=1 觸發播放
+  frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  frame.classList.add('ready');
+  cover.style.opacity = '0';
+  cover.style.pointerEvents = 'none';
+  logVideoOpen();
+}
+function logVideoOpen(){
+  if(!videoOpened){
+    videoOpened=true;
+    videoOpenTime=new Date();
+    document.getElementById('vdot').classList.add('on');
+    document.getElementById('vtxt').textContent='▶ 影片播放中，請觀看完畢後再進行測驗';
+    addLog('影片', `${U.name} 開始播放影片（${videoOpenTime.toLocaleTimeString('zh-TW',{hour12:false})}）`);
+  }
+}
+
+// ══ BUILD QUIZ ══
+function buildQuiz(){
+  ANS={};
+  let h=`<div class="qst">共 10 題 · 每題 10 分 · 滿分 100 分</div>`;
+  KQ.forEach(q=>{
+    h+=`<div class="qblk" id="qb-${q.id}">
+      <div class="qmeta"><div class="qnum">第 ${q.id.replace('q','')} 題</div><div class="qpts">${q.pts} 分</div></div>
+      <div class="qtxt">${q.text}</div>
+      <div class="qops">${q.ops.map(o=>`<label class="qop" data-qid="${q.id}" data-v="${o.v}" onclick="selQ(event,'${q.id}','${o.v}')">
+        <input type="radio" name="${q.id}"><div class="rdot"></div><div class="qotxt">${o.l}</div></label>`).join('')}</div>
+    </div>`;
+  });
+  document.getElementById('qbody').innerHTML=h;
+  document.getElementById('qpb').style.width='0%';
+}
+
+function selQ(e,qid,val){
+  if(submitted)return;
+  document.querySelectorAll(`[data-qid="${qid}"]`).forEach(el=>el.classList.remove('sel'));
+  e.currentTarget.classList.add('sel');
+  ANS[qid]=val;
+  document.getElementById('qb-'+qid).classList.remove('ua');
+  document.getElementById('qpb').style.width=(Object.keys(ANS).length/10*100)+'%';
+}
+
+function openQuiz(){
+  if(submitted)return;
+  buildQuiz(); qOpenTime=new Date();
+  document.getElementById('qo').classList.add('open');
+  addLog('測驗', `${U.name} 開始作答（${qOpenTime.toLocaleTimeString('zh-TW',{hour12:false})}）`);
+}
+function closeQuiz(){ document.getElementById('qo').classList.remove('open'); }
+
+// ══ SUBMIT ══
+function submitQuiz(){
+  let miss=[];
+  KQ.forEach(q=>{ if(!ANS[q.id]){ miss.push(q.id); document.getElementById('qb-'+q.id).classList.add('ua'); }});
+  if(miss.length){
+    document.getElementById('qwarn').classList.add('show');
+    document.getElementById('qb-'+miss[0]).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('qwarn').classList.remove('show');
+  submitted=true;
+
+  let score=0;
+  KQ.forEach(q=>{ if(ANS[q.id]===q.ans) score+=q.pts; });
+
+  const now=new Date();
+  const dur=qOpenTime?Math.round((now-qOpenTime)/1000):0;
+  const durStr=dur>=60?`${Math.floor(dur/60)}分${dur%60}秒`:`${dur}秒`;
+  addLog('完成', `${U.name} 提交，得分 ${score} 分，時長 ${durStr}`);
+
+  document.getElementById('qo').classList.remove('open');
+  document.getElementById('ri').textContent=score>=80?'🎉':score>=60?'✅':'📚';
+  document.getElementById('rt').textContent=score>=80?'恭喜通過測驗！':score>=60?'測驗完成':'建議再次複習';
+  document.getElementById('rs').innerHTML=`${score}<span> / 100</span>`;
+  document.getElementById('rm').textContent=score>=80
+    ?'您對個人資料保護法有優良掌握，感謝認真完成本次教育訓練！'
+    :score>=60?'感謝完成本次評量，建議複習影片內容加深印象。'
+    :'建議再次觀看教育訓練影片，加強個資法知識後重新作答。';
+  document.getElementById('rinfo').innerHTML=
+    `<div class="rrow"><strong>姓名</strong>${U.name}（${U.title}）</div>
+     <div class="rrow"><strong>部門</strong>${U.dept}</div>
+     <div class="rrow"><strong>得分</strong>${score} / 100 分</div>
+     <div class="rrow"><strong>提交時間</strong>${now.toLocaleString('zh-TW')}</div>`;
+
+  let rv=`<h4>答題結果明細</h4>`;
+  KQ.forEach(q=>{
+    const ua=ANS[q.id], ok=(ua===q.ans);
+    const uaLabel=q.ops.find(o=>o.v===ua)?.l||ua;
+    const caLabel=q.ops.find(o=>o.v===q.ans)?.l||q.ans;
+    rv+=`<div class="rev-item"><div class="rev-icon">${ok?'✅':'❌'}</div>
+      <div class="rev-right"><div class="rev-q">第${q.id.replace('q','')}題</div>
+        <div class="rev-ans ${ok?'ok':'ng'}">您的答案：${uaLabel}${ok?'（正確）':` ／ 正解：${caLabel}`}</div>
+      </div></div>`;
+  });
+  document.getElementById('review').innerHTML=rv;
+  document.getElementById('ro').classList.add('open');
+
+  const btn=document.getElementById('bq');
+  btn.textContent=`已完成測驗（${score} 分）`; btn.disabled=true;
+
+  // 每題：只送出答案，正誤由 Apps Script 判斷並標色
+  function qResult(ans){ return ans || '未作答'; }
+
+  // 民國年度（例如 2025 → 114、2026 → 115）
+  const rocYear = now.getFullYear() - 1911;
+
+  const rec={
+    年度: rocYear + '年度',
+    員工編號: U.empNo,
+    姓名:U.name, 職稱:U.title, 部門:U.dept,
+    Q1:qResult(ANS.q1), Q2:qResult(ANS.q2),
+    Q3:qResult(ANS.q3), Q4:qResult(ANS.q4),
+    Q5:qResult(ANS.q5), Q6:qResult(ANS.q6),
+    Q7:qResult(ANS.q7), Q8:qResult(ANS.q8),
+    Q9:qResult(ANS.q9), Q10:qResult(ANS.q10),
+    錯題數: KQ.filter(q=>ANS[q.id]!==q.ans).length,
+    得分:score,
+    觀看影片時間:videoOpened?(videoOpenTime?videoOpenTime.toLocaleString('zh-TW'):'已開啟'):'未開啟',
+    開始作答時間:qOpenTime?qOpenTime.toLocaleString('zh-TW'):'',
+    完成作答時間:now.toLocaleString('zh-TW')
+  };
+  try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
+  // 暫存資料，等簽名完成後再送出
+  sigRec = rec;
+}
+
+// ══ SHEETS ══
+function saveSheetUrl(){
+  const url=document.getElementById('surl').value.trim(); if(!url)return;
+  localStorage.setItem('sheets_url',url);
+  const s=document.getElementById('ust'); s.style.display='block';
+  s.textContent='✅ Apps Script 網址已儲存';
+  setTimeout(()=>{ s.style.display='none'; s.textContent='✅ 已儲存'; },3000);
+}
+
+function saveSheetLink(){
+  const url=document.getElementById('ssheet').value.trim(); if(!url)return;
+  localStorage.setItem('sheets_link',url);
+  const s=document.getElementById('ust'); s.style.display='block';
+  s.textContent='✅ 試算表網址已儲存，按鈕連結已更新';
+  // 立即更新按鈕連結
+  const btn=document.getElementById('sheets-btn');
+  if(btn) btn.href=url;
+  setTimeout(()=>{ s.style.display='none'; s.textContent='✅ 已儲存'; },3000);
+}
+async function sendToSheets(rec){
+  const url = APPS_SCRIPT_URL || localStorage.getItem('sheets_url') || document.getElementById('surl').value.trim();
+  const si=document.getElementById('si');
+  const leaveBtn=document.getElementById('leave-btn');
+
+  if(leaveBtn) leaveBtn.style.display='block';
+  if(!url){ return; }
+
+  si.style.display='block';
+  si.textContent='⏳ 正在儲存至 Google Sheets…';
+
+  const getUrl = url +
+    '?action=submit' +
+    '&yr=' + encodeURIComponent(rec['年度']||'') +
+    '&no=' + encodeURIComponent(rec['員工編號']||'') +
+    '&nm=' + encodeURIComponent(rec['姓名']||'') +
+    '&tt=' + encodeURIComponent(rec['職稱']||'') +
+    '&dp=' + encodeURIComponent(rec['部門']||'') +
+    '&q1=' + encodeURIComponent(rec['Q1']||'') +
+    '&q2=' + encodeURIComponent(rec['Q2']||'') +
+    '&q3=' + encodeURIComponent(rec['Q3']||'') +
+    '&q4=' + encodeURIComponent(rec['Q4']||'') +
+    '&q5=' + encodeURIComponent(rec['Q5']||'') +
+    '&q6=' + encodeURIComponent(rec['Q6']||'') +
+    '&q7=' + encodeURIComponent(rec['Q7']||'') +
+    '&q8=' + encodeURIComponent(rec['Q8']||'') +
+    '&q9=' + encodeURIComponent(rec['Q9']||'') +
+    '&q10=' + encodeURIComponent(rec['Q10']||'') +
+    '&wr=' + encodeURIComponent(rec['錯題數']||0) +
+    '&sc=' + encodeURIComponent(rec['得分']||0) +
+    '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
+    '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
+    '&et=' + encodeURIComponent(rec['完成作答時間']||'') +
+    '&sg=' + encodeURIComponent(rec['簽名']||'');
+
+  try{
+    await fetch(getUrl, {method:'GET', mode:'no-cors'});
+  }catch(e){}
+
+  si.textContent='✅ 已儲存至 Google Sheets';
+  setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
+}
+
+// ══ 離開頁面 ══
+function leavePage(){
+  window.location.href = 'https://chuchienmis.github.io/training/training2.html';
+}
+
+// ══ 簽名功能 ══
+let sigCanvas, sigCtx, sigDrawing=false, sigLastX=0, sigLastY=0, sigRec=null;
+
+function openSignature(){
+  document.getElementById('ro').classList.remove('open');
+  document.getElementById('so').classList.add('open');
+  initSignature();
+}
+
+function initSignature(){
+  sigCanvas = document.getElementById('sig-canvas');
+  sigCtx = sigCanvas.getContext('2d');
+
+  // 設定畫布實際解析度
+  const rect = sigCanvas.getBoundingClientRect();
+  sigCanvas.width = rect.width * window.devicePixelRatio || 460;
+  sigCanvas.height = 180 * window.devicePixelRatio || 180;
+  sigCtx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  sigCtx.strokeStyle = '#0d1f3c';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  clearSignature();
+
+  // Mouse events
+  sigCanvas.onmousedown = (e)=>{ sigDrawing=true; const p=getPos(e); sigLastX=p.x; sigLastY=p.y; };
+  sigCanvas.onmousemove = (e)=>{ if(!sigDrawing) return; const p=getPos(e); drawLine(sigLastX,sigLastY,p.x,p.y); sigLastX=p.x; sigLastY=p.y; };
+  sigCanvas.onmouseup = sigCanvas.onmouseleave = ()=>{ sigDrawing=false; };
+
+  // Touch events
+  sigCanvas.ontouchstart = (e)=>{ e.preventDefault(); sigDrawing=true; const p=getTouchPos(e); sigLastX=p.x; sigLastY=p.y; };
+  sigCanvas.ontouchmove = (e)=>{ e.preventDefault(); if(!sigDrawing) return; const p=getTouchPos(e); drawLine(sigLastX,sigLastY,p.x,p.y); sigLastX=p.x; sigLastY=p.y; };
+  sigCanvas.ontouchend = ()=>{ sigDrawing=false; };
+}
+
+function getPos(e){
+  const rect = sigCanvas.getBoundingClientRect();
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
+function getTouchPos(e){
+  const rect = sigCanvas.getBoundingClientRect();
+  const t = e.touches[0];
+  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+}
+
+function drawLine(x1,y1,x2,y2){
+  sigCtx.beginPath();
+  sigCtx.moveTo(x1,y1);
+  sigCtx.lineTo(x2,y2);
+  sigCtx.stroke();
+}
+
+function clearSignature(){
+  if(!sigCtx) return;
+  const w = sigCanvas.width / (window.devicePixelRatio||1);
+  const h = sigCanvas.height / (window.devicePixelRatio||1);
+  sigCtx.clearRect(0,0,w,h);
+  sigCtx.fillStyle='#fff';
+  sigCtx.fillRect(0,0,w,h);
+}
+
+function isSignatureEmpty(){
+  const data = sigCtx.getImageData(0,0,sigCanvas.width,sigCanvas.height).data;
+  for(let i=0;i<data.length;i+=4){
+    if(data[i]<250||data[i+1]<250||data[i+2]<250) return false;
+  }
+  return true;
+}
+
+function submitSignature(){
+  if(isSignatureEmpty()){
+    alert('請先完成簽名再送出！');
+    return;
+  }
+  // 取得簽名圖片（壓縮）
+  const sigData = sigCanvas.toDataURL('image/png', 0.7);
+
+  document.getElementById('so').classList.remove('open');
+
+  // 將簽名加入資料送出
+  if(sigRec){
+    sigRec['簽名'] = sigData;
+    sendToSheets(sigRec);
+  }
+}
+document.addEventListener('keydown', function(e){
+  if(e.ctrlKey && e.shiftKey && e.key==='A'){
+    e.preventDefault();
+    const panel  = document.getElementById('sinfo-panel');
+    const footer = document.getElementById('sheets-footer');
+    if(panel){
+      const isHidden = panel.style.display==='none';
+      panel.style.display  = isHidden ? 'block' : 'none';
+      if(footer) footer.style.display = isHidden ? 'block' : 'none';
+      if(isHidden){
+        const saved = localStorage.getItem('sheets_url');
+        if(saved) document.getElementById('surl').value = saved;
+        panel.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    }
+  }
+});
+
+// 頁面載入時自動讀取已存網址（背景靜默載入，不顯示面板）
+window.addEventListener('load', function(){
+  const saved = localStorage.getItem('sheets_url');
+  if(saved){ const el=document.getElementById('surl'); if(el) el.value=saved; }
+  const savedLink = localStorage.getItem('sheets_link');
+  if(savedLink){ const el=document.getElementById('ssheet'); if(el) el.value=savedLink; }
+  // 清除任何殘留的提交旗標，避免誤觸發
+});
+</script>
+
+<!-- SHEETS 說明（隱藏，管理者透過 Ctrl+Shift+A 存取） -->
+<div id="sheets-footer" style="display:none;background:#0d1f3c;color:rgba(255,255,255,.7);padding:36px 24px;font-size:12px;line-height:1.9;">
+  <div style="max-width:900px;margin:0 auto;">
+    <div style="font-family:'Noto Serif TC',serif;font-size:16px;color:#e8b84b;margin-bottom:16px;font-weight:700;">📊 Google Sheets 串接說明</div>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 1</strong> — 建立 Google Sheets 試算表，工作表命名為「<strong style="color:#fff">115年度</strong>」，未來每年新增工作表累積紀錄。</p>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 2</strong> — 點選「擴充功能」→「Apps Script」，貼上以下程式碼後儲存：</p>
+    <pre style="background:#1a3458;padding:14px;border-radius:8px;font-size:11px;overflow-x:auto;margin-bottom:14px;line-height:1.6;color:#a8d5b5;">function doGet(e) {
+  try {
+    var p = e.parameter;
+    var action = p.action || \'\';
+
+    if (action === \'checkCount\') {
+      var name = p.name || \'\';
+      var ss = SpreadsheetApp.getActiveSpreadsheet();
+      var rocYear = new Date().getFullYear() - 1911;
+      var sheet = ss.getSheetByName(rocYear + \'年度\');
+      var count = 0;
+      if (sheet && sheet.getLastRow() >= 2) {
+        var col = sheet.getRange(2, 2, sheet.getLastRow()-1, 1).getValues();
+        for (var r = 0; r < col.length; r++) {
+          if (col[r][0] === name) { count = Number(sheet.getRange(r+2, 21).getValue()) || 1; break; }
+        }
+      }
+      return ContentService.createTextOutput(JSON.stringify({status:\'ok\', count:count}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (action === \'submit\' && p[\'nm\']) {
+      var data = {
+        \'年度\': p[\'yr\'] || \'\', \'員工編號\': p[\'no\'] || \'\',
+        \'姓名\': p[\'nm\'] || \'\', \'職稱\': p[\'tt\'] || \'\', \'部門\': p[\'dp\'] || \'\',
+        \'Q1\':p[\'q1\']||\'\', \'Q2\':p[\'q2\']||\'\', \'Q3\':p[\'q3\']||\'\',
+        \'Q4\':p[\'q4\']||\'\', \'Q5\':p[\'q5\']||\'\', \'Q6\':p[\'q6\']||\'\',
+        \'Q7\':p[\'q7\']||\'\', \'Q8\':p[\'q8\']||\'\', \'Q9\':p[\'q9\']||\'\', \'Q10\':p[\'q10\']||\'\',
+        \'錯題數\': Number(p[\'wr\']) || 0, \'得分\': Number(p[\'sc\']) || 0,
+        \'觀看影片時間\': p[\'vt\'] || \'\', \'開始作答時間\': p[\'st\'] || \'\',
+        \'完成作答時間\': p[\'et\'] || \'\', \'簽名\': p[\'sg\'] || \'\' 
+      };
+      writeData_(data);
+      var redirectUrl = \'https://chuchienmis.github.io/training/training2.html\';
+      return HtmlService.createHtmlOutput(
+        \'&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;\'  +
+        \'&lt;meta http-equiv="refresh" content="0;url=\' + redirectUrl + \'"&gt;\'  +
+        \'&lt;/head&gt;&lt;body&gt;&lt;p&gt;✅ 資料已儲存&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;\'
+      );
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({status:\'ok\'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:\'error\', msg:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doPost(e) {
+  try {
+    var data;
+    if (e.parameter && e.parameter.payload) {
+      data = JSON.parse(e.parameter.payload);
+    } else {
+      data = JSON.parse(e.postData.contents);
+    }
+    writeData_(data);
+    return ContentService.createTextOutput(JSON.stringify({status:\'ok\'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:\'error\', msg:err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function writeData_(data) {
+  var CORRECT_ANS = {Q1:\'O\',Q2:\'O\',Q3:\'X\',Q4:\'X\',Q5:\'O\',Q6:\'D\',Q7:\'D\',Q8:\'C\',Q9:\'A\',Q10:\'D\'};
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = data[\'年度\'] || \'115年度\';
+  var sheet = ss.getSheetByName(sheetName);
+  var headers = [
+    \'員工編號\',\'姓名\',\'職稱\',\'部門\',
+    \'Q1\',\'Q2\',\'Q3\',\'Q4\',\'Q5\',\'Q6\',\'Q7\',\'Q8\',\'Q9\',\'Q10\',
+    \'錯題數\',\'得分\',\'觀看影片時間\',\'開始作答時間\',\'完成作答時間\',\'測驗次數\',\'簽名\'
+  ];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    sheet.getRange(1,1,1,headers.length).setValues([headers])
+      .setFontWeight(\'bold\').setBackground(\'#0d1f3c\').setFontColor(\'#ffffff\');
+    sheet.setFrozenRows(1); sheet.setFrozenColumns(2);
+    sheet.getRange(\'A2:A1000\').setNumberFormat(\'@\');
+  }
+  if (sheet.getRange(1,1).getValue() === \'\') {
+    sheet.insertRowBefore(1);
+    sheet.getRange(1,1,1,headers.length).setValues([headers])
+      .setFontWeight(\'bold\').setBackground(\'#0d1f3c\').setFontColor(\'#ffffff\');
+    sheet.setFrozenRows(1); sheet.setFrozenColumns(2);
+    sheet.getRange(\'A2:A1000\').setNumberFormat(\'@\');
+  }
+
+  var name = data[\'姓名\'] || \'\';
+  var empNo = String(data[\'員工編號\'] || \'\');
+  var newScore = Number(data[\'得分\']) || 0;
+  var lastRow = sheet.getLastRow();
+  var existingRow = -1, oldCount = 0, oldScore = 0;
+
+  if (lastRow >= 2) {
+    var nameCol = sheet.getRange(2,2,lastRow-1,1).getValues();
+    for (var r = 0; r < nameCol.length; r++) {
+      if (nameCol[r][0] === name) {
+        existingRow = r+2;
+        oldCount = Number(sheet.getRange(r+2,21).getValue()) || 1;
+        oldScore = Number(sheet.getRange(r+2,16).getValue()) || 0;
+        break;
+      }
+    }
+  }
+
+  var newCount = existingRow > 0 ? oldCount+1 : 1;
+  var shouldUpdate = existingRow < 0 || newScore >= oldScore;
+  var newRow = [
+    empNo, name, data[\'職稱\']||\'\', data[\'部門\']||\'\',
+    data[\'Q1\']||\'\', data[\'Q2\']||\'\', data[\'Q3\']||\'\',
+    data[\'Q4\']||\'\', data[\'Q5\']||\'\', data[\'Q6\']||\'\',
+    data[\'Q7\']||\'\', data[\'Q8\']||\'\', data[\'Q9\']||\'\', data[\'Q10\']||\'\',
+    data[\'錯題數\']||0, newScore,
+    data[\'觀看影片時間\']||\'\', data[\'開始作答時間\']||\'\', data[\'完成作答時間\']||\'\',
+    newCount, data[\'簽名\']||\'\'
+  ];
+
+  var targetRow;
+  if (existingRow > 0) {
+    if (shouldUpdate) {
+      sheet.getRange(existingRow,1,1,newRow.length).setValues([newRow]);
+      sheet.getRange(existingRow,5,1,10).setFontColor(\'#000000\').setFontWeight(\'normal\');
+    } else {
+      sheet.getRange(existingRow,21).setValue(newCount);
+      sheet.getRange(existingRow,19).setValue(data[\'完成作答時間\']||\'\');
+    }
+    targetRow = existingRow;
+  } else {
+    sheet.appendRow(newRow);
+    targetRow = sheet.getLastRow();
+  }
+
+  sheet.getRange(targetRow,1).setNumberFormat(\'@\').setBackground(null).setValue(empNo);
+
+  if (shouldUpdate) {
+    var qKeys = [\'Q1\',\'Q2\',\'Q3\',\'Q4\',\'Q5\',\'Q6\',\'Q7\',\'Q8\',\'Q9\',\'Q10\'];
+    for (var i=0; i<10; i++) {
+      var ans = data[qKeys[i]] || \'\';
+      if (ans !== \'\' && ans !== CORRECT_ANS[qKeys[i]]) {
+        sheet.getRange(targetRow,i+5).setFontColor(\'#cc0000\').setFontWeight(\'bold\');
+      }
+    }
+  }
+
+  if (sheet.getLastRow() > 2) {
+    sheet.getRange(2,1,sheet.getLastRow()-1,headers.length).sort({column:1,ascending:true});
+  }
+}
+
+function testDoPost() {
+  var testData = {
+    "年度":"115年度","員工編號":"023","姓名":"黃晨晞",
+    "職稱":"副理","部門":"資訊室",
+    "Q1":"O","Q2":"O","Q3":"X","Q4":"X","Q5":"O",
+    "Q6":"D","Q7":"D","Q8":"C","Q9":"A","Q10":"D",
+    "錯題數":0,"得分":100,
+    "觀看影片時間":"測試","開始作答時間":"測試","完成作答時間":"測試","簽名":""
+  };
+  writeData_(testData);
+  Logger.log(\'testDoPost 完成\');
+}</pre>
+    <p style="margin-bottom:10px;"><strong style="color:#fff">Step 3</strong> — 點選「部署」→「新增部署」→ 類型：<strong style="color:#fff">網頁應用程式</strong>，執行身分：<strong style="color:#fff">我</strong>，存取權：<strong style="color:#fff">任何人</strong> → 部署後複製網址。</p>
+    <p><strong style="color:#fff">Step 4</strong> — 將網址貼入頁面上方「Google Sheets 串接設定」欄位並儲存即完成。</p>
+  </div>
+</div>
+
+
+</body>
+</html>
