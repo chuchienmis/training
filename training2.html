@@ -475,6 +475,33 @@ const KQ=[
 
 let U={}, LOG=[], qOpenTime=null, submitted=false, ANS={}, videoOpened=false, videoOpenTime=null;
 
+// ══ 裝置指紋收集 ══
+async function getDeviceInfo(){
+  const nav = window.navigator;
+  const scr = window.screen;
+  // 取得公開 IP（透過免費 API）
+  let ip = '無法取得';
+  try{
+    const r = await fetch('https://api.ipify.org?format=json', {signal: AbortSignal.timeout(3000)});
+    const j = await r.json();
+    ip = j.ip || '無法取得';
+  }catch(e){}
+  // 裝置指紋
+  const fingerprint = [
+    nav.userAgent,
+    nav.language,
+    scr.width + 'x' + scr.height,
+    scr.colorDepth + 'bit',
+    new Date().getTimezoneOffset(),
+    nav.hardwareConcurrency || '',
+    nav.platform || ''
+  ].join('|');
+  // 裝置類型判斷
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(nav.userAgent);
+  const deviceType = isMobile ? '手機/平板' : '電腦';
+  return { ip, fingerprint, deviceType, userAgent: nav.userAgent };
+}
+
 // ★ Apps Script 網址（直接寫死，確保 iPhone/LINE 也能使用）
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtl9z1L2HQteXGVkcGXj9nvaNq9hWm9TaB9q7Pz3iFVe282npwELE8DS-Fajao9f9WpQ/exec';
 
@@ -689,9 +716,14 @@ function submitQuiz(){
     開始作答時間:qOpenTime?qOpenTime.toLocaleString('zh-TW'):'',
     完成作答時間:now.toLocaleString('zh-TW')
   };
-  try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
-  // 暫存資料，等簽名完成後再送出
-  sigRec = rec;
+  // 收集裝置資訊後暫存，等簽名完成再送出
+  getDeviceInfo().then(function(dev){
+    rec['IP位址'] = dev.ip;
+    rec['裝置類型'] = dev.deviceType;
+    rec['裝置指紋'] = dev.fingerprint;
+    try{ localStorage.setItem('t115_'+U.name+'_'+Date.now(), JSON.stringify(rec)); }catch(e){}
+    sigRec = rec;
+  });
 }
 
 // ══ SHEETS ══
@@ -747,6 +779,9 @@ async function sendToSheets(rec){
     '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
     '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
     '&et=' + encodeURIComponent(rec['完成作答時間']||'') +
+    '&ip=' + encodeURIComponent(rec['IP位址']||'') +
+    '&dt=' + encodeURIComponent(rec['裝置類型']||'') +
+    '&fp=' + encodeURIComponent(rec['裝置指紋']||'') +
     '&sg=';
 
   try{
