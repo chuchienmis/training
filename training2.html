@@ -724,6 +724,7 @@ async function sendToSheets(rec){
   si.style.display='block';
   si.textContent='⏳ 正在儲存至 Google Sheets…';
 
+  // 簽名以外的資料用 GET 傳送
   const getUrl = url +
     '?action=submit' +
     '&yr=' + encodeURIComponent(rec['年度']||'') +
@@ -746,11 +747,26 @@ async function sendToSheets(rec){
     '&vt=' + encodeURIComponent(rec['觀看影片時間']||'') +
     '&st=' + encodeURIComponent(rec['開始作答時間']||'') +
     '&et=' + encodeURIComponent(rec['完成作答時間']||'') +
-    '&sg=' + encodeURIComponent(rec['簽名']||'');
+    '&sg=';
 
   try{
     await fetch(getUrl, {method:'GET', mode:'no-cors'});
   }catch(e){}
+
+  // 簽名（base64）另外用 POST 傳送，避免 URL 長度限制
+  const sig = rec['簽名']||'';
+  if(sig){
+    try{
+      const formData = new FormData();
+      formData.append('payload', JSON.stringify({
+        action: 'updateSig',
+        nm: rec['姓名']||'',
+        yr: rec['年度']||'',
+        sg: sig
+      }));
+      await fetch(url, {method:'POST', mode:'no-cors', body: formData});
+    }catch(e){}
+  }
 
   si.textContent='✅ 已儲存至 Google Sheets';
   setTimeout(()=>{ si.style.display='none'; si.textContent='⏳ 正在儲存至 Google Sheets…'; },4000);
