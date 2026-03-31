@@ -300,10 +300,10 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
 
       <!-- 播放器：iframe 預先載入但隱藏，縮圖蓋在上方 -->
       <div class="vplayer" id="vplayer">
-        <!-- iframe 預載，autoplay=0，點擊後切換為 autoplay=1 -->
+        <!-- iframe 點擊後才載入 src，相容 LINE WebView -->
         <iframe
           id="vframe"
-          src="https://www.youtube.com/embed/BtjS95wb-yQ?rel=0&modestbranding=1&playsinline=1"
+          src=""
           title="115年度個人資料保護法教育訓練"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
@@ -590,11 +590,20 @@ function addLog(type, detail){
 function playVideo(){
   const cover = document.getElementById('vcover');
   const frame = document.getElementById('vframe');
-  // 切換 src 加入 autoplay=1 觸發播放
-  frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?autoplay=1&rel=0&modestbranding=1&playsinline=1';
-  frame.classList.add('ready');
+  // 先隱藏封面，讓 iframe 顯示
   cover.style.opacity = '0';
   cover.style.pointerEvents = 'none';
+  frame.classList.add('ready');
+  // LINE WebView 不支援 autoplay，改為直接顯示 YouTube 播放器讓使用者點擊
+  // 一般瀏覽器仍可正常 autoplay
+  const isLine = /Line/i.test(navigator.userAgent);
+  if(isLine){
+    // LINE：不加 autoplay，讓使用者點 YouTube 播放鍵（只需點1次）
+    frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?rel=0&modestbranding=1&playsinline=1';
+  } else {
+    // 一般瀏覽器：autoplay=1
+    frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  }
   logVideoOpen();
 }
 function logVideoOpen(){
