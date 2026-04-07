@@ -287,7 +287,7 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
         <!-- iframe 預載，autoplay=0，點擊後切換為 autoplay=1 -->
         <iframe
           id="vframe"
-          src="https://www.youtube.com/embed/BtjS95wb-yQ?rel=0&modestbranding=1&playsinline=1"
+          src="https://www.youtube.com/embed/bRJUVaoYCaA?rel=0&modestbranding=1&playsinline=1"
           title="115年度個人資料保護法教育訓練"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
@@ -295,8 +295,8 @@ header::before{content:'';position:absolute;inset:0;background:repeating-linear-
         </iframe>
         <!-- 縮圖蓋板 -->
         <div class="vthumb-cover" id="vcover" onclick="playVideo()">
-          <img src="https://img.youtube.com/vi/BtjS95wb-yQ/hqdefault.jpg" alt="影片縮圖"
-               onerror="this.src='https://img.youtube.com/vi/BtjS95wb-yQ/mqdefault.jpg'"/>
+          <img src="https://img.youtube.com/vi/bRJUVaoYCaA/hqdefault.jpg" alt="影片縮圖"
+               onerror="this.src='https://img.youtube.com/vi/bRJUVaoYCaA/mqdefault.jpg'"/>
           <div class="vplay-circle">
             <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg" width="72" height="50">
               <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#ff0000"/>
@@ -535,7 +535,7 @@ function playVideo(){
   const cover = document.getElementById('vcover');
   const frame = document.getElementById('vframe');
   // 切換 src 加入 autoplay=1 觸發播放
-  frame.src = 'https://www.youtube.com/embed/BtjS95wb-yQ?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  frame.src = 'https://www.youtube.com/embed/bRJUVaoYCaA?autoplay=1&rel=0&modestbranding=1&playsinline=1';
   frame.classList.add('ready');
   cover.style.opacity = '0';
   cover.style.pointerEvents = 'none';
